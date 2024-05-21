@@ -6,11 +6,12 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 10:12:15 by aheinane          #+#    #+#             */
-/*   Updated: 2024/05/21 13:12:22 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/05/21 14:07:40 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
+#include <unistd.h>
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
 	size_t	i;
@@ -30,12 +31,13 @@ int main (int argc, char **argv)
 {
 	int i = 2;
 	int flag = 0;
-	if(ft_strncmp(argv[2], "-n", 2) == 0)// in case there is -n as 3d arg
+	char wd[1000];
+	if(argc > 2 && ft_strncmp(argv[2], "-n", 2) == 0)// in case there is -n as 3d arg
 	{
 		flag = 1;
 		i = 3;
 	}
-	if(ft_strncmp(argv[1], "echo", 4) == 0) //if found echo
+	if(argc > 1 &&  ft_strncmp(argv[1], "echo", 4) == 0) //if found echo
 	{
 		if(argc <=2)// in case after echo there is no arguments
 			printf("there is nothing to print, put some arg"); 
@@ -52,6 +54,10 @@ int main (int argc, char **argv)
 				printf("\n");
 		}
 	}
+	if (ft_strncmp(argv[1], "pwd", 3) == 0)
+    {
+      printf("%s",getcwd(wd, sizeof(wd)));
+    }
 	else
 	{
 		printf("WRONGhello_world");

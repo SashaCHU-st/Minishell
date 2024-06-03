@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 13:32:50 by aheinane          #+#    #+#             */
-/*   Updated: 2024/05/31 16:02:15 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/06/02 13:53:45 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ char	*ft_wd(const char *str, char c);
 void	free_w(size_t i, char **ptr);
 char	**ft_split(char const *s, char c);
 char	*ft_strchr(const char *s, int c);
-char *ft_strpbrk( char *s1, char *s2);
-
+char *ft_strpbrk(const char *s, int c);
+char	*ft_strjoin(char const *s1, char const *s2);
+size_t	ft_strlen(const char *str );
 #endif

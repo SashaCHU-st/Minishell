@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 10:12:15 by aheinane          #+#    #+#             */
-/*   Updated: 2024/05/31 16:03:01 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/06/03 10:50:19 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,14 @@ int main (int argc, char **argv, char **envp)
 	int i = 2;
 	int flag = 0;
 	char wd[1000];
+	char *env = envp[i];
 	
 	//init_msll(&data, envp);
 	if(argc == 1)
 		printf("");
-	else if(argc > 1 &&  ft_strncmp(argv[1], "echo", 4) == 0) //if found echo, nujno esche $ pro env
+	else if(argc > 1 &&  ft_strncmp(argv[1], "echo", 5) == 0) //if found echo, nujno esche $ pro env
 	{
-		if(argc > 2 && ft_strncmp(argv[2], "-n", 2) == 0)// in case there is -n as 3d arg
+		if(argc > 2 && ft_strncmp(argv[2], "-n", 3) == 0)// in case there is -n as 3d arg
 		{
 			flag = 1;
 			i = 3;
@@ -47,11 +48,11 @@ int main (int argc, char **argv, char **envp)
 				printf("\n");
 		}
 	}
-	else if (ft_strncmp(argv[1], "pwd", 3) == 0)
+	else if (argc > 1 && ft_strncmp(argv[1], "pwd", 4) == 0)
     {
 		printf("%s",getcwd(wd, sizeof(wd)));
     }
-	else if (ft_strncmp(argv[1], "cd", 3) == 0)//// DOES NOT REALLY WORKS!!!!!!!
+	else if (argc > 1 && ft_strncmp(argv[1], "cd", 3) == 0)//// DOES NOT REALLY WORKS!!!!!!!
     {
 		if(argc <3)// in case after echo there is no arguments
 			printf("");
@@ -65,10 +66,9 @@ int main (int argc, char **argv, char **envp)
 			printf("%s",getcwd(wd, sizeof(wd)));
 		}
     }
-	else if(ft_strncmp(argv[1], "env", 4) == 0)
+	else if(argc > 1 && ft_strncmp(argv[1], "env", 4) == 0)
 	{
 		int i =  0;
-		char *env = envp[i];
 		while (env != NULL)
 		{
 			printf("%s\n", env);
@@ -76,28 +76,47 @@ int main (int argc, char **argv, char **envp)
 			env = envp[i];
 		}
 	}
-	else if(ft_strncmp(argv[1], "export", 7) == 0)
+	else if(argc > 1 && ft_strncmp(argv[1], "export", 7) == 0)
 	{
-
-		int i =  0;
-		char *env = envp[i];
+		//char *env = envp[i];
 		char *after_equal_sign;
-		char *before_equal_sign;
-		while (env != NULL)
+		int i =  0;
+		
+		while (env != NULL && envp[i + 1] != NULL)/// envp[i + 1] dont pprint last line
 		{
 			after_equal_sign = ft_strchr(env, '=');
-			before_equal_sign = ft_strpbrk(env, '=');
 			printf("declare -x ");
-			printf("=\"%s\"\n", before_equal_sign);
-			//write(1, env,before_equal_sign-env);
+			printf("%.*s", (int)(after_equal_sign - env), env);/// .* shows that the length of argument will be given as argument
 			printf("=\"%s\"\n", after_equal_sign + 1);
 			i++;
 			env = envp[i];
+		}	
+		if(argc == 3)
+		{
+			char *added_var = ft_strjoin(argv[2], "");
+			if (added_var != NULL)
+			{
+				envp[i] = added_var;
+				envp[i + 1] = NULL; ///for ending list
+				printf("declare -x %s\n", added_var);
+			}
+	}
+
+	}
+	else if(argc > 1 && ft_strncmp(argv[1], "unset", 6) == 0)
+	{
+		if(argc == 2)
+		{
+			printf("");
+		}
+		if(argc >= 3)
+		{
+			printf("Hello_world");
 		}
 	}
-	else
-	{
-		printf("WRONGhello_world");
-	}
+	//else
+	//{
+	//	printf("WRONGhello_world");
+	//}
 	return(0);
 }

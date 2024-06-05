@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 13:32:50 by aheinane          #+#    #+#             */
-/*   Updated: 2024/06/05 10:54:44 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/06/05 13:18:11 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,4 +30,9 @@ char *ft_strpbrk(const char *s, int c);
 char	*ft_strjoin(char const *s1, char const *s2);
 size_t	ft_strlen(const char *str );
 void deleteEnvVar(char **envp, const char *arg);
+void ft_echo(int argc, char **argv);
+void ft_export(char *env, char **envp, int argc, char **argv);
+void ft_env(char *env, char **envp);
+void ft_unset(int argc, char **envp, char **argv);
+void ft_cd(int argc, char **argv);
 #endif

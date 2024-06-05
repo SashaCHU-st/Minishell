@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 13:32:50 by aheinane          #+#    #+#             */
-/*   Updated: 2024/06/05 13:30:01 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/06/05 13:34:59 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,4 +35,5 @@ void ft_export(char *env, char **envp, int argc, char **argv);
 void ft_env(char *env, char **envp);
 void ft_unset(int argc, char **envp, char **argv);
 void ft_cd(int argc, char **argv);
+void ft_cwd(char **envp);
 #endif

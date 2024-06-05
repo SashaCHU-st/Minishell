@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 10:12:15 by aheinane          #+#    #+#             */
-/*   Updated: 2024/06/05 13:19:31 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/06/05 13:35:02 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ int main (int argc, char **argv, char **envp)
 {
 	t_built data;
 	int i = 0;
-	char wd[1000];
 	char *env = envp[i];
 	
 	if(argc == 1)
@@ -24,7 +23,7 @@ int main (int argc, char **argv, char **envp)
 	else if(argc > 1 &&  ft_strncmp(argv[1], "echo", 5) == 0) //if found echo, nujno esche $ pro env
 		ft_echo(argc, argv);
 	else if (argc > 1 && ft_strncmp(argv[1], "pwd", 4) == 0)
-		printf("%s",getcwd(wd, sizeof(wd)));
+		ft_cwd(envp);
 	else if (argc > 1 && ft_strncmp(argv[1], "cd", 3) == 0)//// DOES NOT REALLY WORKS!!!!!!!
 		ft_cd(argc, argv);
 	else if(argc > 1 && ft_strncmp(argv[1], "env", 4) == 0)

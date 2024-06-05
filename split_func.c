@@ -6,7 +6,7 @@
 /*   By: epolkhov <epolkhov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 20:25:40 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/05/29 20:40:44 by epolkhov         ###   ########.fr       */
+/*   Updated: 2024/06/05 14:31:29 by epolkhov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,19 +41,52 @@ static unsigned int	num_of_str(const char *s, char c)
 	return (count);
 }
 
-static void	f_free_array(char **r)
-{
-	char	**ptr;
+// static int	f_free_array(char **r)
+// {
+// 	char	**ptr;
 
-	if (!r)
-		return ;
-	ptr = r;
-	while (*ptr)
+// 	if (!r)
+// 		return (1);
+// 	ptr = r;
+// 	while (*ptr)
+// 	{
+// 		free(*ptr);
+// 		ptr++;
+// 	}
+// 	free(r);
+// 	return (1);
+// }
+
+char	*f_free_array(char **str)
+{
+	while (*str)
 	{
-		free(*ptr);
-		ptr++;
+		free(*str);
+		*str = NULL;
+		str++;
 	}
-	free(r);
+	free(str);
+	return (NULL);
+}
+static unsigned int	get_substring_length(const char *s, \
+			unsigned int start, char c)
+{
+	unsigned int	len;
+
+	len = 0;
+	while (s[start + len] != c && s[start + len] != '\0')
+		len++;
+	return (len);
+}
+
+static char	**allocate_array(unsigned int nb)
+{
+	char	**array;
+
+	array = (char **)malloc((nb + 1) * sizeof(char *));
+	if (!array)
+		return (NULL);
+	return (array);
 }
 
 static char	**f_fill_array(char const *s, char c, unsigned int nb)
@@ -63,24 +96,17 @@ static char	**f_fill_array(char const *s, char c, unsigned int nb)
 	unsigned int	i;
 	unsigned int	len;
 
-	array = (char **)malloc((nb + 1) * sizeof(char *));
-	if (!array || !s)
-		return (NULL);
+	array = allocate_array(nb);
 	start = 0;
 	i = 0;
 	while (i < nb)
 	{
 		if (s[start] != c)
 		{
-			len = 0;
-			while (s[start + len] != c && s[start + len] != '\0')
-				len++;
+			len = get_substring_length(s, start, c);
 			array[i] = ft_substr(s, start, len);
 			if (!array[i])
-			{
 				f_free_array(array);
-				return (NULL);
-			}
 			i++;
 			start += len;
 		}

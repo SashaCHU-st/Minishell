@@ -1,6 +1,6 @@
 #include "builtins.h"
 
-void deleteEnvVar(char **envp, const char *arg)
+void unset_var(char **envp, const char *arg)
 {
 	int i;
 	int j;

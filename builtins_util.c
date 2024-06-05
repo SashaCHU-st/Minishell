@@ -1,4 +1,30 @@
 #include "builtins.h"
+
+void deleteEnvVar(char **envp, const char *arg)
+{
+	int i;
+	int j;
+	int len = ft_strlen(arg);
+	i = 0;
+	while (envp[i] != NULL)
+	{
+		
+		if (ft_strncmp(envp[i], arg, len) == 0 && envp[i][len] == '=')
+			break;
+		i++;
+	}
+	if (envp[i] == NULL)
+	{
+		printf("");
+		return;
+	}
+	j = i;
+	while(envp[j] != NULL)
+	{
+		envp[j] = envp[j + 1];
+		j++;
+	}
+}
 size_t	ft_strlen(const char *str )
 {
 	size_t	i;

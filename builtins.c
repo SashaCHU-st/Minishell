@@ -6,37 +6,12 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 10:12:15 by aheinane          #+#    #+#             */
-/*   Updated: 2024/06/05 10:54:54 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/06/05 11:39:05 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-void deleteEnvVar(char **envp, const char *arg)
-{
-	int i;
-	int j;
-	int len = ft_strlen(arg);
-	i = 0;
-	while (envp[i] != NULL)
-	{
-		
-		if (ft_strncmp(envp[i], arg, len && envp[i][len] == '=') == 0)
-			break;
-		i++;
-	}
-	if (envp[i] == NULL)
-	{
-		printf("");
-		return;
-	}
-	j = i;
-	while(envp[j] != NULL)
-	{
-		envp[j] = envp[j + 1];
-		j++;
-	}
-}
 int main (int argc, char **argv, char **envp)
 {
 	t_built data;

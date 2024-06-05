@@ -1,5 +1,9 @@
 #include "builtins.h"
-
+void ft_cwd(char **envp)
+{
+	char wd[1000];
+	printf("%s",getcwd(wd, sizeof(wd)));
+}
 void ft_cd(int argc, char **argv)
 {
 	char wd[1000];

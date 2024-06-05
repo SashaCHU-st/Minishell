@@ -29,7 +29,7 @@ void ft_unset(int argc, char **envp, char **argv)
 			while (envp[i] != NULL && envp[i + 1] != NULL)
 				printf("%s\n", envp[i++]);
 			while (--count > 1)
-				deleteEnvVar(envp, argv[k++]);
+				unset_var(envp, argv[k++]);
 			printf("\n");printf("\n");printf("\n");// DELETE THIS 
 			printf("UPDATED\n");
 			i = 0;

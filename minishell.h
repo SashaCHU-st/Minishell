@@ -6,7 +6,7 @@
 /*   By: epolkhov <epolkhov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:53:11 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/06/05 14:41:38 by epolkhov         ###   ########.fr       */
+/*   Updated: 2024/06/06 11:03:04 by epolkhov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ typedef struct s_tok
 
 typedef struct Tokens
 {
-	t_tok	*p_tokens;
+	t_tok	*w_tokens;
 	
 }	Tokens;
 

@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 13:32:50 by aheinane          #+#    #+#             */
-/*   Updated: 2024/06/05 13:34:59 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/06/06 08:55:23 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@
 #include <stdlib.h>
 
 typedef struct s_built{
-	char **env;
+	char **envp;
+	char pwd[1000];
 } t_built;
 
 int	ft_strncmp(const char *s1, const char *s2, size_t n);
@@ -31,9 +32,9 @@ char	*ft_strjoin(char const *s1, char const *s2);
 size_t	ft_strlen(const char *str );
 void unset_var(char **envp, const char *arg);
 void ft_echo(int argc, char **argv);
-void ft_export(char *env, char **envp, int argc, char **argv);
-void ft_env(char *env, char **envp);
-void ft_unset(int argc, char **envp, char **argv);
-void ft_cd(int argc, char **argv);
-void ft_cwd(char **envp);
+void ft_export(t_built *data, int argc, char **argv);
+void ft_env(t_built *data);
+void ft_unset(t_built *data,int argc, char **argv);
+void ft_cd(t_built *data,int argc, char **argv);
+void ft_pwd(char **envp);
 #endif

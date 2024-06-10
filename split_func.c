@@ -6,7 +6,7 @@
 /*   By: epolkhov <epolkhov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 20:25:40 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/06/05 14:31:29 by epolkhov         ###   ########.fr       */
+/*   Updated: 2024/06/10 13:28:12 by epolkhov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,15 +59,19 @@ static unsigned int	num_of_str(const char *s, char c)
 
 char	*f_free_array(char **str)
 {
-	while (*str)
+	char	**ptr;
+
+	ptr = str;
+	while (*ptr)
 	{
-		free(*str);
-		*str = NULL;
-		str++;
+		free(*ptr);
+		*ptr = NULL;
+		ptr++;
 	}
-	free(str);
+	free(ptr);
 	return (NULL);
 }
+
 static unsigned int	get_substring_length(const char *s, \
 			unsigned int start, char c)
 {

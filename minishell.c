@@ -6,7 +6,7 @@
 /*   By: epolkhov <epolkhov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:52:26 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/06/05 20:30:07 by epolkhov         ###   ########.fr       */
+/*   Updated: 2024/06/10 21:49:48 by epolkhov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,39 +27,113 @@ void	check_input_quotes_pipe(char *line)
 			i++;
 			continue ;
 		}
-		if (line[i] == '|' && !in_quote)
-			line[i] = 31;
+		if (!in_quote)
+		{
+			if (line[i] == '|')
+				line[i] = 31;
+		}
 		i++;
 	}
 	if ((in_quote || has_unclosed_quotes(line)))
 		error_message("Syntax error: unclosed quotes");
 }
 
-void	is_heredoc(char *line)
-{
-	int		i;
-	char	*str_delimeter;
-	int		j;
+// char	*hd_filename(int count)
+// {
+// 	char	*file;
+// 	char	*temp;
 
-	str_delimeter = NULL;
-	i = 0;
-	while (ft_strncmp(&line[i], "<<", 2) != 0)
-		i++;
-	i = i + 2;
-	while (check_space(line[i]))
-		i++;
-	j = 0;
-	while (line[i] && line[i] != 31 && !check_space(line[i]))
-	{
-		str_delimeter = realloc(str_delimeter, (j + 2) * sizeof(char));
-		if (str_delimeter == NULL)
-			error_message("Memory allocation error\n");
-		str_delimeter[j++] = line[i++];
-	}
-	str_delimeter[j] = '\0';
-	printf("delimeter Heredoc:%s\n", str_delimeter);
-	free(str_delimeter);
-}
+// 	temp = ft_itoa(count);
+// 	if (!temp)
+// 		error_message("Failed to create file for heredoc");
+// 	file = ft_strjoin(".heredoc", temp);
+// 	free (temp);
+// 	if (!file)
+// 		error_message("Failed to create file for heredoc");
+// 	return (file);
+// }
+
+// void	process_hd(const char *file, const char *delimeter)
+// {
+// 	int	fd;
+// 	char	*line;
+
+// 	unlink(file);
+// 	fd = open(file, O_RDWR | O_CREAT | O_TRUNC, 0644);
+// 	if (fd == -1)
+// 		error_message("Failed to open fd for heredoc");
+// 	while (1)
+// 	{
+// 		line = readline("> ");
+// 		if (!line && strcmp(line, delimeter) == 0)
+// 		{
+// 			free(line);
+// 			break ;
+// 		}
+// 		ft_putendl_fd(line, fd);
+// 		free(line);
+// 	}
+// 	if (close(fd) == -1)
+// 		error_message("Failed to close fd for heredoc");
+// }
+
+// void	*is_heredoc(char *line)
+// {
+// 	int		i;
+// 	t_tok	str_delimeter;
+// 	int		j;
+// 	int		len;
+// 	t_tok	count;
+// 	int	in_quote = 0;
+// 	t_tok	file;
+
+// 	str_delimeter.hd_delimeter = NULL;
+// 	i = 0;
+// 	len = 0;
+// 	count.hd_index = 0;
+
+// 	while (line[i])
+// 	{
+// 		if (line[i] == '\"' || line[i] == '\'')
+//         {
+//             in_quote = !in_quote;
+//             i++;
+//             continue;
+//         }
+// 		if ((ft_strncmp(&line[i], "<<", 2) == 0) && !in_quote)
+// 		{
+// 			count.hd_index++;
+// 			printf("%d\n", count.hd_index);
+// 			i = i + 2;
+// 			while (check_space(line[i]))
+// 				i++;
+// 			j = i;
+// 			while (line[j] && line[j] != 31 && !check_space(line[j]))
+// 			{
+// 				len++;
+// 				j++;
+// 			}
+// 			str_delimeter.hd_delimeter = (char *)malloc(sizeof(char) * len + 1);
+// 			if (str_delimeter.hd_delimeter == NULL)
+// 				error_message("Memory allocation error\n");
+// 			j = 0;
+// 			while (line[i] && line[i] != 31 && !check_space(line[i]))
+// 				str_delimeter.hd_delimeter[j++] = line[i++];
+// 			str_delimeter.hd_delimeter[j] = '\0';
+// 			printf("delimeter Heredoc:%s\n", str_delimeter.hd_delimeter);
+// 			if (str_delimeter.hd_delimeter != NULL)
+// 				free(str_delimeter.hd_delimeter);
+// 			file.tempfile_hd = hd_filename(count.hd_index);
+// 			if (!file.tempfile_hd)
+// 				error_message("Failed to assign filename for heredoc");
+// 			process_hd(file.tempfile_hd, str_delimeter.hd_delimeter);
+// 			free(str_delimeter.hd_delimeter);
+// 		}
+// 		else
+// 			i++;
+// 	}
+// 	return (NULL);
+// }
 
 t_tok	split_line(char *line)
 {

@@ -6,7 +6,7 @@
 /*   By: epolkhov <epolkhov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:53:11 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/06/05 14:41:38 by epolkhov         ###   ########.fr       */
+/*   Updated: 2024/06/10 21:51:03 by epolkhov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,16 @@
 # include <unistd.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+#include <fcntl.h>
 # include "libft/libft.h"
 
 typedef struct s_tok
 {
 	int		size;
 	char	**pipe_tok;
+	char	*hd_delimeter;
+	int		hd_index;
+	char	*tempfile_hd;
 }	t_tok;
 
 typedef struct Tokens
@@ -42,5 +46,7 @@ bool	has_unclosed_quotes(char *line);
 void	error_message(char *msg);
 
 char	**do_split(char const *s, char c);
+
+void	*is_heredoc(char *line);
 
 #endif

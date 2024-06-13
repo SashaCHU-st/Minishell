@@ -1,5 +1,6 @@
 NAME = minishell
-FLAGS = -Wall -Wextra -Werror -g -fsanitize=address
+FLAGS = -Wall -Wextra -Werror
+# -g -fsanitize=address
 LIBFT_DIR = ./libft
 LIBFT_LIB = $(LIBFT_DIR)/libft.a
 
@@ -8,6 +9,9 @@ RL_FLAGS = -lreadline
 SRCS = minishell.c \
 		input_validation.c \
 		split_func.c \
+		command.c \
+		builtins_util.c 
+
 			
 OBJS = $(SRCS:.c=.o)
 

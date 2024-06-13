@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   input_validation.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: epolkhov <epolkhov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 20:18:08 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/06/06 15:59:17 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/06/05 14:45:14 by epolkhov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "builtins.h"
 
 bool	has_unclosed_quotes(char *line)
 {

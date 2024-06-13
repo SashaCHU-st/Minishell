@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: epolkhov <epolkhov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:53:11 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/06/06 18:57:45 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/06/05 14:41:38 by epolkhov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "libft/libft.h"
-# include "builtins.h"
 
 typedef struct s_tok
 {
@@ -29,7 +28,7 @@ typedef struct s_tok
 	char	**pipe_tok;
 }	t_tok;
 
-typedef struct s_tokens
+typedef struct Tokens
 {
 	t_tok	*p_tokens;
 	
@@ -43,8 +42,5 @@ bool	has_unclosed_quotes(char *line);
 void	error_message(char *msg);
 
 char	**do_split(char const *s, char c);
-
-
-//////////////ADDED BY SASHA//////////////
 
 #endif

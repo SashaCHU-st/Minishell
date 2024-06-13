@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   split_func.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: epolkhov <epolkhov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 20:25:40 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/06/06 15:59:23 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/06/05 14:31:29 by epolkhov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "builtins.h"
 
 static unsigned int	num_of_str(const char *s, char c)
 {

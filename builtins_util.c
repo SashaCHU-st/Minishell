@@ -1,32 +1,30 @@
-#include "minishell.h"
 #include "builtins.h"
 
-void unset_var(t_built *data, char *arg)
+void unset_var(char **envp, const char *arg)
 {
 	int i;
 	int j;
 	int len = ft_strlen(arg);
 	i = 0;
-	while (data->envp[i] != NULL)
+	while (envp[i] != NULL)
 	{
 		
-		if (ft_strncmp(data->envp[i], arg, len) == 0 && data->envp[i][len] == '=')
+		if (ft_strncmp(envp[i], arg, len) == 0 && envp[i][len] == '=')
 			break;
 		i++;
 	}
-	if (data->envp[i] == NULL)
+	if (envp[i] == NULL)
 	{
-		printf(" ");
+		printf("");
 		return;
 	}
 	j = i;
-	while(data->envp[j] != NULL)
+	while(envp[j] != NULL)
 	{
-		data->envp[j] = data->envp[j + 1];
+		envp[j] = envp[j + 1];
 		j++;
 	}
 }
-
 size_t	ft_strlen(const char *str )
 {
 	size_t	i;
@@ -40,25 +38,6 @@ size_t	ft_strlen(const char *str )
 		count++;
 	}
 	return (count);
-}
-char	*ft_strdup(const char *src)
-{
-	int		len;
-	int		i;
-	char	*newstr;
-
-	len = ft_strlen(src);
-	i = 0;
-	newstr = ((char *)malloc(sizeof(char) * (len + 1)));
-	if (newstr == 0)
-		return (0);
-	while (src[i])
-	{
-		newstr[i] = src[i];
-		i++;
-	}
-	newstr[i] = '\0';
-	return (newstr);
 }
 char	*ft_strjoin(char const *s1, char const *s2)
 {

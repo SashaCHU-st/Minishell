@@ -6,7 +6,7 @@
 /*   By: epolkhov <epolkhov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 20:18:08 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/06/10 17:07:33 by epolkhov         ###   ########.fr       */
+/*   Updated: 2024/06/05 14:45:14 by epolkhov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,6 @@ void	input_validation_redir(char *input)
 		i++;
 	}
 }
-
 void	error_message(char *msg)
 {
 	//ft_putstr_fd("Error\n", 2);

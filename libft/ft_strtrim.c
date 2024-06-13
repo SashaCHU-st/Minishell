@@ -32,7 +32,7 @@ char	*ft_strtrim(char const *s1, char const *set)
 	end_position = start_position + len - 1;
 	while (*start_position && ft_strchr(set, *start_position))
 		start_position++;
-	if (start_position == '\0')
+	if (*start_position == '\0')
 		return (ft_strdup(""));
 	while (end_position > start_position && ft_strchr(set, *end_position))
 		end_position--;

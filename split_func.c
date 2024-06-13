@@ -6,7 +6,7 @@
 /*   By: epolkhov <epolkhov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 20:25:40 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/06/10 13:28:12 by epolkhov         ###   ########.fr       */
+/*   Updated: 2024/06/06 13:22:13 by epolkhov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,36 +41,36 @@ static unsigned int	num_of_str(const char *s, char c)
 	return (count);
 }
 
-// static int	f_free_array(char **r)
-// {
-// 	char	**ptr;
-
-// 	if (!r)
-// 		return (1);
-// 	ptr = r;
-// 	while (*ptr)
-// 	{
-// 		free(*ptr);
-// 		ptr++;
-// 	}
-// 	free(r);
-// 	return (1);
-// }
-
-char	*f_free_array(char **str)
+void	f_free_array(char **r)
 {
 	char	**ptr;
 
-	ptr = str;
+	if (!r)
+		return ;
+	ptr = r;
 	while (*ptr)
 	{
 		free(*ptr);
-		*ptr = NULL;
 		ptr++;
 	}
-	free(ptr);
-	return (NULL);
+	free(r);
+	r = NULL;
 }
+
+// char	*f_free_array(char **str)
+// {
+// 	char	**ptr;
+
+// 	ptr = str;
+// 	while (*ptr)
+// 	{
+// 		free(*ptr);
+// 		*ptr = NULL;
+// 		ptr++;
+// 	}
+// 	free(ptr);
+// 	return (NULL);
+// }
 
 static unsigned int	get_substring_length(const char *s, \
 			unsigned int start, char c)
@@ -101,6 +101,8 @@ static char	**f_fill_array(char const *s, char c, unsigned int nb)
 	unsigned int	len;
 
 	array = allocate_array(nb);
+	if (!array)
+		return (NULL);
 	start = 0;
 	i = 0;
 	while (i < nb)
@@ -110,7 +112,10 @@ static char	**f_fill_array(char const *s, char c, unsigned int nb)
 			len = get_substring_length(s, start, c);
 			array[i] = ft_substr(s, start, len);
 			if (!array[i])
+			{
 				f_free_array(array);
+				return (NULL);
+			}
 			i++;
 			start += len;
 		}

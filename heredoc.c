@@ -3,13 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: epolkhov <epolkhov@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: epolkhov <epolkhov@student.42.fr>          #+#  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/10 21:48:32 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/06/10 21:49:11 by epolkhov         ###   ########.fr       */
+/*   Created: 2024-06-12 10:05:10 by epolkhov          #+#    #+#             */
+/*   Updated: 2024-06-12 10:05:10 by epolkhov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 #include "minishell.h"
 
 char	*hd_filename(int count)
@@ -39,7 +38,9 @@ void	process_hd(const char *file, const char *delimeter)
 	while (1)
 	{
 		line = readline("> ");
-		if (!line && strcmp(line, delimeter) == 0)
+        if (!line)
+            break;
+		if (strcmp(line, delimeter) == 0)
 		{
 			free(line);
 			break ;
@@ -51,7 +52,7 @@ void	process_hd(const char *file, const char *delimeter)
 		error_message("Failed to close fd for heredoc");
 }
 
-void	*is_heredoc(char *line)
+void    *is_heredoc(char *line)
 {
 	int		i;
 	t_tok	str_delimeter;
@@ -95,16 +96,16 @@ void	*is_heredoc(char *line)
 				str_delimeter.hd_delimeter[j++] = line[i++];
 			str_delimeter.hd_delimeter[j] = '\0';
 			printf("delimeter Heredoc:%s\n", str_delimeter.hd_delimeter);
-			if (str_delimeter.hd_delimeter != NULL)
-				free(str_delimeter.hd_delimeter);
+			
 			file.tempfile_hd = hd_filename(count.hd_index);
 			if (!file.tempfile_hd)
 				error_message("Failed to assign filename for heredoc");
 			process_hd(file.tempfile_hd, str_delimeter.hd_delimeter);
-			free(str_delimeter.hd_delimeter);
+            if (str_delimeter.hd_delimeter != NULL)
+			    free(str_delimeter.hd_delimeter);
 		}
-		else
-			i++;
+        if (line[i] != '\0')
+		    i++;
 	}
-	return (NULL);
+	return (0);
 }

@@ -41,22 +41,6 @@ static unsigned int	num_of_str(const char *s, char c)
 	return (count);
 }
 
-// void	f_free_array(char **r)
-// {
-// 	char	**ptr;
-
-// 	if (!r)
-// 		return ;
-// 	ptr = r;
-// 	while (*ptr)
-// 	{
-// 		free(*ptr);
-// 		ptr++;
-// 	}
-// 	free(r);
-// 	//r = NULL;
-// }
-
 void	f_free_array(char **str)
 {
 	char	**ptr;
@@ -72,27 +56,27 @@ void	f_free_array(char **str)
 	str = NULL;
 }
 
-void	f_free_array_3(char ***str)
+void	f_free_cmds(t_cmd *cmds, int cmds_count)
 {
-	char	***ptr;
-	char	**ptr2;
+	int		i;
+	int		j;
 
-	ptr = str;
-	while (*ptr)
+	i = 0;
+	while (i < cmds_count)
 	{
-		ptr2 = *ptr;
-		while (**ptr)
+		j = 0;
+		while (j < cmds->w_count)
 		{
-			free(**ptr);
-			**ptr = NULL;
-			(*ptr)++;
+			free(cmds->word_tok[j]);
+			cmds->word_tok[j] = NULL;
+			j++;
 		}
-		free(ptr2);
-		ptr2 = NULL;
-		ptr++;
+		free(cmds->word_tok);
+		cmds->word_tok = NULL;
+		i++;
 	}
-	free(str);
-	str = NULL;
+	free(cmds);
+	cmds = NULL;
 }
 
 static unsigned int	get_substring_length(const char *s, \

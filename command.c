@@ -1,104 +1,105 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   command.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/19 13:43:44 by aheinane          #+#    #+#             */
+/*   Updated: 2024/06/19 14:02:54 by aheinane         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "builtins.h"
-void ft_pwd(char **envp)
+#include "minishell.h"
+
+void	ft_pwd(void)
 {
-	char wd[1000];
-	printf("%s",getcwd(wd, sizeof(wd)));
-}
-void ft_cd(t_built *data,int argc, char **argv)
-{
-	if(argc <3)// in case after echo there is no arguments
-			printf("");
-		else if(argc == 3)
-		{
-			printf("%s\n",getcwd(data->pwd, sizeof(data->pwd)));
-			if (chdir(argv[2]) != 0)
-            {
-                printf("ERROOR");
-            }
-			printf("%s",getcwd(data->pwd, sizeof(data->pwd)));
-		}
+	printf("%s\n", getcwd(NULL, 0));
 }
 
-void ft_unset(t_built *data,int argc, char **argv)
+void	if_quotes(char *str)
 {
-	int k = 2;
-		int count = argc;
-		if(argc == 2)
-			printf("");
-		if(argc >= 3)
-		{
-			printf("ENVP\n");
-			int i = 0;
-			while (data->envp[i] != NULL && data->envp[i + 1] != NULL)
-				printf("%s\n", data->envp[i++]);
-			while (--count > 1)
-				unset_var(data->envp, argv[k++]);
-			printf("\n");printf("\n");printf("\n");// DELETE THIS 
-			printf("UPDATED\n");
-			i = 0;
-			while (data->envp[i] != NULL && data->envp[i + 1] != NULL)
-				printf("%s\n", data->envp[i++]);
-		}
-}
+	char	*write_ptr;
+	char	quote_char;
+	char	*read_ptr;
 
-void ft_echo(int argc, char **argv)
-{
-	int flag =0;
-	int i = 2;
-	if(argc > 2 && ft_strncmp(argv[2], "-n", 3) == 0)// in case there is -n as 3d arg
+	write_ptr = str;
+	read_ptr = str;
+	quote_char = 0;
+	while (*read_ptr)
+	{
+		if (*read_ptr == '\'' || *read_ptr == '\"')
 		{
-			flag = 1;
-			i = 3;
+			if (quote_char == 0)
+				quote_char = *read_ptr;
+			else if (quote_char == *read_ptr)
+				quote_char = 0;
+			read_ptr++;
 		}
-		if(argc <=2)// in case after echo there is no arguments
-			printf("there is nothing to print, put some arg"); 
 		else
-		{
-			while(argc > i)
-			{
-				printf("%s", argv[i]);
-				if(argc - 1 > i)
-					printf(" ");
-				i++;
-			}
-			if(!flag)
-				printf("\n");
-		}
+			*write_ptr++ = *read_ptr++;
+	}
+	*write_ptr = '\0';
 }
 
-void ft_export(t_built *data, int argc, char **argv)
+void	ft_unset(t_built *data, int number_of_inputs)
 {
-	char *after_equal_sign;
-		int i =  0;
-		char *env = data->envp[i];
-		while (env != NULL && data->envp[i + 1] != NULL)/// envp[i + 1] dont pprint last line
-		{
-			after_equal_sign = ft_strchr(env, '=');
-			printf("declare -x ");
-			printf("%.*s", (int)(after_equal_sign - env), env);/// .* shows that the length of argument will be given as argument
-			printf("=\"%s\"\n", after_equal_sign + 1);
-			i++;
-			env = data->envp[i];
-		}	
-		if(argc == 3)
-		{
-			char *added_var = ft_strjoin(argv[2], "");
-			if (added_var != NULL)
-			{
-				data->envp[i] = added_var;
-				data->envp[i + 1] = NULL; ///for ending list
-				printf("declare -x %s\n", added_var);
-			}
-		}
+	int	k;
+
+	k = 1;
+	if (number_of_inputs == 1)
+		printf(" ");
+	if (number_of_inputs >= 2)
+	{
+		while (k < number_of_inputs)
+			unset_var(data, data->inputs[k++]);
+	}
 }
-void ft_env(t_built *data)
+
+void	ft_echo(t_built *data, int number_of_inputs)
 {
-	int i = 0;
-		char *env = data->envp[i];
-		while (env != NULL)
+	int	flag;
+	int	i;
+
+	i = 2;
+	flag = 0;
+	if (number_of_inputs > 2 && ft_strncmp(data->inputs[1], "-n", 3) == 0)// in case there is -n as 3d arg
+	{
+		flag = 1;
+		i = 3;
+	}
+	if (number_of_inputs <= 1)// in case after echo there is no arguments
+		printf("there is nothing to print, put some arg");
+	else
+	{
+		while (number_of_inputs >= i)
 		{
-			printf("%s\n", env);
+			printf("%s", data->inputs[i - 1]);
+			if (number_of_inputs - 1 > i)
+				printf(" ");
 			i++;
-			env = data->envp[i];
 		}
+		if (!flag)
+			printf("\n");
+	}
+}
+
+void	ft_env(t_built *data)
+{	
+	int		i;
+	char	*kuku;
+
+	i = 0;
+	while (data->envp[i] != NULL)
+	{
+		kuku = ft_strchr(data->envp[i], '=');
+		if (kuku != NULL)
+		{
+			printf("%s\n", data->envp[i]);
+			i++;
+		}
+		else
+			i++;
+	}
 }

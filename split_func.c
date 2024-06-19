@@ -41,36 +41,59 @@ static unsigned int	num_of_str(const char *s, char c)
 	return (count);
 }
 
-void	f_free_array(char **r)
-{
-	char	**ptr;
-
-	if (!r)
-		return ;
-	ptr = r;
-	while (*ptr)
-	{
-		free(*ptr);
-		ptr++;
-	}
-	free(r);
-	r = NULL;
-}
-
-// char	*f_free_array(char **str)
+// void	f_free_array(char **r)
 // {
 // 	char	**ptr;
 
-// 	ptr = str;
+// 	if (!r)
+// 		return ;
+// 	ptr = r;
 // 	while (*ptr)
 // 	{
 // 		free(*ptr);
-// 		*ptr = NULL;
 // 		ptr++;
 // 	}
-// 	free(ptr);
-// 	return (NULL);
+// 	free(r);
+// 	//r = NULL;
 // }
+
+void	f_free_array(char **str)
+{
+	char	**ptr;
+
+	ptr = str;
+	while (*ptr)
+	{
+		free(*ptr);
+		*ptr = NULL;
+		ptr++;
+	}
+	free(str);
+	str = NULL;
+}
+
+void	f_free_array_3(char ***str)
+{
+	char	***ptr;
+	char	**ptr2;
+
+	ptr = str;
+	while (*ptr)
+	{
+		ptr2 = *ptr;
+		while (**ptr)
+		{
+			free(**ptr);
+			**ptr = NULL;
+			(*ptr)++;
+		}
+		free(ptr2);
+		ptr2 = NULL;
+		ptr++;
+	}
+	free(str);
+	str = NULL;
+}
 
 static unsigned int	get_substring_length(const char *s, \
 			unsigned int start, char c)
@@ -101,8 +124,6 @@ static char	**f_fill_array(char const *s, char c, unsigned int nb)
 	unsigned int	len;
 
 	array = allocate_array(nb);
-	if (!array)
-		return (NULL);
 	start = 0;
 	i = 0;
 	while (i < nb)
@@ -114,7 +135,7 @@ static char	**f_fill_array(char const *s, char c, unsigned int nb)
 			if (!array[i])
 			{
 				f_free_array(array);
-				return (NULL);
+				//return (NULL);
 			}
 			i++;
 			start += len;

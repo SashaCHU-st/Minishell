@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-void	check_input_quotes_pipe(char *line)
+int	check_input_quotes_pipe(char *line)
 {
 	int	i;
 	int	in_quote;
@@ -32,32 +32,101 @@ void	check_input_quotes_pipe(char *line)
 		i++;
 	}
 	if ((in_quote || has_unclosed_quotes(line)))
-		error_message("Syntax error: unclosed quotes");
+	{
+		ft_putendl_fd("Syntax error: unclosed quotes", 2);
+		return (1);
+	}
+	return (0);
 }
 
-t_tok	split_line(char *line)
+t_cmd	split_into_wtok(char *pipe_token)
 {
-	t_tok	tokens;
+	t_cmd	cmd;
+	int		i;
+	int		j;
+	char	**words;
+	t_cmd	new_words;
+
+	cmd.word_tok = NULL;
+	cmd.w_count = 0;
+	i = 0;
+	words = do_split(pipe_token, ' ');
+	if (!words)
+	{
+		cmd.word_tok = NULL;
+        cmd.w_count = 0;
+		return (cmd);
+	}
+	while (words[i])
+	{
+		new_words.word_tok = malloc(sizeof(char *) * (cmd.w_count + 1));
+		if (!new_words.word_tok)
+			error_message("Failed to allocate memory");
+		j = 0;
+		while (j < cmd.w_count)
+		{
+			new_words.word_tok[j] = cmd.word_tok[j];
+			j++;
+		}
+		new_words.word_tok[cmd.w_count] = ft_strdup(words[i]);
+		if (!new_words.word_tok[cmd.w_count])
+			error_message("Failed to duplicate string");
+		free (cmd.word_tok);
+		cmd.word_tok = new_words.word_tok;
+		cmd.w_count++;
+		i++;
+	}
+	f_free_array(words);
+	return (cmd);
+}
+
+void	split_line(char *line)
+{
+	t_data	tokens;
+	int		i;
 
 	tokens.pipe_tok = NULL;
-	tokens.size = 0;
-	input_validation_pipes(line);
-	input_validation_redir(line);
-	check_input_quotes_pipe(line);
+	tokens.cmds_count = 0;
+	tokens.cmds = NULL;
 	printf("input after replacing pipe: %s\n", line);
 	is_heredoc(line);
 	tokens.pipe_tok = do_split(line, 31);
+	if (!tokens.pipe_tok)
+		return ;
 	if (tokens.pipe_tok)
 	{
-		while (tokens.pipe_tok[tokens.size])
-			tokens.size++;
+		while (tokens.pipe_tok[tokens.cmds_count])
+			tokens.cmds_count++;
 	}
-	printf("Number of tokens: %d\n", tokens.size);
-	for (int j = 0; j < tokens.size; j++)
+	tokens.cmds = (t_cmd *)malloc(sizeof(t_cmd) * tokens.cmds_count);
+	if (!tokens.cmds)
+		error_message("Failed to allocate memory");
+	i = 0;
+	while (i < tokens.cmds_count)
+	{
+		tokens.cmds[i] = split_into_wtok(tokens.pipe_tok[i]);
+		i++;
+	}
+	printf("Number of tokens: %d\n", tokens.cmds_count);
+	for (int j = 0; j < tokens.cmds_count; j++)
     {
         printf("Token %d: %s\n", j, tokens.pipe_tok[j]);
     }
-	return (tokens);
+	for (i = 0; i < tokens.cmds_count; i++) {
+        printf("Command %d:\n", i);
+        for (int j = 0; j < tokens.cmds[i].w_count; j++) {
+            printf("  Word %d: %s\n", j, tokens.cmds[i].word_tok[j]);
+        }
+    }
+	for (i = 0; i < tokens.cmds_count; i++) {
+        for (int j = 0; j < tokens.cmds[i].w_count; j++) {
+            free(tokens.cmds[i].word_tok[j]);
+        }
+        free(tokens.cmds[i].word_tok);
+    }
+    free(tokens.cmds);
+    f_free_array(tokens.pipe_tok);
+	//return (tokens);
 }
 
 char	*read_line(void)
@@ -73,6 +142,7 @@ char	*read_line(void)
 		printf ("exit\n");
 		exit(EXIT_SUCCESS);
 	}
+	
 	add_history(input);
 	printf("input: %s\n", input);
 	return (input);
@@ -81,17 +151,17 @@ char	*read_line(void)
 void	shell_loop(void)
 {
 	char	*line;
-	t_tok	pipe_tok_str;
+	//t_data	pipe_tok_str;
 
-	(void)pipe_tok_str;
+	//(void)pipe_tok_str;
 	while (1)
 	{
 		line = read_line();
-		pipe_tok_str = split_line(line);
+		if (input_validation_pipes(line) == 0 && input_validation_redir(line) == 0 \
+					&& check_input_quotes_pipe(line) == 0)
+			split_line(line);
 		free (line);
 	}
-	if (pipe_tok_str.pipe_tok)
-		f_free_array(pipe_tok_str.pipe_tok);
 }
 
 int	main(void)
@@ -105,3 +175,5 @@ int	main(void)
 	}
 	return (EXIT_SUCCESS);
 }
+
+

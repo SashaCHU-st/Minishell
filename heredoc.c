@@ -55,12 +55,12 @@ void	process_hd(const char *file, const char *delimeter)
 void    *is_heredoc(char *line)
 {
 	int		i;
-	t_tok	str_delimeter;
+	t_data	str_delimeter;
 	int		j;
 	int		len;
-	t_tok	count;
+	t_data	count;
 	int	in_quote = 0;
-	t_tok	file;
+	t_data	file;
 
 	str_delimeter.hd_delimeter = NULL;
 	i = 0;

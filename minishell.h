@@ -23,24 +23,29 @@
 #include <fcntl.h>
 # include "libft/libft.h"
 
-typedef struct s_tok
+typedef struct s_cmd
 {
-	int		size;
+	char	**word_tok;
+	int		w_count;
+	
+}	t_cmd;
+
+typedef struct s_data
+{
+	t_cmd	*cmds;
+	int		cmds_count;
 	char	**pipe_tok;
 	char	*hd_delimeter;
 	int		hd_index;
 	char	*tempfile_hd;
-}	t_tok;
+}	t_data;
 
-typedef struct Tokens
-{
-	t_tok	*p_tokens;
-	
-}	Tokens;
+
+
 
 ///////// input validation /////////
-void	input_validation_redir(char *input);
-void	input_validation_pipes(char *input);
+int	input_validation_redir(char *input);
+int	input_validation_pipes(char *input);
 bool	check_space(char ch);
 bool	has_unclosed_quotes(char *line);
 void	error_message(char *msg);
@@ -48,5 +53,7 @@ void	error_message(char *msg);
 char	**do_split(char const *s, char c);
 void	*is_heredoc(char *line);
 void	f_free_array(char **r);
+void	f_free_array_3(char ***str);
+void	put_one_space(char *line);
 
 #endif

@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: epolkhov <epolkhov@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:52:26 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/06/07 18:20:34 by epolkhov         ###   ########.fr       */
+/*   Updated: 2024/06/19 13:52:32 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "builtins.h"
 
 int	check_input_quotes_pipe(char *line)
 {
@@ -89,7 +90,7 @@ void	split_line(char *line)
 	tokens.cmds_count = 0;
 	tokens.cmds = NULL;
 	printf("input after replacing pipe: %s\n", line);
-	is_heredoc(line);
+	//is_heredoc(line);
 	tokens.pipe_tok = do_split(line, 31);
 	if (!tokens.pipe_tok)
 		return ;
@@ -129,26 +130,47 @@ void	split_line(char *line)
 	//return (tokens);
 }
 
-char	*read_line(void)
+char	*read_line(t_built *data)
 {
 	char	*input;
 
 	input = readline("minishell-$ ");
+	int number_of_inputs = 0;
 	if (!input)
 		error_message("Failed to read line");
-	else if (strcmp(input, "exit") == 0)
+	/////////////////
+	data->inputs = do_split(input, 32);
+	while (data->inputs[number_of_inputs])
+			number_of_inputs++; 
+   // printf("!!!!!!!!!! %d\n", number_of_inputs); 
+	
+	if( number_of_inputs > 0)
+	{
+	if (ft_strncmp(data->inputs[0], "pwd", 4) == 0)
+		ft_pwd();
+	else if(ft_strncmp(data->inputs[0], "echo", 5) == 0)
+		ft_echo(data, number_of_inputs);
+	else if(ft_strncmp(data->inputs[0], "env", 4) == 0)
+		ft_env(data);
+	else if(ft_strncmp(data->inputs[0], "export", 7) == 0)
+		ft_export(data, number_of_inputs);
+	else if (ft_strncmp(data->inputs[0], "cd", 3) == 0)
+		ft_cd(data, number_of_inputs);
+	else if(ft_strncmp(data->inputs[0], "unset", 6) == 0)
+		ft_unset(data, number_of_inputs);
+	else if (ft_strncmp(data->inputs[0], "exit", 5) == 0)
 	{
 		free(input);
 		printf ("exit\n");
 		exit(EXIT_SUCCESS);
 	}
-	
+	}
 	add_history(input);
 	printf("input: %s\n", input);
 	return (input);
 }
 
-void	shell_loop(void)
+void	shell_loop(t_built *data)
 {
 	char	*line;
 	//t_data	pipe_tok_str;
@@ -156,24 +178,54 @@ void	shell_loop(void)
 	//(void)pipe_tok_str;
 	while (1)
 	{
-		line = read_line();
+		line = read_line(data);
 		if (input_validation_pipes(line) == 0 && input_validation_redir(line) == 0 \
 					&& check_input_quotes_pipe(line) == 0)
 			split_line(line);
 		free (line);
 	}
 }
-
-int	main(void)
+char **copy_envp(char *envp[])
 {
-	if (isatty(STDIN_FILENO))
-		shell_loop();
-	else
+	int count = 0;
+	while (envp[count] != NULL)
+		count++;
+	char **new_envp = malloc((count + 1) * sizeof(char *));
+	if (new_envp == NULL)
 	{
-		perror("Terminal is not in interactive mode");
-		return (EXIT_FAILURE);
+		perror("malloc");
+		exit(EXIT_FAILURE);
 	}
-	return (EXIT_SUCCESS);
+	int i = 0;
+	while ( i < count)
+	{
+		new_envp[i] = ft_strdup(envp[i]);
+		if (new_envp[i] == NULL)
+		{
+			perror("strdup");
+			exit(EXIT_FAILURE);
+		}
+		i++;
+	}
+	new_envp[count] = NULL;
+	return(new_envp);
+}
+int	main(int argc, char **argv, char *envp[])
+{
+	t_built data;
+	(void)argv;
+	data.envp = copy_envp(envp);
+	if(argc < 2)
+	{
+		if (isatty(STDIN_FILENO))
+			shell_loop(&data);
+		else
+		{
+			perror("Terminal is not in interactive mode");
+			return (EXIT_FAILURE);
+		}
+		return (EXIT_SUCCESS);
+	}
 }
 
 

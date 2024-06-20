@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: epolkhov <epolkhov@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:53:11 by epolkhov          #+#    #+#             */
 /*   Updated: 2024/06/06 21:33:01 by epolkhov         ###   ########.fr       */
@@ -22,6 +22,7 @@
 # include <readline/history.h>
 #include <fcntl.h>
 # include "libft/libft.h"
+# include "builtins.h"
 
 typedef struct s_cmd
 {
@@ -29,6 +30,7 @@ typedef struct s_cmd
 	int		w_count;
 	
 }	t_cmd;
+
 
 typedef struct s_data
 {
@@ -55,5 +57,8 @@ void	*is_heredoc(char *line);
 void	f_free_array(char **r);
 void	f_free_array_3(char ***str);
 void	put_one_space(char *line);
+
+
+//////////////ADDED BY SASHA//////////////
 
 #endif

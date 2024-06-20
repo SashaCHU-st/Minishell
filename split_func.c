@@ -6,7 +6,7 @@
 /*   By: epolkhov <epolkhov@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 20:25:40 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/06/05 14:31:29 by epolkhov         ###   ########.fr       */
+/*   Updated: 2024/06/06 13:22:13 by epolkhov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,33 +41,44 @@ static unsigned int	num_of_str(const char *s, char c)
 	return (count);
 }
 
-// static int	f_free_array(char **r)
-// {
-// 	char	**ptr;
-
-// 	if (!r)
-// 		return (1);
-// 	ptr = r;
-// 	while (*ptr)
-// 	{
-// 		free(*ptr);
-// 		ptr++;
-// 	}
-// 	free(r);
-// 	return (1);
-// }
-
-char	*f_free_array(char **str)
+void	f_free_array(char **str)
 {
-	while (*str)
+	char	**ptr;
+
+	ptr = str;
+	while (*ptr)
 	{
-		free(*str);
-		*str = NULL;
-		str++;
+		free(*ptr);
+		*ptr = NULL;
+		ptr++;
 	}
 	free(str);
-	return (NULL);
+	str = NULL;
 }
+
+void	f_free_cmds(t_cmd *cmds, int cmds_count)
+{
+	int		i;
+	int		j;
+
+	i = 0;
+	while (i < cmds_count)
+	{
+		j = 0;
+		while (j < cmds->w_count)
+		{
+			free(cmds->word_tok[j]);
+			cmds->word_tok[j] = NULL;
+			j++;
+		}
+		free(cmds->word_tok);
+		cmds->word_tok = NULL;
+		i++;
+	}
+	free(cmds);
+	cmds = NULL;
+}
+
 static unsigned int	get_substring_length(const char *s, \
 			unsigned int start, char c)
 {

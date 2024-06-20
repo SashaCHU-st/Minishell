@@ -8,6 +8,11 @@ RL_FLAGS = -lreadline
 SRCS = minishell.c \
 		input_validation.c \
 		split_func.c \
+		command.c \
+		builtins_util.c \
+		export.c \
+		cd.c \
+		export_utils.c \
 		heredoc.c \
 			
 OBJS = $(SRCS:.c=.o)

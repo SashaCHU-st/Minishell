@@ -178,7 +178,7 @@ void	shell_loop(t_built *data)
 	//(void)pipe_tok_str;
 	while (1)
 	{
-		line = read_line();
+		line = read_line(data);
 		if (input_validation_pipes(line) == 0 && input_validation_redir(line) == 0 \
 					&& check_input_quotes_pipe(line) == 0)
 			split_line(line);

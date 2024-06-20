@@ -13,7 +13,7 @@ SRCS = minishell.c \
 		export.c \
 		cd.c \
 		export_utils.c \
-
+		heredoc.c \
 			
 OBJS = $(SRCS:.c=.o)
 

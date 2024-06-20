@@ -39,7 +39,7 @@ bool	check_space(char ch)
 	return (false);
 }
 
-void	input_validation_pipes(char *input)
+int	input_validation_pipes(char *input)
 {
 	int	i;
 
@@ -50,23 +50,24 @@ void	input_validation_pipes(char *input)
 		{
 			if (input[i + 1] == '|')
 			{
-				perror("Syntax error: double pipes");
-				exit(1);
+				ft_putendl_fd("Syntax error: multiple pipes", 2);
+				return (1);
 			}
 			i++;
 			while (check_space(input[i]))
 				i++;
 			if (input[i] == '|' || input[i] == '\0')
 			{
-				perror("Syntax error: no input after pipe");
-				exit(1);
+				ft_putendl_fd("Syntax error: no input after pipe", 2);
+				return (1);
 			}
 		}
 		i++;
 	}
+	return (0);
 }
 
-void	input_validation_redir(char *input)
+int	input_validation_redir(char *input)
 {
 	int	i;
 
@@ -85,16 +86,38 @@ void	input_validation_redir(char *input)
 				i++;
 			if (input[i] == '|' || input[i] == '\0')
 			{
-				perror("Syntax error: no input after redirection");
-				exit(1);
+				ft_putendl_fd("Syntax error: no input after redirection", 2);
+				return (1);
 			}
 		}
 		i++;
 	}
+	return (0);
 }
 void	error_message(char *msg)
 {
 	//ft_putstr_fd("Error\n", 2);
 	ft_putendl_fd(msg, 2);
 	exit (EXIT_FAILURE);
+}
+
+void	put_one_space(char *line)
+{
+	int i;
+
+	i =  0;
+	while (line[i] && check_space(line[i]))
+			i++;
+	while (line[i])
+	{
+		while (line[i] && !check_space(line[i]))
+		{
+			printf("%c", line[i]);
+			i++;
+		}
+		while (line[i] && check_space(line[i]))
+			i++;
+		if (line[i] && !check_space(line[i]))
+		printf(" ");
+	}
 }

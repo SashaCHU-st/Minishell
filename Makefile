@@ -14,6 +14,11 @@ SRCS = minishell.c \
 		cd.c \
 		export_utils.c \
 		heredoc.c \
+		pipex.c \
+		open_fd.c \
+		free.c \
+		children.c \
+		builtin.c \
 			
 OBJS = $(SRCS:.c=.o)
 

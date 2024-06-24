@@ -6,30 +6,42 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 13:32:50 by aheinane          #+#    #+#             */
-/*   Updated: 2024/06/19 13:55:37 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/06/24 15:52:37 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BUILTINS_H
 #define BUILTINS_H
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
+# include <stdio.h>
+# include <unistd.h>
+# include <fcntl.h>
+# include <sys/wait.h>
+# include <stdlib.h>
 #include "minishell.h"
 
 typedef struct s_built{
-	char **envp;
-	char **new_envp;
-	int argc;
-	char **argv;
-	char pwd[1000];
-	int pwd_index;
-	int oldpwd_index;
-	char *input_copy;
+	char	**envp;
+	char	**new_envp;
+	int		argc;
+	char	**argv;
+	char	pwd[1000];
+	int		pwd_index;
+	int		oldpwd_index;
+	char	*input_copy;
 	//int number_of_inputs;
 	//int envp_size;
-	char **inputs;
+	char	**inputs;
 } t_built;
+
+typedef struct s_pipex{
+	int		fd[2];
+	int		fd_in;
+	int		fd_out;
+	char	**commands_path;
+	char	**com_fir_child;
+	char	**com_sec_child;
+	
+} t_pipex;
 
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 int		ft_words(const char *str, char c);
@@ -58,5 +70,21 @@ void	checking_export (t_built *data);
 void	not_in_var(t_built *data, char *input_copy, char *added_var);
 void	export_with(t_built *data, int number_of_inputs);
 void	if_error_input(char *input_copy);
+int		if_builtins(t_built *data, int number_of_inputs);
+
+
+//////
+char	*mine_path(t_built *data);
+void	creating_children( t_pipex *pipex, t_built *data, int number_of_inputs);
+void	free_fun(t_pipex *pipex);
+int		open_fd_in(t_pipex *pipex, t_built *data);
+void	open_fd_out(t_pipex *pipex, t_built *data, int number_of_inputs);
+void	free_array(char **array);
+void	ft_error(void);
+char	*path_for_commands(t_pipex *pipex, char **child_command);
+void	fun_second_child(t_built *data, t_pipex pipex);
+void	fun_first_child(t_built *data, t_pipex pipex);
+void	close_and_wait(t_pipex *data, int first_child, int second_child);
+void	check_permissions(t_built *data);
 
 #endif

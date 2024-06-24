@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:52:26 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/06/19 13:52:32 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/06/24 16:04:57 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,41 +130,70 @@ void	split_line(char *line)
 	//return (tokens);
 }
 
+// int if_builtins(t_built *data, int number_of_inputs)
+// {
+// 	if (ft_strncmp(data->inputs[0], "pwd", 4) == 0)
+// 			ft_pwd();
+// 	else if (ft_strncmp(data->inputs[0], "echo", 5) == 0)
+// 			ft_echo(data, number_of_inputs);
+// 	else if (ft_strncmp(data->inputs[0], "env", 4) == 0)
+// 		ft_env(data);
+// 	else if (ft_strncmp(data->inputs[0], "export", 7) == 0)
+// 		ft_export(data, number_of_inputs);
+// 	else if (ft_strncmp(data->inputs[0], "cd", 3) == 0)
+// 		ft_cd(data, number_of_inputs);
+// 	else if (ft_strncmp(data->inputs[0], "unset", 6) == 0)
+// 			ft_unset(data, number_of_inputs);
+// 	else
+// 		return(0);
+// 	return(1);
+// }
+
 char	*read_line(t_built *data)
 {
 	char	*input;
+	int		number_of_inputs;
+	t_pipex	pipex;
+	char	*path;
 
+	number_of_inputs = 0;
 	input = readline("minishell-$ ");
-	int number_of_inputs = 0;
 	if (!input)
 		error_message("Failed to read line");
-	/////////////////
 	data->inputs = do_split(input, 32);
 	while (data->inputs[number_of_inputs])
-			number_of_inputs++; 
-   // printf("!!!!!!!!!! %d\n", number_of_inputs); 
-	
-	if( number_of_inputs > 0)
+			number_of_inputs++;
+	if (number_of_inputs > 0)
 	{
-	if (ft_strncmp(data->inputs[0], "pwd", 4) == 0)
-		ft_pwd();
-	else if(ft_strncmp(data->inputs[0], "echo", 5) == 0)
-		ft_echo(data, number_of_inputs);
-	else if(ft_strncmp(data->inputs[0], "env", 4) == 0)
-		ft_env(data);
-	else if(ft_strncmp(data->inputs[0], "export", 7) == 0)
-		ft_export(data, number_of_inputs);
-	else if (ft_strncmp(data->inputs[0], "cd", 3) == 0)
-		ft_cd(data, number_of_inputs);
-	else if(ft_strncmp(data->inputs[0], "unset", 6) == 0)
-		ft_unset(data, number_of_inputs);
-	else if (ft_strncmp(data->inputs[0], "exit", 5) == 0)
-	{
-		free(input);
-		printf ("exit\n");
-		exit(EXIT_SUCCESS);
-	}
-	}
+		if(if_builtins(data, number_of_inputs) == 0)
+		{
+			path = mine_path(data);
+			if(path)
+				printf("%s\n", path);
+			else 
+				printf("KUKUUUUUUU");
+			if (pipe(pipex.fd) == -1)
+			{
+				perror("Error in pipe()");
+				exit(1);
+			}
+			pipex.commands_path = ft_split(path, ':');
+			if (pipex.commands_path == 0)
+			{
+				close(pipex.fd[0]);
+				close(pipex.fd[1]);
+				free_fun(&pipex);
+			}
+			creating_children(&pipex, data, number_of_inputs);
+			close(pipex.fd_in);
+			close(pipex.fd_out);
+		}
+		else
+			printf("HHHAHAHHAHAHAHAHAH");
+	} 
+	for (int i = 0; data->inputs[i] != NULL; i++)
+		free(data->inputs[i]);
+	free(data->inputs);
 	add_history(input);
 	printf("input: %s\n", input);
 	return (input);
@@ -178,7 +207,7 @@ void	shell_loop(t_built *data)
 	//(void)pipe_tok_str;
 	while (1)
 	{
-		line = read_line();
+		line = read_line(data);
 		if (input_validation_pipes(line) == 0 && input_validation_redir(line) == 0 \
 					&& check_input_quotes_pipe(line) == 0)
 			split_line(line);

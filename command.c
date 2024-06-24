@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 13:43:44 by aheinane          #+#    #+#             */
-/*   Updated: 2024/06/19 14:02:54 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/06/20 09:34:57 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	ft_pwd(void)
 	printf("%s\n", getcwd(NULL, 0));
 }
 
-void	if_quotes(char *str)
+void	if_quotes(char *str) 
 {
 	char	*write_ptr;
 	char	quote_char;

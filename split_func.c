@@ -109,6 +109,8 @@ static char	**f_fill_array(char const *s, char c, unsigned int nb)
 	unsigned int	len;
 
 	array = allocate_array(nb);
+	if (!array)
+		return(NULL);
 	start = 0;
 	i = 0;
 	while (i < nb)
@@ -118,7 +120,10 @@ static char	**f_fill_array(char const *s, char c, unsigned int nb)
 			len = get_substring_length(s, start, c);
 			array[i] = ft_substr(s, start, len);
 			if (!array[i])
+			{
 				f_free_array(array);
+				return (NULL);
+			}
 			i++;
 			start += len;
 		}

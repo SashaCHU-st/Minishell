@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:53:11 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/06/06 21:33:01 by epolkhov         ###   ########.fr       */
+/*   Updated: 2024/06/26 11:11:54 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ char	**do_split(char const *s, char c);
 void	*is_heredoc(char *line);
 void	f_free_array(char **r);
 void	put_one_space(char *line);
-int if_builtins(t_built *data, t_cmd *cmd);
+int	skip_quotes(char *line, int i);
+//int if_builtins(t_built *data, t_cmd *cmd);
 
 
 //////////////ADDED BY SASHA//////////////

@@ -13,62 +13,6 @@
 #include "minishell.h"
 #include "builtins.h"
 
-char	*change_to_space(char *line)
-{
-	int	i;
-
-	i = 0;
-	while (line[i])
-	{
-		if (line[i] == '\t' || line[i] == '\v' || line[i] == '\r' || line[i] == '\f')
-			line[i] = ' ';
-		i++;
-	}
-	return (line);
-}
-
-void	change_space_to_31(char *p_token)
-{
-	int	i;
-
-	i = 0;
-	while (p_token[i])
-	{
-		if (p_token[i] == '\'' || p_token[i] == '\"')
-			i = skip_quotes(p_token, i);
-		if (p_token[i] == ' ')
-			p_token[i] = 31;
-		i++;
-	}
-}
-
-int	check_input_quotes_pipe(char *line)
-{
-	int	i;
-	int	in_quote;
-
-	i = 0;
-	in_quote = 0;
-	while (line[i])
-	{
-		if (line[i] == '\"' || line[i] == '\'')
-		{
-			in_quote = !in_quote;
-			i++;
-			continue ;
-		}
-		if (line[i] == '|' && !in_quote)
-			line[i] = 31;
-		i++;
-	}
-	if ((in_quote || has_unclosed_quotes(line)))
-	{
-		ft_putendl_fd("Syntax error: unclosed quotes", 2);
-		return (1);
-	}
-	return (0);
-}
-
 t_cmd	split_into_wtok(char *pipe_token)
 {
 	t_cmd	cmd;
@@ -81,6 +25,7 @@ t_cmd	split_into_wtok(char *pipe_token)
 	cmd.w_count = 0;
 	i = 0;
 	change_space_to_31(pipe_token);
+	remove_quotes(pipe_token);
 	words = do_split(pipe_token, 31);
 	if (!words)
 	{
@@ -272,5 +217,3 @@ int	main(int argc, char **argv, char *envp[])
 		return (EXIT_SUCCESS);
 	}
 }
-
-

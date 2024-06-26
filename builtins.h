@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 13:32:50 by aheinane          #+#    #+#             */
-/*   Updated: 2024/06/24 15:52:37 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/06/26 11:10:55 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,20 +18,21 @@
 # include <sys/wait.h>
 # include <stdlib.h>
 #include "minishell.h"
+#include "structs.h"
 
-typedef struct s_built{
-	char	**envp;
-	char	**new_envp;
-	int		argc;
-	char	**argv;
-	char	pwd[1000];
-	int		pwd_index;
-	int		oldpwd_index;
-	char	*input_copy;
-	//int number_of_inputs;
-	//int envp_size;
-	char	**inputs;
-} t_built;
+// typedef struct s_built{
+// 	char	**envp;
+// 	char	**new_envp;
+// 	int		argc;
+// 	char	**argv;
+// 	char	pwd[1000];
+// 	int		pwd_index;
+// 	int		oldpwd_index;
+// 	char	*input_copy;
+// 	//int number_of_inputs;
+// 	//int envp_size;
+// 	char	**inputs;
+// } t_built;
 
 typedef struct s_pipex{
 	int		fd[2];
@@ -70,7 +71,6 @@ void	checking_export (t_built *data);
 void	not_in_var(t_built *data, char *input_copy, char *added_var);
 void	export_with(t_built *data, int number_of_inputs);
 void	if_error_input(char *input_copy);
-int		if_builtins(t_built *data, int number_of_inputs);
 
 
 //////
@@ -86,5 +86,6 @@ void	fun_second_child(t_built *data, t_pipex pipex);
 void	fun_first_child(t_built *data, t_pipex pipex);
 void	close_and_wait(t_pipex *data, int first_child, int second_child);
 void	check_permissions(t_built *data);
+ int	if_builtins(t_built *data, t_cmd *cmd);
 
 #endif

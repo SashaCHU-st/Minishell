@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: epolkhov <epolkhov@student.42.fr>          #+#  +:+       +#+        */
+/*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024-06-12 10:05:10 by epolkhov          #+#    #+#             */
-/*   Updated: 2024-06-12 10:05:10 by epolkhov         ###   ########.fr       */
+/*   Created: 2024/06/12 10:05:10 by epolkhov          #+#    #+#             */
+/*   Updated: 2024/06/26 10:42:57 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "minishell.h"
 
 char	*hd_filename(int count)
@@ -76,7 +77,7 @@ void    *is_heredoc(char *line)
             continue;
         }
 		if ((ft_strncmp(&line[i], "<<", 2) == 0) && !in_quote)
-		{
+		{	
 			count.hd_index++;
 			printf("%d\n", count.hd_index);
 			i = i + 2;

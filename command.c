@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 13:43:44 by aheinane          #+#    #+#             */
-/*   Updated: 2024/06/24 16:21:24 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/06/26 10:39:24 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	if_quotes(char *str)
 	*write_ptr = '\0';
 }
 
-void	ft_unset(t_built *data, int number_of_inputs)
+void	ft_unset(t_built *shell, int number_of_inputs)
 {
 	int	k;
 
@@ -53,18 +53,18 @@ void	ft_unset(t_built *data, int number_of_inputs)
 	if (number_of_inputs >= 2)
 	{
 		while (k < number_of_inputs)
-			unset_var(data, data->inputs[k++]);
+			unset_var(shell, shell->data.cmds->word_tok[k++]);
 	}
 }
 
-void	ft_echo(t_built *data, int number_of_inputs)
+void	ft_echo(t_built *shell, int number_of_inputs)
 {
 	int	flag;
 	int	i;
 
 	i = 2;
 	flag = 0;
-	if (number_of_inputs > 2 && ft_strncmp(data->inputs[1], "-n", 3) == 0)// in case there is -n as 3d arg
+	if (number_of_inputs > 2 && ft_strncmp(shell->data.cmds->word_tok[1], "-n", 3) == 0)// in case there is -n as 3d arg
 	{
 		flag = 1;
 		i = 3;
@@ -75,7 +75,7 @@ void	ft_echo(t_built *data, int number_of_inputs)
 	{
 		while (number_of_inputs >= i)
 		{
-			printf("%s", data->inputs[i - 1]);
+			printf("%s", shell->data.cmds->word_tok[i - 1]);
 			if (number_of_inputs - 1 > i)
 				printf(" ");
 			i++;

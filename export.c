@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 13:35:40 by aheinane          #+#    #+#             */
-/*   Updated: 2024/06/19 14:10:33 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/06/26 10:41:22 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	not_in_var(t_built *data, char *input_copy, char *added_var)
 		free(new_envp);
 }
 
-void	export_with(t_built *data, int number_of_inputs)
+void	export_with(t_built *shell, int number_of_inputs)
 {
 	char	*added_var;
 	char	*input_copy;
@@ -83,19 +83,19 @@ void	export_with(t_built *data, int number_of_inputs)
 	j = 1;
 	while (j < number_of_inputs)
 	{
-		input_copy = ft_strdup(data->inputs[j]);
+		input_copy = ft_strdup(shell->data.cmds->word_tok[j]);
 		if_error_input(input_copy);
 		if_quotes(input_copy);
-		var_index = is_var_in_envp(input_copy, data);
+		var_index = is_var_in_envp(input_copy, shell);
 		if (var_index >= 0)
 		{
-			free(data->envp[var_index]);
+			free(shell->envp[var_index]);
 			added_var = ft_strdup(input_copy);
 			if (added_var != NULL)
-				data->envp[var_index] = added_var;
+				shell->envp[var_index] = added_var;
 		}
 		else
-			not_in_var(data, input_copy, added_var);
+			not_in_var(shell, input_copy, added_var);
 		free(input_copy);
 		j++;
 	}

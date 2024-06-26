@@ -12,6 +12,7 @@
 
 #ifndef BUILTINS_H
 #define BUILTINS_H
+
 # include <stdio.h>
 # include <unistd.h>
 # include <fcntl.h>
@@ -19,20 +20,6 @@
 # include <stdlib.h>
 #include "minishell.h"
 #include "structs.h"
-
-// typedef struct s_built{
-// 	char	**envp;
-// 	char	**new_envp;
-// 	int		argc;
-// 	char	**argv;
-// 	char	pwd[1000];
-// 	int		pwd_index;
-// 	int		oldpwd_index;
-// 	char	*input_copy;
-// 	//int number_of_inputs;
-// 	//int envp_size;
-// 	char	**inputs;
-// } t_built;
 
 typedef struct s_pipex{
 	int		fd[2];

@@ -22,6 +22,7 @@
 # include <readline/history.h>
 #include <fcntl.h>
 # include "libft/libft.h"
+#include "structs.h"
 # include "builtins.h"
 
 // typedef struct s_cmd
@@ -42,22 +43,20 @@
 // 	char	*tempfile_hd;
 // }	t_data;
 
-
-
-
 ///////// input validation /////////
 int	input_validation_redir(char *input);
 int	input_validation_pipes(char *input);
 bool	check_space(char ch);
 bool	has_unclosed_quotes(char *line);
+int	skip_quotes(char *line, int i);
 void	error_message(char *msg);
 
 char	**do_split(char const *s, char c);
 void	*is_heredoc(char *line);
 void	f_free_array(char **r);
-void	f_free_array_3(char ***str);
 void	put_one_space(char *line);
 int	skip_quotes(char *line, int i);
+//int if_builtins(t_built *data, t_cmd *cmd);
 
 
 //////////////ADDED BY SASHA//////////////

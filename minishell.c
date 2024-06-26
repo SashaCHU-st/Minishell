@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:52:26 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/06/19 13:52:32 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/06/26 13:33:35 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,6 +150,9 @@ void	shell_loop(t_built *shell)
 	char	*line;
 	int		i;
 
+	t_pipex	pipex;
+	char	*path;
+
 	i = 0;
 	while (1)
 	{
@@ -162,10 +165,41 @@ void	shell_loop(t_built *shell)
 		}
 		while (i < shell->data.cmds_count)
 		{
+
+        //     if (if_builtins(shell, &shell->data.cmds[i]))
+        // //         break;
+        // //     i++;
+        // // }
             if (if_builtins(shell, &shell->data.cmds[i]))
-                break;
-            i++;
+				break ;
+			else
+			{
+
+				path = mine_path(shell);
+				if(path)
+					printf("%s\n", path);
+				else 
+					printf("KUKUUUUUUU");
+				if (pipe(pipex.fd) == -1)
+				{
+					perror("Error in pipe()");
+					exit(1);
+				}
+				pipex.commands_path = ft_split(path, ':');
+				if (pipex.commands_path == 0)
+				{
+					close(pipex.fd[0]);
+					close(pipex.fd[1]);
+					free_fun(&pipex);
+				}
+			creating_children(&pipex, shell, shell->data.cmds->w_count);
+			close(pipex.fd_in);
+			close(pipex.fd_out);
+			}
+          	i++;
         }
+		
+
 		// for (int i = 0; i < shell->data.cmds_count; i++) {
         //     f_free_array(shell->data.cmds[i].word_tok);
         // }
@@ -199,6 +233,7 @@ char **copy_envp(char *envp[])
 	new_envp[count] = NULL;
 	return(new_envp);
 }
+
 
 int	main(int argc, char **argv, char *envp[])
 {

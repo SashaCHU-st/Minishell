@@ -6,14 +6,14 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:45:12 by aheinane          #+#    #+#             */
-/*   Updated: 2024/06/24 15:45:43 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/06/26 11:18:38 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "builtins.h"
 
-void	fun_first_child(t_built *data, t_pipex pipex)
+void	fun_first_child(t_built *shell, t_pipex pipex)
 {
 	char	*final;
 
@@ -21,7 +21,7 @@ void	fun_first_child(t_built *data, t_pipex pipex)
 	close(pipex.fd[0]);
 	close(pipex.fd[1]);
 	dup2(pipex.fd_in, STDIN_FILENO);
-	pipex.com_fir_child = ft_split(data->inputs[1], ' ');
+	pipex.com_fir_child = ft_split(shell->data.cmds->word_tok[1], ' ');
 	if (pipex.com_fir_child == 0)
 	{
 		close(pipex.fd[0]);
@@ -35,11 +35,11 @@ void	fun_first_child(t_built *data, t_pipex pipex)
 		free(final);
 		exit(1);
 	}
-	if (execve(final, pipex.com_fir_child, data->envp) == -1)
+	if (execve(final, pipex.com_fir_child, shell->envp) == -1)
 		free_fun(&pipex);
 }
 
-void	fun_second_child(t_built *data, t_pipex pipex)
+void	fun_second_child(t_built *shell, t_pipex pipex)
 {
 	char	*final;
 
@@ -47,7 +47,7 @@ void	fun_second_child(t_built *data, t_pipex pipex)
 	close(pipex.fd[0]);
 	close(pipex.fd[1]);
 	dup2(pipex.fd_out, STDOUT_FILENO);
-	pipex.com_sec_child = ft_split(data->inputs[2], ' ');
+	pipex.com_sec_child = ft_split(shell->data.cmds->word_tok[2], ' ');
 	if (pipex.com_sec_child == 0)
 	{
 		close(pipex.fd[0]);
@@ -61,7 +61,7 @@ void	fun_second_child(t_built *data, t_pipex pipex)
 		free(final);
 		exit(1);
 	}
-	if (execve(final, pipex.com_sec_child, data->envp) == -1)
+	if (execve(final, pipex.com_sec_child, shell->envp) == -1)
 		free_fun(&pipex);
 }
 

@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:53:11 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/06/06 21:33:01 by epolkhov         ###   ########.fr       */
+/*   Updated: 2024/06/26 11:11:54 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,23 +24,23 @@
 # include "libft/libft.h"
 # include "builtins.h"
 
-typedef struct s_cmd
-{
-	char	**word_tok;
-	int		w_count;
+// typedef struct s_cmd
+// {
+// 	char	**word_tok;
+// 	int		w_count;
 	
-}	t_cmd;
+// }	t_cmd;
 
 
-typedef struct s_data
-{
-	t_cmd	*cmds;
-	int		cmds_count;
-	char	**pipe_tok;
-	char	*hd_delimeter;
-	int		hd_index;
-	char	*tempfile_hd;
-}	t_data;
+// typedef struct s_data
+// {
+// 	t_cmd	*cmds;
+// 	int		cmds_count;
+// 	char	**pipe_tok;
+// 	char	*hd_delimeter;
+// 	int		hd_index;
+// 	char	*tempfile_hd;
+// }	t_data;
 
 
 
@@ -57,6 +57,7 @@ void	*is_heredoc(char *line);
 void	f_free_array(char **r);
 void	f_free_array_3(char ***str);
 void	put_one_space(char *line);
+int	skip_quotes(char *line, int i);
 
 
 //////////////ADDED BY SASHA//////////////

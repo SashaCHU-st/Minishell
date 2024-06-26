@@ -6,13 +6,41 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:52:26 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/06/24 16:04:57 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/06/26 13:33:35 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "builtins.h"
 
+char	*change_to_space(char *line)
+{
+	int	i;
+
+	i = 0;
+	while (line[i])
+	{
+		if (line[i] == '\t' || line[i] == '\v' || line[i] == '\r' || line[i] == '\f')
+			line[i] = ' ';
+		i++;
+	}
+	return (line);
+}
+
+void	change_space_to_31(char *p_token)
+{
+	int	i;
+
+	i = 0;
+	while (p_token[i])
+	{
+		if (p_token[i] == '\'' || p_token[i] == '\"')
+			i = skip_quotes(p_token, i);
+		if (p_token[i] == ' ')
+			p_token[i] = 31;
+		i++;
+	}
+}
 int	check_input_quotes_pipe(char *line)
 {
 	int	i;
@@ -51,11 +79,13 @@ t_cmd	split_into_wtok(char *pipe_token)
 	cmd.word_tok = NULL;
 	cmd.w_count = 0;
 	i = 0;
-	words = do_split(pipe_token, ' ');
+	change_space_to_31(pipe_token);
+	words = do_split(pipe_token, 31);
 	if (!words)
 	{
 		cmd.word_tok = NULL;
         cmd.w_count = 0;
+		f_free_array(words);
 		return (cmd);
 	}
 	while (words[i])
@@ -81,7 +111,7 @@ t_cmd	split_into_wtok(char *pipe_token)
 	return (cmd);
 }
 
-void	split_line(char *line)
+t_data	split_line(char *line)
 {
 	t_data	tokens;
 	int		i;
@@ -90,10 +120,10 @@ void	split_line(char *line)
 	tokens.cmds_count = 0;
 	tokens.cmds = NULL;
 	printf("input after replacing pipe: %s\n", line);
-	//is_heredoc(line);
+	is_heredoc(line);
 	tokens.pipe_tok = do_split(line, 31);
 	if (!tokens.pipe_tok)
-		return ;
+		return (tokens);
 	if (tokens.pipe_tok)
 	{
 		while (tokens.pipe_tok[tokens.cmds_count])
@@ -119,98 +149,112 @@ void	split_line(char *line)
             printf("  Word %d: %s\n", j, tokens.cmds[i].word_tok[j]);
         }
     }
-	for (i = 0; i < tokens.cmds_count; i++) {
-        for (int j = 0; j < tokens.cmds[i].w_count; j++) {
-            free(tokens.cmds[i].word_tok[j]);
-        }
-        free(tokens.cmds[i].word_tok);
-    }
-    free(tokens.cmds);
-    f_free_array(tokens.pipe_tok);
-	//return (tokens);
+	// for (i = 0; i < tokens.cmds_count; i++) {
+    //     for (int j = 0; j < tokens.cmds[i].w_count; j++) {
+    //         free(tokens.cmds[i].word_tok[j]);
+    //     }
+    //     free(tokens.cmds[i].word_tok);
+    // }
+    // free(tokens.cmds);
+    // f_free_array(tokens.pipe_tok);
+	return (tokens);
 }
 
-// int if_builtins(t_built *data, int number_of_inputs)
-// {
-// 	if (ft_strncmp(data->inputs[0], "pwd", 4) == 0)
-// 			ft_pwd();
-// 	else if (ft_strncmp(data->inputs[0], "echo", 5) == 0)
-// 			ft_echo(data, number_of_inputs);
-// 	else if (ft_strncmp(data->inputs[0], "env", 4) == 0)
-// 		ft_env(data);
-// 	else if (ft_strncmp(data->inputs[0], "export", 7) == 0)
-// 		ft_export(data, number_of_inputs);
-// 	else if (ft_strncmp(data->inputs[0], "cd", 3) == 0)
-// 		ft_cd(data, number_of_inputs);
-// 	else if (ft_strncmp(data->inputs[0], "unset", 6) == 0)
-// 			ft_unset(data, number_of_inputs);
-// 	else
-// 		return(0);
-// 	return(1);
-// }
+ int if_builtins(t_built *data, t_cmd *cmd)
+{
+	if (ft_strncmp(cmd->word_tok[0], "pwd", 4) == 0)
+			ft_pwd();
+	else if (ft_strncmp(cmd->word_tok[0], "echo", 5) == 0)
+			ft_echo(data, cmd->w_count);
+	else if (ft_strncmp(cmd->word_tok[0], "env", 4) == 0)
+		ft_env(data);
+	else if (ft_strncmp(cmd->word_tok[0], "export", 7) == 0)
+		ft_export(data, cmd->w_count);
+	else if (ft_strncmp(cmd->word_tok[0], "cd", 3) == 0)
+		ft_cd(data, cmd->w_count);
+	else if (ft_strncmp(cmd->word_tok[0], "unset", 6) == 0)
+			ft_unset(data, cmd->w_count);
+	else
+		return(0);
+	return(1);
+}
 
-char	*read_line(t_built *data)
+char	*read_line(t_built *line)
 {
 	char	*input;
-	int		number_of_inputs;
-	t_pipex	pipex;
-	char	*path;
 
-	number_of_inputs = 0;
+	(void)line;
 	input = readline("minishell-$ ");
 	if (!input)
 		error_message("Failed to read line");
-	data->inputs = do_split(input, 32);
-	while (data->inputs[number_of_inputs])
-			number_of_inputs++;
-	if (number_of_inputs > 0)
+
+	if (ft_strncmp(input, "exit", 5) == 0)
 	{
-		if(if_builtins(data, number_of_inputs) == 0)
-		{
-			path = mine_path(data);
-			if(path)
-				printf("%s\n", path);
-			else 
-				printf("KUKUUUUUUU");
-			if (pipe(pipex.fd) == -1)
-			{
-				perror("Error in pipe()");
-				exit(1);
-			}
-			pipex.commands_path = ft_split(path, ':');
-			if (pipex.commands_path == 0)
-			{
-				close(pipex.fd[0]);
-				close(pipex.fd[1]);
-				free_fun(&pipex);
-			}
-			creating_children(&pipex, data, number_of_inputs);
-			close(pipex.fd_in);
-			close(pipex.fd_out);
-		}
-		else
-			printf("HHHAHAHHAHAHAHAHAH");
-	} 
-	for (int i = 0; data->inputs[i] != NULL; i++)
-		free(data->inputs[i]);
-	free(data->inputs);
+		free(input);
+		printf ("exit\n");
+		exit(EXIT_SUCCESS);
+	}
 	add_history(input);
 	printf("input: %s\n", input);
 	return (input);
 }
 
-void	shell_loop(t_built *data)
+void	shell_loop(t_built *shell)
 {
 	char	*line;
-	//t_data	pipe_tok_str;
+	int		i;
+	t_pipex	pipex;
+	char	*path;
 
-	//(void)pipe_tok_str;
+	i = 0;
 	while (1)
 	{
-		line = read_line(data);
+		line = read_line(shell);
 		if (input_validation_pipes(line) == 0 && input_validation_redir(line) == 0 \
 					&& check_input_quotes_pipe(line) == 0)
-			split_line(line);
+		{
+			line = change_to_space(line);
+			shell->data = split_line(line);
+		}
+		while (i < shell->data.cmds_count)
+		{
+        //     if (if_builtins(shell, &shell->data.cmds[i]))
+        // //         break;
+        // //     i++;
+        // // }
+            if (if_builtins(shell, &shell->data.cmds[i]))
+				break ;
+			else
+			{
+
+				path = mine_path(shell);
+				if(path)
+					printf("%s\n", path);
+				else 
+					printf("KUKUUUUUUU");
+				if (pipe(pipex.fd) == -1)
+				{
+					perror("Error in pipe()");
+					exit(1);
+				}
+				pipex.commands_path = ft_split(path, ':');
+				if (pipex.commands_path == 0)
+				{
+					close(pipex.fd[0]);
+					close(pipex.fd[1]);
+					free_fun(&pipex);
+				}
+			creating_children(&pipex, shell, shell->data.cmds->w_count);
+			close(pipex.fd_in);
+			close(pipex.fd_out);
+			}
+          	i++;
+        }
+		
+		// for (int i = 0; i < shell->data.cmds_count; i++) {
+        //     f_free_array(shell->data.cmds[i].word_tok);
+        // }
+        // free(shell->data.cmds);
 		free (line);
 	}
 }
@@ -256,5 +300,3 @@ int	main(int argc, char **argv, char *envp[])
 		return (EXIT_SUCCESS);
 	}
 }
-
-

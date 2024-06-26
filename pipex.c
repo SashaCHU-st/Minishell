@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:47:03 by aheinane          #+#    #+#             */
-/*   Updated: 2024/06/24 15:51:21 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/06/26 11:15:13 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,22 +69,22 @@ void	creating_children( t_pipex *pipex, t_built *data, int number_of_inputs)
 	close_and_wait(pipex, first_child, second_child);
 }
 
-char	*mine_path(t_built *data)
+char	*mine_path(t_built *shell)
 {
 	int	i;
 
-	if (data->envp == NULL)
+	if (shell->envp == NULL)
 		return (0);
 	i = 0;
-	while (data->envp[i] != NULL)
+	while (shell->envp[i] != NULL)
 	{
-		if (ft_strncmp("PATH=", data->envp[i], 5) == 0)
-			return (data->envp[i] + 5);
+		if (ft_strncmp("PATH=", shell->envp[i], 5) == 0)
+			return (shell->envp[i] + 5);
 		i++;
 	}
-	ft_putstr_fd(data->inputs[1], 2);
+	ft_putstr_fd(shell->data.cmds->word_tok[1], 2);
 	ft_putstr_fd(": No such file or directory\n", 2);
-	ft_putstr_fd(data->inputs[2], 2);
+	ft_putstr_fd(shell->data.cmds->word_tok[2], 2);
 	ft_putstr_fd(": No such file or directory\n", 2);
 	exit(0);
 }

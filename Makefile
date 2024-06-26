@@ -29,7 +29,7 @@ $(NAME): $(OBJS) $(LIBFT_LIB)
 
 $(LIBFT_LIB): $(LIBFT_DIR)
 	make -C $(LIBFT_DIR)
-
+ 
 %.o: %.c
 	cc $(FLAGS) -c $< -o $@
 

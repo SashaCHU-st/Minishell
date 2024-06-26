@@ -6,13 +6,23 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 20:18:08 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/06/06 15:59:17 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/06/26 10:42:18 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "builtins.h"
 
+int	skip_quotes(char *line, int i)
+{
+	char	quote;
+
+	quote = line[i];
+	i++;
+	while (line[i] && line[i] != quote)
+		i++;
+	return (i);
+}
 bool	has_unclosed_quotes(char *line)
 {
 	int	count;
@@ -84,9 +94,9 @@ int	input_validation_redir(char *input)
 				i++;
 			while (check_space(input[i]))
 				i++;
-			if (input[i] == '|' || input[i] == '\0')
+			if (input[i] == '|' || input[i] == '\0' || input[i] == '<' || input[i] == '>')
 			{
-				ft_putendl_fd("Syntax error: no input after redirection", 2);
+				ft_putendl_fd("Syntax error: no input after redirection or unexpected token", 2);
 				return (1);
 			}
 		}
@@ -94,6 +104,7 @@ int	input_validation_redir(char *input)
 	}
 	return (0);
 }
+
 void	error_message(char *msg)
 {
 	//ft_putstr_fd("Error\n", 2);

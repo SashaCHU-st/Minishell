@@ -46,6 +46,8 @@ void	f_free_array(char **str)
 {
 	char	**ptr;
 
+	if (!str)
+		return ;
 	ptr = str;
 	while (*ptr)
 	{
@@ -56,6 +58,7 @@ void	f_free_array(char **str)
 	free(str);
 	str = NULL;
 }
+
 
 void	f_free_cmds(t_cmd *cmds, int cmds_count)
 {

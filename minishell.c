@@ -221,10 +221,10 @@ void	shell_loop(t_built *shell)
                 break;
             i++;
         }
-		for (int i = 0; i < shell->data.cmds_count; i++) {
-            f_free_array(shell->data.cmds[i].word_tok);
-        }
-        free(shell->data.cmds);
+		// for (int i = 0; i < shell->data.cmds_count; i++) {
+        //     f_free_array(shell->data.cmds[i].word_tok);
+        // }
+        // free(shell->data.cmds);
 		free (line);
 	}
 }

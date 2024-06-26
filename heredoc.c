@@ -76,7 +76,7 @@ void    *is_heredoc(char *line)
             continue;
         }
 		if ((ft_strncmp(&line[i], "<<", 2) == 0) && !in_quote)
-		{
+		{	
 			count.hd_index++;
 			printf("%d\n", count.hd_index);
 			i = i + 2;

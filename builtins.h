@@ -15,21 +15,24 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include "structs.h"
 #include "minishell.h"
 
-typedef struct s_built{
-	char **envp;
-	char **new_envp;
-	int argc;
-	char **argv;
-	char pwd[1000];
-	int pwd_index;
-	int oldpwd_index;
-	char *input_copy;
-	//int number_of_inputs;
-	//int envp_size;
-	char **inputs;
-} t_built;
+// typedef struct s_built{
+// 	char **envp;
+// 	char **new_envp;
+// 	int argc;
+// 	char **argv;
+// 	char pwd[1000];
+// 	int pwd_index;
+// 	int oldpwd_index;
+// 	char *input_copy;
+// 	//int number_of_inputs;
+// 	//int envp_size;
+// 	//char **inputs;
+// 	t_data data;
+
+// } t_built;
 
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 int		ft_words(const char *str, char c);

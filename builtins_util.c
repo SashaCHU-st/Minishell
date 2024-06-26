@@ -1,26 +1,39 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtins_util.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/24 16:17:29 by aheinane          #+#    #+#             */
+/*   Updated: 2024/06/24 16:20:00 by aheinane         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 #include "builtins.h"
 
-void unset_var(t_built *data, char *arg)
+void	unset_var(t_built *data, char *arg)
 {
-	int i;
-	int j;
-	int len = ft_strlen(arg);
+	int	i;
+	int	j;
+	int	len;
+
+	len = ft_strlen(arg);
 	i = 0;
 	while (data->envp[i] != NULL)
 	{
-		
 		if (ft_strncmp(data->envp[i], arg, len) == 0 && data->envp[i][len] == '=')
-			break;
+			break ;
 		i++;
 	}
 	if (data->envp[i] == NULL)
 	{
 		printf(" ");
-		return;
+		return ;
 	}
 	j = i;
-	while(data->envp[j] != NULL)
+	while (data->envp[j] != NULL)
 	{
 		data->envp[j] = data->envp[j + 1];
 		j++;
@@ -41,6 +54,7 @@ size_t	ft_strlen(const char *str )
 	}
 	return (count);
 }
+
 char	*ft_strdup(const char *src)
 {
 	int		len;
@@ -60,6 +74,7 @@ char	*ft_strdup(const char *src)
 	newstr[i] = '\0';
 	return (newstr);
 }
+
 char	*ft_strjoin(char const *s1, char const *s2)
 {
 	size_t	i;
@@ -86,6 +101,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	new[i + j] = '\0';
 	return (new);
 }
+
 char	*ft_strchr(const char *s, int c)
 {
 	size_t	i;
@@ -103,9 +119,10 @@ char	*ft_strchr(const char *s, int c)
 		return ((char *)&s[i]);
 	return (NULL);
 }
-char *ft_strpbrk(const char *s, int c)
+
+char	*ft_strpbrk(const char *s, int c)
 {
-   size_t	i;
+	size_t	i;
 
 	i = 0;
 	while (s[i] != '\0')

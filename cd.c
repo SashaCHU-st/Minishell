@@ -6,12 +6,13 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 13:39:27 by aheinane          #+#    #+#             */
-/*   Updated: 2024/06/19 14:15:04 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/06/26 10:37:52 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 #include "minishell.h"
+#include "structs.h"
 
 void	update_pwd(t_built *data, char *original)
 {

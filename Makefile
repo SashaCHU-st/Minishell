@@ -14,6 +14,8 @@ SRCS = minishell.c \
 		cd.c \
 		export_utils.c \
 		heredoc.c \
+		space_manipulation.c \
+		quotes_handle.c \
 			
 OBJS = $(SRCS:.c=.o)
 

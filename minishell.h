@@ -44,18 +44,23 @@
 // }	t_data;
 
 ///////// input validation /////////
-int	input_validation_redir(char *input);
-int	input_validation_pipes(char *input);
+int     input_validation_redir(char *input);
+int	    input_validation_pipes(char *input);
 bool	check_space(char ch);
+char	*change_to_space(char *line);
+void	change_space_to_31(char *p_token);
+
 bool	has_unclosed_quotes(char *line);
-int	skip_quotes(char *line, int i);
+int	    skip_quotes(char *line, int i);
+void	remove_quotes(char *str);
+int     check_input_quotes_pipe(char *line);
 void	error_message(char *msg);
+
 
 char	**do_split(char const *s, char c);
 void	*is_heredoc(char *line);
 void	f_free_array(char **r);
-void	put_one_space(char *line);
-int if_builtins(t_built *data, t_cmd *cmd);
+int     if_builtins(t_built *data, t_cmd *cmd);
 
 
 //////////////ADDED BY SASHA//////////////

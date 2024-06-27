@@ -57,16 +57,184 @@ t_cmd	split_into_wtok(char *pipe_token)
 	return (cmd);
 }
 
+
+e_filetype peek(char *line, int index)
+{
+    if (line[index] == '<' && line[index + 1] == '<') 
+		return (HERE);
+    if (line[index] == '<')
+		return (IN);
+    if (line[index] == '>' && line[index + 1] == '>')
+		return (APPEND);
+    if (line[index] == '>')
+		return (OUT);
+    return (NONE);
+}
+
+char *ft_strndup(const char *str, size_t n)
+{
+    size_t len;
+    size_t i;
+	char *dup;
+
+    len =  0;
+	i = 0;
+	while (str[i] && len < n)
+	{
+        len++;
+        i++;
+    }
+   	dup = (char *)malloc(len + 1);
+    if (!dup)
+        return (NULL);
+    i = 0;
+    while (i < len)
+	{
+        dup[i] = str[i];
+        i++;
+    }
+    dup[i] = '\0';
+    return (dup);
+}
+
+char *take_filename(char *line, int *index)
+{
+    int		start;
+	char	*filename;
+
+	while (check_space(line[*index]))
+		(*index)++;
+    start = *index;
+    while (line[*index] && !check_space(line[*index]) && line[*index] != '<' && \
+			 line[*index] != '>' && line[*index] != 31)
+		(*index)++;
+	filename = ft_strndup(&line[start], *index - start);
+    return (filename);
+}
+
+void make_redirs(t_data *tokens)
+{
+	int			i;
+	int			j;
+	char		*line;
+	e_filetype	type;
+	int			redir_count;
+	char		*filename;
+
+	i = -1;
+	while (tokens->pipe_tok[++i] &&  i < tokens->cmds_count)
+	{
+		j = 0;
+		line = tokens->pipe_tok[i];
+		redir_count = 0;
+		tokens->cmds[i].filenames = malloc(sizeof(char *) * (MAX_REDIRECTIONS + 1));
+        tokens->cmds[i].filetype = malloc(sizeof(int) * (MAX_REDIRECTIONS + 1));
+		if (!tokens->cmds[i].filenames || !tokens->cmds[i].filetype)
+           error_message("Memory allocation error");
+		while (line[j] && redir_count <  MAX_REDIRECTIONS)
+		{
+			type = peek(line, j);
+			printf("Type: %d\n", type);
+			if (type != NONE)
+			{
+				
+				if (type == HERE || type == APPEND)
+					j += 2;
+				else
+					j++;
+				while (check_space(line[j]))
+					j++;
+				
+				filename = take_filename(line, &j);
+				printf("Filename: %s\n", filename);
+				if (filename)
+				{
+					if (type == HERE)
+					{
+						tokens->cmds[i].filenames[redir_count] = tokens->tempfile_hd;
+					}
+					else
+						tokens->cmds[i].filenames[redir_count] = filename;
+					printf("Array filename: %s\n", tokens->cmds[i].filenames[redir_count]);
+					tokens->cmds[i].filetype[redir_count] = type;
+					printf("FILEtype %d\n", tokens->cmds[i].filetype[redir_count]);
+					printf("Redir count: %d\n",  redir_count);
+					redir_count++;
+				}
+				else
+					ft_putendl_fd("Syntax error: no filename", 2);
+			}
+			else
+				j++;
+
+		}
+		tokens->cmds[i].filenames[redir_count] = NULL;
+        tokens->cmds[i].filetype[redir_count] = NONE;
+        tokens->cmds[i].number_of_redir = redir_count;
+		printf("Redir count: %d\n",  tokens->cmds[i].number_of_redir);
+	}
+}
+
+void	remove_redir_from_input(t_data *tokens)
+{
+	char	*line;
+	char	*new_line;
+	int		i;
+	int		j;
+	int		k;
+
+	i = -1;
+	while (tokens->pipe_tok[++i] &&  i < tokens->cmds_count)
+	{
+		line = tokens->pipe_tok[i];
+		new_line = (char *)malloc(sizeof(char) * (ft_strlen(line) + 1));
+		if (!new_line)
+			error_message("Failed to malloc for newline");
+		j = 0;
+		k = 0;
+		while (line[j])
+		{
+			if ((line[j] == '<' || line[j] == '>' ))
+			{
+				if ((line[j] == '<' && line[j + 1] == '<' ) || (line[j] == '>' && line[j + 1] == '>'))
+					j += 2;
+				else
+					j++;
+				while (check_space(line[j]))
+					j++;
+				while (line[j] && line[j] != '<' && \
+						line[j] != '>' && line[j] != 31 && line[j] != ' ')
+					j++;
+			}
+			new_line[k] = line[j];
+			j++;
+			k++;	
+		}
+		new_line[k] = '\0';
+		tokens->pipe_tok[i] = new_line;
+		free(line);
+		//free(new_line);
+	}
+}
+
+void	init_t_data(t_data *tokens)
+{
+	tokens->pipe_tok = NULL;
+	tokens->cmds_count = 0;
+	tokens->cmds = NULL;
+}
+
 t_data	split_line(char *line)
 {
 	t_data	tokens;
 	int		i;
 
-	tokens.pipe_tok = NULL;
-	tokens.cmds_count = 0;
-	tokens.cmds = NULL;
+	// tokens.pipe_tok = NULL;
+	// tokens.cmds_count = 0;
+	// tokens.cmds = NULL;
+	init_t_data(&tokens);
 	printf("input after replacing pipe: %s\n", line);
-	is_heredoc(line);
+	is_heredoc(line, &tokens); // is_heredoc(line, t_data *tokens);
 	tokens.pipe_tok = do_split(line, 31);
 	if (!tokens.pipe_tok)
 		return (tokens);
@@ -75,26 +243,49 @@ t_data	split_line(char *line)
 		while (tokens.pipe_tok[tokens.cmds_count])
 			tokens.cmds_count++;
 	}
+	//void make_redirs(t_data *tokens)
+	//?? expand $VAR  in tokens.pipe_tok  and in tokens->cmds->filenames.
 	tokens.cmds = (t_cmd *)malloc(sizeof(t_cmd) * tokens.cmds_count);
 	if (!tokens.cmds)
 		error_message("Failed to allocate memory");
 	i = 0;
 	while (i < tokens.cmds_count)
 	{
+		tokens.cmds[i].filenames = NULL;
+        tokens.cmds[i].filetype = NULL;
+		//tokens.cmds[i].number_of_redir = 0;
+		i++;
+	}
+	make_redirs(&tokens);
+	remove_redir_from_input(&tokens);
+	for (int j = 0; j < tokens.cmds_count; j++)
+    {
+        printf("Token after redir remove %d: %s\n", j, tokens.pipe_tok[j]);
+    }
+	i = 0;
+	while (i < tokens.cmds_count)
+	{
+		
 		tokens.cmds[i] = split_into_wtok(tokens.pipe_tok[i]);
 		i++;
 	}
+
+
 	printf("Number of tokens: %d\n", tokens.cmds_count);
 	for (int j = 0; j < tokens.cmds_count; j++)
     {
         printf("Token %d: %s\n", j, tokens.pipe_tok[j]);
     }
+	
 	for (i = 0; i < tokens.cmds_count; i++) {
         printf("Command %d:\n", i);
+		
         for (int j = 0; j < tokens.cmds[i].w_count; j++) {
             printf("  Word %d: %s\n", j, tokens.cmds[i].word_tok[j]);
         }
+		
     }
+	
 	// for (i = 0; i < tokens.cmds_count; i++) {
     //     for (int j = 0; j < tokens.cmds[i].w_count; j++) {
     //         free(tokens.cmds[i].word_tok[j]);
@@ -163,43 +354,47 @@ void	shell_loop(t_built *shell)
 			line = change_to_space(line);
 			shell->data = split_line(line);
 		}
-		while (i < shell->data.cmds_count)
-		{
-
-        //     if (if_builtins(shell, &shell->data.cmds[i]))
-        // //         break;
-        // //     i++;
-        // // }
-            if (if_builtins(shell, &shell->data.cmds[i]))
-				break ;
-			else
-			{
-
-				path = mine_path(shell);
-				if(path)
-					printf("%s\n", path);
-				else 
-					printf("KUKUUUUUUU");
-				if (pipe(pipex.fd) == -1)
-				{
-					perror("Error in pipe()");
-					exit(1);
-				}
-				pipex.commands_path = ft_split(path, ':');
-				if (pipex.commands_path == 0)
-				{
-					close(pipex.fd[0]);
-					close(pipex.fd[1]);
-					free_fun(&pipex);
-				}
-			creating_children(&pipex, shell, shell->data.cmds->w_count);
-			close(pipex.fd_in);
-			close(pipex.fd_out);
-			}
-          	i++;
+	
+		if (shell->data.cmds_count > 0)
+        {
+            i = 0;
+            while (i < shell->data.cmds_count)
+            {
+                if (if_builtins(shell, &shell->data.cmds[i]) == 1)
+                {
+                    i++;
+                    continue;
+                }
+                else if (shell->data.cmds->w_count == 4 && if_builtins(shell, &shell->data.cmds[i]) == 0)
+                {
+                	path = mine_path(shell);
+                    if (path)
+                        printf("%s\n", path);
+                    else
+                        printf("KUKUUUUUUU\n");
+                    if (pipe(pipex.fd) == -1)
+                    {
+                        perror("Error in pipe()");
+                        exit(1);
+                    }
+                    pipex.commands_path = ft_split(path, ':');
+                    if (pipex.commands_path == NULL)
+                    {
+                        close(pipex.fd[0]);
+                        close(pipex.fd[1]);
+                        free_fun(&pipex);
+                        i++;
+                    }
+                    creating_children(&pipex, shell, shell->data.cmds->w_count);
+                    close(pipex.fd_in);
+                    close(pipex.fd_out);
+                }
+                else 
+                    printf("HELLO_WORLD\n");
+                i++;
+            }
+            free(shell->data.cmds);
         }
-		
-
 		// for (int i = 0; i < shell->data.cmds_count; i++) {
         //     f_free_array(shell->data.cmds[i].word_tok);
         // }

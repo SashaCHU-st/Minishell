@@ -25,6 +25,8 @@
 #include "structs.h"
 # include "builtins.h"
 
+#define MAX_REDIRECTIONS 10
+
 // typedef struct s_cmd
 // {
 // 	char	**word_tok;
@@ -58,7 +60,7 @@ void	error_message(char *msg);
 
 
 char	**do_split(char const *s, char c);
-void	*is_heredoc(char *line);
+void    *is_heredoc(char *line, t_data *tokens);
 void	f_free_array(char **r);
 
 void	put_one_space(char *line);

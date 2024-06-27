@@ -53,20 +53,15 @@ void	process_hd(const char *file, const char *delimeter)
 		error_message("Failed to close fd for heredoc");
 }
 
-void    *is_heredoc(char *line)
+void    *is_heredoc(char *line, t_data *tokens)
 {
 	int		i;
-	t_data	str_delimeter;
 	int		j;
 	int		len;
-	t_data	count;
 	int	in_quote = 0;
-	t_data	file;
-
-	str_delimeter.hd_delimeter = NULL;
+	
 	i = 0;
-	len = 0;
-	count.hd_index = 0;
+	tokens->hd_index = 0;
 
 	while (line[i])
 	{
@@ -76,37 +71,40 @@ void    *is_heredoc(char *line)
             i++;
             continue;
         }
+
 		if ((ft_strncmp(&line[i], "<<", 2) == 0) && !in_quote)
 		{	
-			count.hd_index++;
-			printf("%d\n", count.hd_index);
+			tokens->hd_index++;
+			printf("%d\n", tokens->hd_index);
 			i = i + 2;
 			while (check_space(line[i]))
 				i++;
 			j = i;
+			len = 0;
 			while (line[j] && line[j] != 31 && !check_space(line[j]))
 			{
 				len++;
 				j++;
 			}
-			str_delimeter.hd_delimeter = (char *)malloc(sizeof(char) * len + 1);
-			if (str_delimeter.hd_delimeter == NULL)
+			tokens->hd_delimeter = (char *)malloc(sizeof(char) * len + 1);
+			if (tokens->hd_delimeter == NULL)
 				error_message("Memory allocation error\n");
 			j = 0;
 			while (line[i] && line[i] != 31 && !check_space(line[i]))
-				str_delimeter.hd_delimeter[j++] = line[i++];
-			str_delimeter.hd_delimeter[j] = '\0';
-			printf("delimeter Heredoc:%s\n", str_delimeter.hd_delimeter);
-			
-			file.tempfile_hd = hd_filename(count.hd_index);
-			if (!file.tempfile_hd)
+				tokens->hd_delimeter[j++] = line[i++];
+			tokens->hd_delimeter[j] = '\0';
+			printf("delimeter Heredoc:%s\n", tokens->hd_delimeter);
+			tokens->tempfile_hd = hd_filename(tokens->hd_index);
+			printf("HD tempfile %s\n", tokens->tempfile_hd);
+			if (!tokens->tempfile_hd)
 				error_message("Failed to assign filename for heredoc");
-			process_hd(file.tempfile_hd, str_delimeter.hd_delimeter);
-            if (str_delimeter.hd_delimeter != NULL)
-			    free(str_delimeter.hd_delimeter);
+			process_hd(tokens->tempfile_hd, tokens->hd_delimeter);
+            if ( tokens->hd_delimeter != NULL)
+			    free(tokens->hd_delimeter);
 		}
         if (line[i] != '\0')
 		    i++;
 	}
 	return (0);
 }
+

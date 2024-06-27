@@ -57,7 +57,7 @@ int	input_validation_redir(char *input)
 			else
 				i++;
 			while (check_space(input[i]))
-				i++;
+				i++;	
 			if (input[i] == '|' || input[i] == '\0' || input[i] == '<' || input[i] == '>')
 			{
 				ft_putendl_fd("Syntax error: no input after redirection or unexpected token", 2);

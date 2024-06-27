@@ -58,7 +58,7 @@ void    *is_heredoc(char *line, t_data *tokens)
 	int		i;
 	int		j;
 	int		len;
-	int	in_quote = 0;
+	int		in_quote = 0;
 	
 	i = 0;
 	tokens->hd_index = 0;

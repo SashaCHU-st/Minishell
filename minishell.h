@@ -65,6 +65,7 @@ void	f_free_array(char **r);
 
 void	put_one_space(char *line);
 int	    skip_quotes(char *line, int i);
+int     is_in_quotes(char c, int *in_single_quote, int *in_double_quote);
 
 
 

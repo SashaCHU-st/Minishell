@@ -182,6 +182,9 @@ void	remove_redir_from_input(t_data *tokens)
 	int		i;
 	int		j;
 	int		k;
+	int		in_single_quote;
+	int		in_double_quote;
+	int		in_quotes;
 
 	i = -1;
 	while (tokens->pipe_tok[++i] &&  i < tokens->cmds_count)
@@ -192,9 +195,12 @@ void	remove_redir_from_input(t_data *tokens)
 			error_message("Failed to malloc for newline");
 		j = 0;
 		k = 0;
+		in_single_quote = 0;
+		in_double_quote = 0;
 		while (line[j])
 		{
-			if ((line[j] == '<' || line[j] == '>' ))
+			in_quotes = is_in_quotes(line[j], &in_single_quote, &in_double_quote);
+			if ((line[j] == '<' || line[j] == '>') && !in_quotes)
 			{
 				if ((line[j] == '<' && line[j + 1] == '<' ) || (line[j] == '>' && line[j + 1] == '>'))
 					j += 2;
@@ -206,13 +212,15 @@ void	remove_redir_from_input(t_data *tokens)
 						line[j] != '>' && line[j] != 31 && line[j] != ' ')
 					j++;
 			}
-			new_line[k] = line[j];
-			j++;
-			k++;	
+			else
+				new_line[k++] = line[j++];
+			//j++;
+			//k++;	
 		}
 		new_line[k] = '\0';
+		free(tokens->pipe_tok[i]);
 		tokens->pipe_tok[i] = new_line;
-		free(line);
+		//free(line);
 		//free(new_line);
 	}
 }
@@ -222,6 +230,21 @@ void	init_t_data(t_data *tokens)
 	tokens->pipe_tok = NULL;
 	tokens->cmds_count = 0;
 	tokens->cmds = NULL;
+	tokens->hd_delimeter = NULL;
+	tokens->hd_index = 0;
+	tokens->tempfile_hd = NULL;
+}
+
+void init_cmd(t_cmd *cmd)
+{
+    if (cmd == NULL)
+        return;
+
+    cmd->filenames = NULL;
+    cmd->filetype = NULL;
+    cmd->number_of_redir = 0;
+    cmd->w_count = 0;
+    cmd->word_tok = NULL;
 }
 
 t_data	split_line(char *line)
@@ -251,9 +274,7 @@ t_data	split_line(char *line)
 	i = 0;
 	while (i < tokens.cmds_count)
 	{
-		tokens.cmds[i].filenames = NULL;
-        tokens.cmds[i].filetype = NULL;
-		//tokens.cmds[i].number_of_redir = 0;
+		init_cmd(&tokens.cmds[i]);
 		i++;
 	}
 	make_redirs(&tokens);

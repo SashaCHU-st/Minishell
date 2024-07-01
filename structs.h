@@ -39,7 +39,7 @@ typedef struct s_data
 	int		cmds_count;
 	char	**pipe_tok;
 	char	*hd_delimeter;
-	int		hd_index;
+	int		hd_count;
 	char	*tempfile_hd;
 	// t_build * shell;
 }	t_data;

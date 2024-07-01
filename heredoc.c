@@ -61,8 +61,7 @@ void    *is_heredoc(char *line, t_data *tokens)
 	int		in_quote = 0;
 	
 	i = 0;
-	tokens->hd_index = 0;
-
+	tokens->hd_count = 0;
 	while (line[i])
 	{
 		if (line[i] == '\"' || line[i] == '\'')
@@ -71,11 +70,10 @@ void    *is_heredoc(char *line, t_data *tokens)
             i++;
             continue;
         }
-
 		if ((ft_strncmp(&line[i], "<<", 2) == 0) && !in_quote)
 		{	
-			tokens->hd_index++;
-			printf("%d\n", tokens->hd_index);
+			tokens->hd_count++;
+			printf("%d\n", tokens->hd_count);
 			i = i + 2;
 			while (check_space(line[i]))
 				i++;
@@ -94,7 +92,7 @@ void    *is_heredoc(char *line, t_data *tokens)
 				tokens->hd_delimeter[j++] = line[i++];
 			tokens->hd_delimeter[j] = '\0';
 			printf("delimeter Heredoc:%s\n", tokens->hd_delimeter);
-			tokens->tempfile_hd = hd_filename(tokens->hd_index);
+			tokens->tempfile_hd = hd_filename(tokens->hd_count);
 			printf("HD tempfile %s\n", tokens->tempfile_hd);
 			if (!tokens->tempfile_hd)
 				error_message("Failed to assign filename for heredoc");

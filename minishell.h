@@ -25,49 +25,34 @@
 #include "structs.h"
 # include "builtins.h"
 
-#define MAX_REDIRECTIONS 10
-
-// typedef struct s_cmd
-// {
-// 	char	**word_tok;
-// 	int		w_count;
-	
-// }	t_cmd;
-
-
-// typedef struct s_data
-// {
-// 	t_cmd	*cmds;
-// 	int		cmds_count;
-// 	char	**pipe_tok;
-// 	char	*hd_delimeter;
-// 	int		hd_index;
-// 	char	*tempfile_hd;
-// }	t_data;
-
 ///////// input validation /////////
-int     input_validation_redir(char *input);
-int	    input_validation_pipes(char *input);
+int		input_validation_redir(char *input);
+int		input_validation_pipes(char *input);
 bool	check_space(char ch);
 char	*change_to_space(char *line);
 void	change_space_to_31(char *p_token);
 
 bool	has_unclosed_quotes(char *line);
-int	    skip_quotes(char *line, int i);
+int		skip_quotes(char *line, int i);
 void	remove_quotes(char *str);
-int     check_input_quotes_pipe(char *line);
+int		check_input_quotes_pipe(char *line);
 void	error_message(char *msg);
 
 
 char	**do_split(char const *s, char c);
-void    *is_heredoc(char *line, t_data *tokens);
+void	*is_heredoc(char *line, t_data *tokens);
 void	f_free_array(char **r);
 
 void	put_one_space(char *line);
-int	    skip_quotes(char *line, int i);
-int     is_in_quotes(char c, int *in_single_quote, int *in_double_quote);
+int		skip_quotes(char *line, int i);
+int		is_in_quotes(char c, int *in_single_quote, int *in_double_quote);
 char	*hd_filename(int count);
+char	*expand_var(char *line);
+void	make_redirs(t_data *tokens);
+void	remove_redir_from_input(t_data *tokens);
 
+char	*ft_strncpy(char *dest, const char *src, size_t n);
+char	*ft_strndup(const char *str, size_t n);
 
 //////////////ADDED BY SASHA//////////////
 

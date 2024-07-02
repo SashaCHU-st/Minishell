@@ -26,174 +26,7 @@ t_cmd	split_into_wtok(char *pipe_token)
 		return (cmd);
 	while (cmd.word_tok[cmd.w_count])
 		cmd.w_count++;
-	printf("word_count final %d\n", cmd.w_count);
 	return (cmd);
-}
-
-e_filetype peek(char *line, int index)
-{
-	if (line[index] == '<' && line[index + 1] == '<') 
-		return (HERE);
-	if (line[index] == '<')
-		return (IN);
-	if (line[index] == '>' && line[index + 1] == '>')
-		return (APPEND);
-	if (line[index] == '>')
-		return (OUT);
-	return (NONE);
-}
-
-char *ft_strndup(const char *str, size_t n)
-{
-	size_t len;
-	size_t i;
-	char *dup;
-
-	len =  0;
-	i = 0;
-	while (str[i] && len < n)
-	{
-		len++;
-		i++;
-	}
-	dup = (char *)malloc(len + 1);
-	if (!dup)
-		return (NULL);
-	i = 0;
-	while (i < len)
-	{
-		dup[i] = str[i];
-		i++;
-	}
-	dup[i] = '\0';
-	return (dup);
-}
-
-char *take_filename(char *line, int *index)
-{
-	int		start;
-	char	*filename;
-
-	while (check_space(line[*index]))
-		(*index)++;
-	start = *index;
-	while (line[*index] && !check_space(line[*index]) && line[*index] != '<' && \
-			 line[*index] != '>' && line[*index] != 31)
-		(*index)++;
-	filename = ft_strndup(&line[start], *index - start);
-	return (filename);
-}
-
-void make_redirs(t_data *tokens)
-{
-	int			i;
-	int			j;
-	char		*line;
-	e_filetype	type;
-	int			redir_count;
-	char		*filename;
-	int			hd_index;
-
-	i = -1;
-	hd_index = 1;
-	while (tokens->pipe_tok[++i] &&  i < tokens->cmds_count)
-	{
-		j = 0;
-		line = tokens->pipe_tok[i];
-		redir_count = 0;
-		tokens->cmds[i].filenames = malloc(sizeof(char *) * (ft_strlen(line) + 1));
-		tokens->cmds[i].filetype = malloc(sizeof(int) * (ft_strlen(line) + 1));
-		if (!tokens->cmds[i].filenames || !tokens->cmds[i].filetype)
-			error_message("Memory allocation error");
-		while (line[j])
-		{
-			type = peek(line, j);
-			if (type != NONE)
-			{
-				
-				if (type == HERE || type == APPEND)
-					j += 2;
-				else
-					j++;
-				while (check_space(line[j]))
-					j++;
-				filename = take_filename(line, &j);
-				printf("Filename: %s\n", filename);
-				if (filename)
-				{
-					if (type == HERE)
-						tokens->cmds[i].filenames[redir_count] = hd_filename(hd_index++);
-					else
-						tokens->cmds[i].filenames[redir_count] = filename;
-					printf("Array filename %d:  %s\n", redir_count, tokens->cmds[i].filenames[redir_count]);
-					printf("Type: %d\n", type);
-					tokens->cmds[i].filetype[redir_count] = type;
-					printf("FILEtype %d\n", tokens->cmds[i].filetype[redir_count]);
-					printf("Redir count: %d\n",  redir_count);
-					redir_count++;
-				}
-				else
-					ft_putendl_fd("Syntax error: no filename", 2);
-			}
-			else
-				j++;
-
-		}
-		tokens->cmds[i].filenames[redir_count] = NULL;
-		tokens->cmds[i].filetype[redir_count] = NONE;
-		tokens->cmds[i].number_of_redir = redir_count;
-		printf("Redir count: %d\n",  tokens->cmds[i].number_of_redir);
-	}
-}
-
-void	remove_redir_from_input(t_data *tokens)
-{
-	char	*line;
-	char	*new_line;
-	int		i;
-	int		j;
-	int		k;
-	int		in_single_quote;
-	int		in_double_quote;
-	int		in_quotes;
-
-	i = -1;
-	while (tokens->pipe_tok[++i] &&  i < tokens->cmds_count)
-	{
-		line = tokens->pipe_tok[i];
-		new_line = (char *)malloc(sizeof(char) * (ft_strlen(line) + 1));
-		if (!new_line)
-			error_message("Failed to malloc for newline");
-		j = 0;
-		k = 0;
-		in_single_quote = 0;
-		in_double_quote = 0;
-		while (line[j])
-		{
-			in_quotes = is_in_quotes(line[j], &in_single_quote, &in_double_quote);
-			if ((line[j] == '<' || line[j] == '>') && !in_quotes)
-			{
-				if ((line[j] == '<' && line[j + 1] == '<' ) || (line[j] == '>' && line[j + 1] == '>'))
-					j += 2;
-				else
-					j++;
-				while (check_space(line[j]))
-					j++;
-				while (line[j] && line[j] != '<' && \
-						line[j] != '>' && line[j] != 31 && line[j] != ' ')
-					j++;
-			}
-			else
-				new_line[k++] = line[j++];
-			//j++;
-			//k++;	
-		}
-		new_line[k] = '\0';
-		free(tokens->pipe_tok[i]);
-		tokens->pipe_tok[i] = new_line;
-		//free(line);
-		//free(new_line);
-	}
 }
 
 void	init_t_data(t_data *tokens)
@@ -218,84 +51,11 @@ void init_cmd(t_cmd *cmd)
 	cmd->word_tok = NULL;
 }
 
-static int end_character(char c) {
-    return (c == '\0' || c == ' ' || c == '/' || c == '$'
-        || c == '\"' || c == '\'' || c == '=' || c == ':'
-        || c == '@');
-}
-
-static char *get_expand(const char *line) {
-    int len = 0;
-    char *value;
-
-    // if (line[len] == '?')
-    //     return get_exit_status();
-    while (!end_character(line[len]))
-        len++;
-    if (len == 0)
-        return (ft_strdup(""));
-    char *env = malloc(len + 1);
-    if (!env)
-       error_message("Malloc filed");
-    strncpy(env, line, len);
-    env[len] = '\0';
-    value = getenv(env);
-    free(env);
-	if (value)
-		return (ft_strdup(value));
-    else
-		return (ft_strdup(""));
-}
-
-
-void	expand_env(char *line, int i)
-{
-	int		start;
-	char	*value;
-
-	start = i++;
-	value = get_expand(&line[start]);
-
-
-}
-
-void	expand_var(t_data *tokens)
-{
-	char	*line;
-	int		i;
-	int		j;
-	int		in_dquotes;
-
-	i = -1;
-	in_dquotes = 0;
-	while (tokens->pipe_tok[++i] && i < tokens->cmds_count)
-	{
-		line = tokens->pipe_tok[i];
-		j = 0;
-		while (line[j])
-		{
-			if (line[j] == '\"')
-				in_dquotes = !in_dquotes;
-			if ((line[j + 1] && line[j] == '$' && line[j + 1] != ' ' ) || \
-				(line[j + 1] && line[j] == '$' && line[j + 1] != ' ' && !in_dquotes))
-			{
-				expand_env(line, j);
-			}
-			else
-				j++;
-		}
-		tokens->pipe_tok[i] = line;
-	}
-}
-
 t_data	split_line(char *line)
 {
 	t_data	tokens;
 	int		i;
 
-	// tokens.pipe_tok = NULL;
-	// tokens.cmds_count = 0;
-	// tokens.cmds = NULL;
 	init_t_data(&tokens);
 	printf("input after replacing pipe: %s\n", line);
 	is_heredoc(line, &tokens); // is_heredoc(line, t_data *tokens);
@@ -307,19 +67,39 @@ t_data	split_line(char *line)
 		while (tokens.pipe_tok[tokens.cmds_count])
 			tokens.cmds_count++;
 	}
-	//void make_redirs(t_data *tokens)
-	//?? expand $VAR  in tokens.pipe_tok  and in tokens->cmds->filenames.
 	tokens.cmds = (t_cmd *)malloc(sizeof(t_cmd) * tokens.cmds_count);
 	if (!tokens.cmds)
 		error_message("Failed to allocate memory");
-	i = 0;
-	while (i < tokens.cmds_count)
+	i = -1;
+	while (++i < tokens.cmds_count)
 	{
 		init_cmd(&tokens.cmds[i]);
-		i++;
+		//i++;
 	}
 	make_redirs(&tokens);
 	remove_redir_from_input(&tokens);
+	i = -1;
+	while (tokens.pipe_tok[++i] && i < tokens.cmds_count)
+	{
+		tokens.pipe_tok[i] = expand_var(tokens.pipe_tok[i]);
+	}
+	i = 0;
+    while (i < tokens.cmds_count) {
+        int j = 0;
+        while (tokens.cmds[i].filenames[j])
+		{
+            tokens.cmds[i].filenames[j] = expand_var(tokens.cmds[i].filenames[j]);
+			printf("Expand filename %d: %s\n", j, tokens.cmds[i].filenames[j]);
+            if (!tokens.cmds[i].filenames[j])
+			{
+                ft_putendl_fd("Variable expansion failed in filenames", 2);
+                exit(EXIT_FAILURE);
+            }
+            j++;
+        }
+        i++;
+    }
+
 	for (int j = 0; j < tokens.cmds_count; j++)
 	{
 		printf("Token after redir remove %d: %s\n", j, tokens.pipe_tok[j]);

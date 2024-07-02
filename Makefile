@@ -21,6 +21,9 @@ SRCS = minishell.c \
 		free.c \
 		children.c \
 		builtin.c \
+		expand.c \
+		redirect.c \
+		utils_functions.c \
 			
 OBJS = $(SRCS:.c=.o)
 

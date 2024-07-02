@@ -12,7 +12,6 @@
 
 #ifndef BUILTINS_H
 #define BUILTINS_H
-
 # include <stdio.h>
 # include <unistd.h>
 # include <fcntl.h>
@@ -21,10 +20,7 @@
 #include "minishell.h"
 #include "structs.h"
 
-<<<<<<< HEAD
 
-=======
->>>>>>> 4147650123bb36dea6ea96459a84d9905031a9ad
 typedef struct s_pipex{
 	int		fd[2];
 	int		fd_in;

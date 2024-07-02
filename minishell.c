@@ -41,6 +41,7 @@ void	change_space_to_31(char *p_token)
 		i++;
 	}
 }
+
 int	check_input_quotes_pipe(char *line)
 {
 	int	i;
@@ -217,6 +218,11 @@ void	check_permissions(t_built *shell)
 void shell_loop(t_built *shell)
 {
 	char	*line;
+<<<<<<< HEAD
+=======
+	int		i;
+
+>>>>>>> 4147650123bb36dea6ea96459a84d9905031a9ad
 	t_pipex	pipex;
 	char	*path;
 	int i;
@@ -228,7 +234,21 @@ void shell_loop(t_built *shell)
 		{
 			line = change_to_space(line);
 			shell->data = split_line(line);
+<<<<<<< HEAD
 			if (shell->data.cmds_count > 0)
+=======
+		}
+		while (i < shell->data.cmds_count)
+		{
+
+        //     if (if_builtins(shell, &shell->data.cmds[i]))
+        // //         break;
+        // //     i++;
+        // // }
+            if (if_builtins(shell, &shell->data.cmds[i]))
+				break ;
+			else
+>>>>>>> 4147650123bb36dea6ea96459a84d9905031a9ad
 			{
 				i = 0;
 				while (i < shell->data.cmds_count)
@@ -268,8 +288,20 @@ void shell_loop(t_built *shell)
 				}
 			free(shell->data.cmds);
 			}
+<<<<<<< HEAD
 		}
 	free(line);
+=======
+          	i++;
+        }
+		
+
+		// for (int i = 0; i < shell->data.cmds_count; i++) {
+        //     f_free_array(shell->data.cmds[i].word_tok);
+        // }
+        // free(shell->data.cmds);
+		free (line);
+>>>>>>> 4147650123bb36dea6ea96459a84d9905031a9ad
 	}
 }
 
@@ -298,6 +330,7 @@ char **copy_envp(char *envp[])
 	new_envp[count] = NULL;
 	return(new_envp);
 }
+
 int	main(int argc, char **argv, char *envp[])
 {
 	t_built data;

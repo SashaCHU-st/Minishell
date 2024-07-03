@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:52:26 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/02 15:13:43 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/02 16:33:15 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,7 +232,7 @@ void shell_loop(t_built *shell)
 			{
 				i = 0;
 				while (i < shell->data.cmds_count)
-				{
+				{printf("22222");
 					if (if_builtins(shell, &shell->data.cmds[i]) == 1)
 					{
 						i++;
@@ -240,6 +240,7 @@ void shell_loop(t_built *shell)
 					}
 					else if (shell->data.cmds->w_count >=1 && if_builtins(shell, &shell->data.cmds[i]) == 0)
 					{
+					
 					path = mine_path(shell);
 					if(shell->data.cmds->w_count == 4)
 					{

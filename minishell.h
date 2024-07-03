@@ -22,8 +22,8 @@
 # include <readline/history.h>
 #include <fcntl.h>
 # include "libft/libft.h"
-#include "structs.h"
 # include "builtins.h"
+
 
 ///////// input validation /////////
 int		input_validation_redir(char *input);
@@ -42,6 +42,9 @@ void	error_message(char *msg);
 char	**do_split(char const *s, char c);
 void	*is_heredoc(char *line, t_data *tokens);
 void	f_free_array(char **r);
+void	f_free_array_3(char ***str);
+void	put_one_space(char *line);
+int	skip_quotes(char *line, int i);
 
 void	put_one_space(char *line);
 int		skip_quotes(char *line, int i);

@@ -13,10 +13,23 @@
 #ifndef STRUCT_H
 #define STRUCT_H
 
+typedef enum {
+    NONE,
+    IN,
+    OUT,
+    HERE,
+    APPEND
+} e_filetype;
+
 typedef struct s_cmd
 {
 	char	**word_tok;
 	int		w_count;
+
+	char **filenames;
+	int *filetype;
+	int number_of_redir;
+	//int flag_amb_redir;
 	
 }	t_cmd;
 
@@ -26,8 +39,9 @@ typedef struct s_data
 	int		cmds_count;
 	char	**pipe_tok;
 	char	*hd_delimeter;
-	int		hd_index;
+	int		hd_count;
 	char	*tempfile_hd;
+	// t_build * shell;
 }	t_data;
 
 typedef struct s_built{

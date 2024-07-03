@@ -1,6 +1,5 @@
 NAME = minishell
 FLAGS = -Wall -Wextra -Werror 
-#-g -fsanitize=address
 LIBFT_DIR = ./libft
 LIBFT_LIB = $(LIBFT_DIR)/libft.a
 
@@ -15,11 +14,16 @@ SRCS = minishell.c \
 		cd.c \
 		export_utils.c \
 		heredoc.c \
+		space_manipulation.c \
+		quotes_handle.c \
 		pipex.c \
 		open_fd.c \
 		free.c \
 		children.c \
 		builtin.c \
+		expand.c \
+		redirect.c \
+		utils_functions.c \
 			
 OBJS = $(SRCS:.c=.o)
 

@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:47:03 by aheinane          #+#    #+#             */
-/*   Updated: 2024/06/26 11:15:13 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/02 15:13:04 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,15 +42,25 @@ char	*path_for_commands(t_pipex *pipex, char **child_command)
 	return (NULL);
 }
 
-void	creating_children( t_pipex *pipex, t_built *data, int number_of_inputs)
+void	creating_children( t_pipex *pipex, t_built *shell, int number_of_inputs)
 {
 	int		first_child;
-	int		second_child;
 
-	first_child = 0;
-	second_child = 0;
-	check_permissions(data);
-	if (open_fd_in(pipex, data) == 1)
+	//first_child = 0;
+	if(shell->data.cmds->w_count == 1)
+	{
+		first_child = 0;
+		first_child = fork();
+		if (first_child < 0)
+			ft_error();
+		if (first_child == 0)
+			fun_first_child(shell, *pipex);
+	}
+	if(shell->data.cmds->w_count == 2)
+	{
+		first_child = 0;
+		//check_permissions(shell);
+	if (open_fd_in(pipex, shell) == 1)
 		ft_putstr_fd(": No such file or directory\n", 2);
 	else
 	{
@@ -58,16 +68,34 @@ void	creating_children( t_pipex *pipex, t_built *data, int number_of_inputs)
 		if (first_child < 0)
 			ft_error();
 		if (first_child == 0)
-			fun_first_child(data, *pipex);
+			fun_first_child(shell, *pipex);
 	}
-	open_fd_out(pipex, data, number_of_inputs);
-	second_child = fork();
-	if (second_child < 0)
+	}
+	if(shell->data.cmds->w_count == 4)
+	{
+		first_child = 0;
+		printf("KUKU1\n");
+		//check_permissions(shell);
+	if (open_fd_in(pipex, shell) == 1)
+		ft_putstr_fd(": No such file or directory\n", 2);
+	else
+	{
+		first_child = fork();
+		if (first_child < 0)
+			ft_error();
+		if (first_child == 0)
+			fun_first_child(shell, *pipex);
+	}
+	open_fd_out(pipex, shell, number_of_inputs);
+	pipex->second_child = fork();
+	if (pipex->second_child  < 0)
 		ft_error();
-	if (second_child == 0)
-		fun_second_child(data, *pipex);
-	close_and_wait(pipex, first_child, second_child);
+	if (pipex->second_child == 0)
+		fun_second_child(shell, *pipex);
+	}
+	close_and_wait(shell, pipex, first_child);
 }
+
 
 char	*mine_path(t_built *shell)
 {

@@ -6,13 +6,12 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 13:32:50 by aheinane          #+#    #+#             */
-/*   Updated: 2024/06/26 11:10:55 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/02 15:03:22 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BUILTINS_H
 #define BUILTINS_H
-
 # include <stdio.h>
 # include <unistd.h>
 # include <fcntl.h>
@@ -21,6 +20,7 @@
 #include "minishell.h"
 #include "structs.h"
 
+
 typedef struct s_pipex{
 	int		fd[2];
 	int		fd_in;
@@ -28,6 +28,7 @@ typedef struct s_pipex{
 	char	**commands_path;
 	char	**com_fir_child;
 	char	**com_sec_child;
+	int second_child;
 	
 } t_pipex;
 
@@ -62,17 +63,19 @@ void	if_error_input(char *input_copy);
 
 //////
 char	*mine_path(t_built *data);
-void	creating_children( t_pipex *pipex, t_built *data, int number_of_inputs);
+void	creating_children(t_pipex *pipex, t_built *data, int num_commands);
 void	free_fun(t_pipex *pipex);
 int		open_fd_in(t_pipex *pipex, t_built *data);
 void	open_fd_out(t_pipex *pipex, t_built *data, int number_of_inputs);
 void	free_array(char **array);
 void	ft_error(void);
 char	*path_for_commands(t_pipex *pipex, char **child_command);
-void	fun_second_child(t_built *data, t_pipex pipex);
-void	fun_first_child(t_built *data, t_pipex pipex);
-void	close_and_wait(t_pipex *data, int first_child, int second_child);
+
 void	check_permissions(t_built *data);
- int	if_builtins(t_built *data, t_cmd *cmd);
+int		if_builtins(t_built *data, t_cmd *cmd);
+void	close_and_wait(t_built *shell, t_pipex *pipex, int first_child);
+//void	close_and_wait(t_pipex *data, int first_child, int second_child);
+void	fun_second_child(t_built *shell, t_pipex pipex);
+void	fun_first_child(t_built *shell, t_pipex pipex);
 
 #endif

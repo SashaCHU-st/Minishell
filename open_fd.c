@@ -6,28 +6,16 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:46:25 by aheinane          #+#    #+#             */
-/*   Updated: 2024/06/26 13:12:02 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/02 15:11:30 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "builtins.h"
 
-void	check_permissions(t_built *shell)
-{
-	if (shell->data.cmds->word_tok[2][0] == '\0' || shell->data.cmds->word_tok[3][0] == '\0')
-	{
-		write(2, "zsh: permission denied:\n", 24);
-	}
-	else if (shell->data.cmds->word_tok[2][0] == '\0' && shell->data.cmds->word_tok[3][0] == '\0')
-	{
-		write(2, "zsh: permission denied:\n", 24);
-		exit(1);
-	}
-}
-
 int	open_fd_in(t_pipex *pipex, t_built *shell)
 {
+		printf("hello3\n");
 	if (access(shell->data.cmds->word_tok[0], F_OK | R_OK) == -1)
 	{
 		perror("No access for input");

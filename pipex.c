@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:47:03 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/02 15:13:04 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/02 16:30:24 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ void	creating_children( t_pipex *pipex, t_built *shell, int number_of_inputs)
 {
 	int		first_child;
 
-	//first_child = 0;
 	if(shell->data.cmds->w_count == 1)
 	{
 		first_child = 0;
@@ -99,20 +98,34 @@ void	creating_children( t_pipex *pipex, t_built *shell, int number_of_inputs)
 
 char	*mine_path(t_built *shell)
 {
-	int	i;
+	//int	i;
 
+	printf("11111");
 	if (shell->envp == NULL)
 		return (0);
-	i = 0;
-	while (shell->envp[i] != NULL)
+	//i = 0;
+	// while (shell->envp[i] != NULL)
+	// {
+	// 	if (ft_strncmp("PATH=", shell->envp[i], 5) == 0)
+	// 		return (shell->envp[i] + 5);
+	// 	i++;
+	// }
+	// ft_putstr_fd(shell->data.cmds->word_tok[1], 2);
+	// ft_putstr_fd(": No such file or directory\n", 2);
+	// ft_putstr_fd(shell->data.cmds->word_tok[2], 2);
+	// ft_putstr_fd(": No such file or directory\n", 2);
+	// exit(0);
+	while (ft_strncmp("PATH=", *shell->envp, 5) != 0)
 	{
-		if (ft_strncmp("PATH=", shell->envp[i], 5) == 0)
-			return (shell->envp[i] + 5);
-		i++;
+		shell->envp++;
+		if (*shell->envp == NULL)
+		{
+			ft_putstr_fd(shell->data.cmds->word_tok[1], 2);
+			ft_putstr_fd(": No such file or directory\n", 2);
+			ft_putstr_fd(shell->data.cmds->word_tok[2], 2);
+			ft_putstr_fd(": No such file or directory\n", 2);
+			exit(0);
+		}
 	}
-	ft_putstr_fd(shell->data.cmds->word_tok[1], 2);
-	ft_putstr_fd(": No such file or directory\n", 2);
-	ft_putstr_fd(shell->data.cmds->word_tok[2], 2);
-	ft_putstr_fd(": No such file or directory\n", 2);
-	exit(0);
+	return (*shell->envp + 5);
 }

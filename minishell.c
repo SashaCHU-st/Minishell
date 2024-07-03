@@ -13,102 +13,42 @@
 #include "minishell.h"
 #include "builtins.h"
 
-char	*change_to_space(char *line)
-{
-	int	i;
-
-	i = 0;
-	while (line[i])
-	{
-		if (line[i] == '\t' || line[i] == '\v' || line[i] == '\r' || line[i] == '\f')
-			line[i] = ' ';
-		i++;
-	}
-	return (line);
-}
-
-void	change_space_to_31(char *p_token)
-{
-	int	i;
-
-	i = 0;
-	while (p_token[i])
-	{
-		if (p_token[i] == '\'' || p_token[i] == '\"')
-			i = skip_quotes(p_token, i);
-		if (p_token[i] == ' ')
-			p_token[i] = 31;
-		i++;
-	}
-}
-int	check_input_quotes_pipe(char *line)
-{
-	int	i;
-	int	in_quote;
-
-	i = 0;
-	in_quote = 0;
-	while (line[i])
-	{
-		if (line[i] == '\"' || line[i] == '\'')
-		{
-			in_quote = !in_quote;
-			i++;
-			continue ;
-		}
-		if (line[i] == '|' && !in_quote)
-			line[i] = 31;
-		i++;
-	}
-	if ((in_quote || has_unclosed_quotes(line)))
-	{
-		ft_putendl_fd("Syntax error: unclosed quotes", 2);
-		return (1);
-	}
-	return (0);
-}
-
 t_cmd	split_into_wtok(char *pipe_token)
 {
 	t_cmd	cmd;
-	int		i;
-	int		j;
-	char	**words;
-	t_cmd	new_words;
 
 	cmd.word_tok = NULL;
 	cmd.w_count = 0;
-	i = 0;
 	change_space_to_31(pipe_token);
-	words = do_split(pipe_token, 31);
-	if (!words)
-	{
-		cmd.word_tok = NULL;
-        cmd.w_count = 0;
-		f_free_array(words);
+	remove_quotes(pipe_token);
+	cmd.word_tok = do_split(pipe_token, 31);
+	if (!cmd.word_tok)
 		return (cmd);
-	}
-	while (words[i])
-	{
-		new_words.word_tok = malloc(sizeof(char *) * (cmd.w_count + 1));
-		if (!new_words.word_tok)
-			error_message("Failed to allocate memory");
-		j = 0;
-		while (j < cmd.w_count)
-		{
-			new_words.word_tok[j] = cmd.word_tok[j];
-			j++;
-		}
-		new_words.word_tok[cmd.w_count] = ft_strdup(words[i]);
-		if (!new_words.word_tok[cmd.w_count])
-			error_message("Failed to duplicate string");
-		free (cmd.word_tok);
-		cmd.word_tok = new_words.word_tok;
+	while (cmd.word_tok[cmd.w_count])
 		cmd.w_count++;
-		i++;
-	}
-	f_free_array(words);
 	return (cmd);
+}
+
+void	init_t_data(t_data *tokens)
+{
+	tokens->pipe_tok = NULL;
+	tokens->cmds_count = 0;
+	tokens->cmds = NULL;
+	tokens->hd_delimeter = NULL;
+	tokens->hd_count = 0;
+	tokens->tempfile_hd = NULL;
+}
+
+void init_cmd(t_cmd *cmd)
+{
+	if (cmd == NULL)
+		return;
+
+	cmd->filenames = NULL;
+	cmd->filetype = NULL;
+	cmd->number_of_redir = 0;
+	cmd->w_count = 0;
+	cmd->word_tok = NULL;
 }
 
 t_data	split_line(char *line)
@@ -116,11 +56,9 @@ t_data	split_line(char *line)
 	t_data	tokens;
 	int		i;
 
-	tokens.pipe_tok = NULL;
-	tokens.cmds_count = 0;
-	tokens.cmds = NULL;
+	init_t_data(&tokens);
 	printf("input after replacing pipe: %s\n", line);
-	is_heredoc(line);
+	is_heredoc(line, &tokens); // is_heredoc(line, t_data *tokens);
 	tokens.pipe_tok = do_split(line, 31);
 	if (!tokens.pipe_tok)
 		return (tokens);
@@ -132,31 +70,72 @@ t_data	split_line(char *line)
 	tokens.cmds = (t_cmd *)malloc(sizeof(t_cmd) * tokens.cmds_count);
 	if (!tokens.cmds)
 		error_message("Failed to allocate memory");
+	i = -1;
+	while (++i < tokens.cmds_count)
+	{
+		init_cmd(&tokens.cmds[i]);
+		//i++;
+	}
+	make_redirs(&tokens);
+	remove_redir_from_input(&tokens);
+	i = -1;
+	while (tokens.pipe_tok[++i] && i < tokens.cmds_count)
+	{
+		tokens.pipe_tok[i] = expand_var(tokens.pipe_tok[i]);
+	}
+	i = 0;
+    while (i < tokens.cmds_count) {
+        int j = 0;
+        while (tokens.cmds[i].filenames[j])
+		{
+            tokens.cmds[i].filenames[j] = expand_var(tokens.cmds[i].filenames[j]);
+			printf("Expand filename %d: %s\n", j, tokens.cmds[i].filenames[j]);
+            if (!tokens.cmds[i].filenames[j])
+			{
+                ft_putendl_fd("Variable expansion failed in filenames", 2);
+                exit(EXIT_FAILURE);
+            }
+            j++;
+        }
+        i++;
+    }
+
+	for (int j = 0; j < tokens.cmds_count; j++)
+	{
+		printf("Token after redir remove %d: %s\n", j, tokens.pipe_tok[j]);
+    }
 	i = 0;
 	while (i < tokens.cmds_count)
 	{
+		
 		tokens.cmds[i] = split_into_wtok(tokens.pipe_tok[i]);
 		i++;
 	}
+
+
 	printf("Number of tokens: %d\n", tokens.cmds_count);
 	for (int j = 0; j < tokens.cmds_count; j++)
-    {
-        printf("Token %d: %s\n", j, tokens.pipe_tok[j]);
-    }
+	{
+		printf("Token %d: %s\n", j, tokens.pipe_tok[j]);
+	}
+	
 	for (i = 0; i < tokens.cmds_count; i++) {
-        printf("Command %d:\n", i);
-        for (int j = 0; j < tokens.cmds[i].w_count; j++) {
-            printf("  Word %d: %s\n", j, tokens.cmds[i].word_tok[j]);
-        }
-    }
+		printf("Command %d:\n", i);
+		
+		for (int j = 0; j < tokens.cmds[i].w_count; j++) {
+			printf("  Word %d: %s\n", j, tokens.cmds[i].word_tok[j]);
+		}
+		
+	}
+	
 	// for (i = 0; i < tokens.cmds_count; i++) {
-    //     for (int j = 0; j < tokens.cmds[i].w_count; j++) {
-    //         free(tokens.cmds[i].word_tok[j]);
-    //     }
-    //     free(tokens.cmds[i].word_tok);
-    // }
-    // free(tokens.cmds);
-    // f_free_array(tokens.pipe_tok);
+	//	 for (int j = 0; j < tokens.cmds[i].w_count; j++) {
+	//		 free(tokens.cmds[i].word_tok[j]);
+	//	 }
+	//	 free(tokens.cmds[i].word_tok);
+	// }
+	// free(tokens.cmds);
+	// f_free_array(tokens.pipe_tok);
 	return (tokens);
 }
 
@@ -299,6 +278,7 @@ char **copy_envp(char *envp[])
 	new_envp[count] = NULL;
 	return(new_envp);
 }
+
 int	main(int argc, char **argv, char *envp[])
 {
 	t_built data;

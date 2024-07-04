@@ -6,38 +6,38 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:52:26 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/02 16:33:15 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/04 16:49:05 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "builtins.h"
 
-t_cmd	split_into_wtok(char *pipe_token)
+t_cmd	split_into_wtok(char *pipe_token, t_cmd *cmd)
 {
-	t_cmd	cmd;
+	//t_cmd	cmd;
 
-	cmd.word_tok = NULL;
-	cmd.w_count = 0;
+	// cmd->word_tok = NULL;
+	// cmd->w_count = 0;
 	change_space_to_31(pipe_token);
 	remove_quotes(pipe_token);
-	cmd.word_tok = do_split(pipe_token, 31);
-	if (!cmd.word_tok)
-		return (cmd);
-	while (cmd.word_tok[cmd.w_count])
-		cmd.w_count++;
-	return (cmd);
+	cmd->word_tok = do_split(pipe_token, 31);
+	if (!cmd->word_tok)
+		return (*cmd);
+	while (cmd->word_tok[cmd->w_count])
+		cmd->w_count++;
+	return (*cmd);
 }
 
-void	init_t_data(t_data *tokens)
-{
-	tokens->pipe_tok = NULL;
-	tokens->cmds_count = 0;
-	tokens->cmds = NULL;
-	tokens->hd_delimeter = NULL;
-	tokens->hd_count = 0;
-	tokens->tempfile_hd = NULL;
-}
+// void	init_t_data(t_data *tokens)
+// {
+// 	tokens->pipe_tok = NULL;
+// 	tokens->cmds_count = 0;
+// 	tokens->cmds = NULL;
+// 	tokens->hd_delimeter = NULL;
+// 	tokens->hd_count = 0;
+// 	tokens->tempfile_hd = NULL;
+// }
 
 void init_cmd(t_cmd *cmd)
 {
@@ -51,46 +51,50 @@ void init_cmd(t_cmd *cmd)
 	cmd->word_tok = NULL;
 }
 
-t_data	split_line(char *line)
+void	split_line(char *line, t_data *shell)
 {
-	t_data	tokens;
+	//t_data	tokens;
 	int		i;
 
-	init_t_data(&tokens);
+	//init_t_data(&tokens);
 	printf("input after replacing pipe: %s\n", line);
-	is_heredoc(line, &tokens); // is_heredoc(line, t_data *tokens);
-	tokens.pipe_tok = do_split(line, 31);
-	if (!tokens.pipe_tok)
-		return (tokens);
-	if (tokens.pipe_tok)
+	is_heredoc(line, shell); // is_heredoc(line, t_data *tokens);
+	shell->pipe_tok = do_split(line, 31);
+	if (!shell->pipe_tok)
+		return ;
+	if (shell->pipe_tok)
 	{
-		while (tokens.pipe_tok[tokens.cmds_count])
-			tokens.cmds_count++;
+		while (shell->pipe_tok[shell->cmds_count])
+			shell->cmds_count++;
 	}
-	tokens.cmds = (t_cmd *)malloc(sizeof(t_cmd) * tokens.cmds_count);
-	if (!tokens.cmds)
+	shell->cmds = (t_cmd *)malloc(sizeof(t_cmd) * shell->cmds_count);
+	if (!shell->cmds)
 		error_message("Failed to allocate memory");
 	i = -1;
-	while (++i < tokens.cmds_count)
+	while (++i < shell->cmds_count)
 	{
-		init_cmd(&tokens.cmds[i]);
+		init_cmd(&shell->cmds[i]);
 		//i++;
 	}
-	make_redirs(&tokens);
-	remove_redir_from_input(&tokens);
+	make_redirs(shell);
+	printf("TYPE %d\n", shell->cmds[0].filetype[0]);
+	printf("NAME %s\n", shell->cmds[0].filenames[0]);
+	printf("TYPE %d\n", shell->cmds[0].filetype[1]);
+	printf("NAME %s\n", shell->cmds[0].filenames[1]);
+	//remove_redir_from_input(shell);
 	i = -1;
-	while (tokens.pipe_tok[++i] && i < tokens.cmds_count)
+	while (shell->pipe_tok[++i] && i < shell->cmds_count)
 	{
-		tokens.pipe_tok[i] = expand_var(tokens.pipe_tok[i]);
+		shell->pipe_tok[i] = expand_var(shell->pipe_tok[i]);
 	}
 	i = 0;
-    while (i < tokens.cmds_count) {
+    while (i < shell->cmds_count) {
         int j = 0;
-        while (tokens.cmds[i].filenames[j])
+        while (shell->cmds[i].filenames[j])
 		{
-            tokens.cmds[i].filenames[j] = expand_var(tokens.cmds[i].filenames[j]);
-			printf("Expand filename %d: %s\n", j, tokens.cmds[i].filenames[j]);
-            if (!tokens.cmds[i].filenames[j])
+            shell->cmds[i].filenames[j] = expand_var(shell->cmds[i].filenames[j]);
+			printf("Expand filename %d: %s\n", j, shell->cmds[i].filenames[j]);
+            if (!shell->cmds[i].filenames[j])
 			{
                 ft_putendl_fd("Variable expansion failed in filenames", 2);
                 exit(EXIT_FAILURE);
@@ -100,46 +104,51 @@ t_data	split_line(char *line)
         i++;
     }
 
-	for (int j = 0; j < tokens.cmds_count; j++)
-	{
-		printf("Token after redir remove %d: %s\n", j, tokens.pipe_tok[j]);
-    }
+	// for (int j = 0; j < shell.cmds_count; j++)
+	// {
+	// 	printf("Token after redir remove %d: %s\n", j, tokens.pipe_tok[j]);
+    // }
 	i = 0;
-	while (i < tokens.cmds_count)
+	while (i < shell->cmds_count)
 	{
 		
-		tokens.cmds[i] = split_into_wtok(tokens.pipe_tok[i]);
+		shell->cmds[i] = split_into_wtok(shell->pipe_tok[i], shell->cmds);
 		i++;
 	}
+	////????????????????????????????????????????????????//
+	printf("TYPE %d\n", shell->cmds[0].filetype[0]);
+	printf("NAME %s\n", shell->cmds[0].filenames[0]);
+	printf("TYPE %d\n", shell->cmds[0].filetype[1]);
+	printf("NAME %s\n", shell->cmds[0].filenames[1]);
 
 
-	printf("Number of tokens: %d\n", tokens.cmds_count);
-	for (int j = 0; j < tokens.cmds_count; j++)
+	printf("Number of shell: %d\n", shell->cmds_count);
+	for (int j = 0; j < shell->cmds_count; j++)
 	{
-		printf("Token %d: %s\n", j, tokens.pipe_tok[j]);
+		printf("Token %d: %s\n", j, shell->pipe_tok[j]);
 	}
-	
-	for (i = 0; i < tokens.cmds_count; i++) {
-		printf("Command %d:\n", i);
+	// for (i = 0; i < shell.cmds_count; i++) {
+	// 	printf("Command %d:\n", i);
 		
-		for (int j = 0; j < tokens.cmds[i].w_count; j++) {
-			printf("  Word %d: %s\n", j, tokens.cmds[i].word_tok[j]);
-		}
+	// 	for (int j = 0; j < shell.cmds[i].w_count; j++) {
+	// 		printf("  Word %d: %s\n", j, shell.cmds[i].word_tok[j]);
+	// 	}
 		
-	}
-	
-	// for (i = 0; i < tokens.cmds_count; i++) {
-	//	 for (int j = 0; j < tokens.cmds[i].w_count; j++) {
-	//		 free(tokens.cmds[i].word_tok[j]);
-	//	 }
-	//	 free(tokens.cmds[i].word_tok);
 	// }
-	// free(tokens.cmds);
-	// f_free_array(tokens.pipe_tok);
-	return (tokens);
+	
+	// for (i = 0; i < shell.cmds_count; i++) {
+	//	 for (int j = 0; j < shell.cmds[i].w_count; j++) {
+	//		 free(shell.cmds[i].word_tok[j]);
+	//	 }
+	//	 free(shell.cmds[i].word_tok);
+	// }
+	// free(shell.cmds);
+	// f_free_array(shell.pipe_tok);
+	//return (*shell);
 }
 
- int if_builtins(t_built *data, t_cmd *cmd)
+
+ int if_builtins(t_data *data, t_cmd *cmd)
 {
 	if (ft_strncmp(cmd->word_tok[0], "pwd", 4) == 0)
 			ft_pwd();
@@ -158,7 +167,7 @@ t_data	split_line(char *line)
 	return(1);
 }
 
-char	*read_line(t_built *line)
+char	*read_line(t_data *line)
 {
 	char	*input;
 
@@ -177,14 +186,14 @@ char	*read_line(t_built *line)
 	return (input);
 }
 
-void	check_permissions(t_built *shell)
+void	check_permissions(t_data *shell)
 {
-	if (shell->data.cmds->word_tok[2][0] == '\0' || shell->data.cmds->word_tok[3][0] == '\0')
+	if (shell->cmds->word_tok[2][0] == '\0' || shell->cmds->word_tok[3][0] == '\0')
 //	if (shell->data.cmds->word_tok[2][0] == '\0')
 	{
 		write(2, "zsh: permission denied:\n", 24);
 	}
-	else if (shell->data.cmds->word_tok[2][0] == '\0' && shell->data.cmds->word_tok[3][0] == '\0')
+	else if (shell->cmds->word_tok[2][0] == '\0' && shell->cmds->word_tok[3][0] == '\0')
 	//else if (shell->data.cmds->word_tok[2][0] == '\0')
 	{
 		write(2, "zsh: permission denied:\n", 24);
@@ -193,42 +202,50 @@ void	check_permissions(t_built *shell)
 }
 
 
-void shell_loop(t_built *shell)
+void shell_loop(t_data *shell)
 {
 	char	*line;
 	t_pipex	pipex;
 	char	*path;
 	int i;
+	
 	while (1)
 	{
 		line = read_line(shell);
+		printf("before line");
 		if (input_validation_pipes(line) == 0 && input_validation_redir(line) == 0 \
 					&& check_input_quotes_pipe(line) == 0)
 		{
+			printf( "1. Before split\n");
 			line = change_to_space(line);
-			shell->data = split_line(line);
-			if (shell->data.cmds_count > 0)
+			printf( "2. Before split\n");
+			split_line(line, shell);
+			printf("3.aafter split\n");
+			// printf("TYPE %d\n", tokens->cmds[i].filetype[0]);
+			// printf("NAME %s\n", tokens->cmds[i].filenames[0]);
+			// printf("TYPE %d\n", tokens->cmds[i].filetype[1]);
+			// printf("NAME %s\n", tokens->cmds[i].filenames[1]);
+			if (shell->cmds_count > 0)
 			{
 				i = 0;
-				while (i < shell->data.cmds_count)
-				{printf("22222");
-					if (if_builtins(shell, &shell->data.cmds[i]) == 1)
+				while (i < shell->cmds_count)
+				{
+					if (if_builtins(shell, &shell->cmds[i]) == 1)
 					{
 						i++;
 						continue;
 					}
-					else if (shell->data.cmds->w_count >=1 && if_builtins(shell, &shell->data.cmds[i]) == 0)
+					else if (shell->cmds->w_count >=1 && if_builtins(shell, &shell->cmds[i]) == 0)
 					{
-					
+					printf("1111");
 					path = mine_path(shell);
-					if(shell->data.cmds->w_count == 4)
+					if(shell->cmds->w_count == 4)
 					{
-						printf("hellooo\n");
 						if (pipe(pipex.fd) == -1)
-					{
-						perror("Error in pipe()");
-						exit(1);
-					}
+						{
+							perror("Error in pipe()");
+							exit(1);
+						}
 					}
 					pipex.commands_path = ft_split(path, ':');
 					if (pipex.commands_path == NULL)
@@ -238,7 +255,7 @@ void shell_loop(t_built *shell)
 						free_fun(&pipex);
 						i++;
 					}
-					creating_children(&pipex, shell, shell->data.cmds->w_count);
+					creating_children(&pipex, shell, shell->cmds->w_count);
 					close(pipex.fd_in);
 					close(pipex.fd_out);
 					}
@@ -246,7 +263,7 @@ void shell_loop(t_built *shell)
 					printf("HELLO_WORLD\n");
 				i++;
 				}
-			free(shell->data.cmds);
+			free(shell->cmds);
 			}
 		}
 	free(line);
@@ -278,10 +295,26 @@ char **copy_envp(char *envp[])
 	new_envp[count] = NULL;
 	return(new_envp);
 }
+void init_t_data(t_data *data)
 
+{
+	data->envp= NULL;
+	data->new_envp = NULL;
+	data->pwd_index = 0;
+	data->oldpwd_index = 0;
+	data->input_copy = NULL;
+	data->pipe_tok = NULL;
+	data->cmds_count = 0;
+	data->cmds = NULL;
+	data->hd_delimeter = NULL;
+	data->hd_count = 0;
+	data->tempfile_hd = NULL;
+}
 int	main(int argc, char **argv, char *envp[])
 {
-	t_built data;
+	t_data data;
+	init_t_data(&data);
+	///init_t_data(&tokens);
 	(void)argv;
 	data.envp = copy_envp(envp);
 	if(argc < 2)

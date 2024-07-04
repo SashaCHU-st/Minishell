@@ -78,6 +78,8 @@ typedef struct s_cmd
 	
 }	t_cmd;
 
+typedef struct s_built t_built;
+
 typedef struct s_data
 {
 	t_cmd	*cmds;
@@ -94,8 +96,6 @@ typedef struct s_data
 	char *input_copy;
 	// t_build * shell;
 }	t_data;
-
-
 
 
 #endif

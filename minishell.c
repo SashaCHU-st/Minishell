@@ -29,16 +29,6 @@ t_cmd	split_into_wtok(char *pipe_token, t_cmd *cmd)
 	return (*cmd);
 }
 
-// void	init_t_data(t_data *tokens)
-// {
-// 	tokens->pipe_tok = NULL;
-// 	tokens->cmds_count = 0;
-// 	tokens->cmds = NULL;
-// 	tokens->hd_delimeter = NULL;
-// 	tokens->hd_count = 0;
-// 	tokens->tempfile_hd = NULL;
-// }
-
 void init_cmd(t_cmd *cmd)
 {
 	if (cmd == NULL)
@@ -71,6 +61,7 @@ void	split_line(char *line, t_data *shell)
 	if (!shell->cmds)
 		error_message("Failed to allocate memory");
 	i = -1;
+
 	while (++i < shell->cmds_count)
 	{
 		init_cmd(&shell->cmds[i]);
@@ -85,14 +76,15 @@ void	split_line(char *line, t_data *shell)
 	i = -1;
 	while (shell->pipe_tok[++i] && i < shell->cmds_count)
 	{
-		shell->pipe_tok[i] = expand_var(shell->pipe_tok[i]);
+		shell->pipe_tok[i] = expand_var(shell, shell->pipe_tok[i]);
 	}
 	i = 0;
     while (i < shell->cmds_count) {
         int j = 0;
         while (shell->cmds[i].filenames[j])
 		{
-            shell->cmds[i].filenames[j] = expand_var(shell->cmds[i].filenames[j]);
+
+            shell->cmds[i].filenames[j] = expand_var(shell, shell->cmds[i].filenames[j]);
 			printf("Expand filename %d: %s\n", j, shell->cmds[i].filenames[j]);
             if (!shell->cmds[i].filenames[j])
 			{
@@ -101,7 +93,6 @@ void	split_line(char *line, t_data *shell)
             }
             j++;
         }
-        i++;
     }
 
 	// for (int j = 0; j < shell.cmds_count; j++)
@@ -146,7 +137,6 @@ void	split_line(char *line, t_data *shell)
 	// f_free_array(shell.pipe_tok);
 	//return (*shell);
 }
-
 
  int if_builtins(t_data *data, t_cmd *cmd)
 {
@@ -207,8 +197,8 @@ void shell_loop(t_data *shell)
 	char	*line;
 	t_pipex	pipex;
 	char	*path;
+
 	int i;
-	
 	while (1)
 	{
 		line = read_line(shell);
@@ -296,7 +286,6 @@ char **copy_envp(char *envp[])
 	return(new_envp);
 }
 void init_t_data(t_data *data)
-
 {
 	data->envp= NULL;
 	data->new_envp = NULL;
@@ -320,6 +309,7 @@ int	main(int argc, char **argv, char *envp[])
 	if(argc < 2)
 	{
 		if (isatty(STDIN_FILENO))
+
 			shell_loop(&data);
 		else
 		{

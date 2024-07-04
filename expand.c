@@ -30,8 +30,6 @@ char	*ft_getenv(t_data *shell, char *env)
 		return (NULL);
 	len = ft_strlen(env);
 	write(2, "im in ft_getenv\n", 17);
-	printf("check %p\n", shell);
-	printf("ENV print: %s \nAfter env print", shell->envp[++i]);
 	while (shell->envp[++i])
 	{
 		if (!ft_strncmp(shell->envp[i], env, len))
@@ -127,7 +125,6 @@ char	*expand_var(t_data *shell, char *line)
 			{
 				j = skip_quotes(line, j);
 			}
-			printf("!!!!!!!!");
 			if (line[j + 1] && line[j] == '$' && line[j + 1] != ' ')
 			{
 				expanded_line = expand_env(shell, &line, &j);

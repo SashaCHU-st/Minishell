@@ -26,7 +26,6 @@ static e_filetype peek(char *line, int index)
 	return (NONE);
 }
 
-
 static char *take_filename(char *line, int *index)
 {
 	int		start;
@@ -99,14 +98,6 @@ void    make_redirs(t_data *tokens)
 				j++;
 
 		}
-		printf("!!!!!!!%d %d\n", i,tokens->cmds[i].filetype[0]);
-		printf("??????? %d %s\n", i, tokens->cmds[i].filenames[0]);
-		printf("!!!!!!!%d %d\n", i, tokens->cmds[i].filetype[1]);
-		printf("???????%d %s\n", i, tokens->cmds[i].filenames[1]);
-		// printf("!!!!!!!%d\n", tokens->cmds[i].filetype[2]);
-		// printf("???????%s\n", tokens->cmds[i].filenames[2]);
-		// printf("!!!!!!!%d\n", tokens->cmds[i].filetype[3]);
-		// printf("???????%s\n", tokens->cmds[i].filenames[3]);
 		tokens->cmds[i].filenames[redir_count] = NULL;
 		tokens->cmds[i].filetype[redir_count] = NONE;
 		tokens->cmds[i].number_of_redir = redir_count;
@@ -126,10 +117,6 @@ void	remove_redir_from_input(t_data *tokens)
 	int		in_quotes;
 
 	i = -1;
-			printf("!!!!!!!%d %d\n", i,tokens->cmds[i].filetype[0]);
-		printf("??????? %d %s\n", i, tokens->cmds[i].filenames[0]);
-		printf("!!!!!!!%d %d\n", i, tokens->cmds[i].filetype[1]);
-		printf("???????%d %s\n", i, tokens->cmds[i].filenames[1]);
 	while (tokens->pipe_tok[++i] &&  i < tokens->cmds_count)
 	{
 		line = tokens->pipe_tok[i];

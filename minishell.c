@@ -43,8 +43,8 @@ void init_cmd(t_cmd *cmd)
 
 void	split_line(char *line, t_data *shell)
 {
-	//t_data	tokens;
 	int		i;
+	//shell->cmds_count = 0;
 
 	//init_t_data(&tokens);
 	printf("input after replacing pipe: %s\n", line);
@@ -63,21 +63,17 @@ void	split_line(char *line, t_data *shell)
 	i = -1;
 
 	while (++i < shell->cmds_count)
-	{
 		init_cmd(&shell->cmds[i]);
-		//i++;
-	}
 	make_redirs(shell);
-	printf("TYPE %d\n", shell->cmds[0].filetype[0]);
-	printf("NAME %s\n", shell->cmds[0].filenames[0]);
-	printf("TYPE %d\n", shell->cmds[0].filetype[1]);
-	printf("NAME %s\n", shell->cmds[0].filenames[1]);
-	//remove_redir_from_input(shell);
+	remove_redir_from_input(shell);
 	i = -1;
 	while (shell->pipe_tok[++i] && i < shell->cmds_count)
 	{
 		shell->pipe_tok[i] = expand_var(shell, shell->pipe_tok[i]);
+		printf("Expand pipe tok: %s\n", shell->pipe_tok[i]);
+		//i++;
 	}
+	printf("I am here\n");
 	i = 0;
     while (i < shell->cmds_count) {
         int j = 0;
@@ -93,12 +89,13 @@ void	split_line(char *line, t_data *shell)
             }
             j++;
         }
+		i++;
     }
 
-	// for (int j = 0; j < shell.cmds_count; j++)
-	// {
-	// 	printf("Token after redir remove %d: %s\n", j, tokens.pipe_tok[j]);
-    // }
+	for (int j = 0; j < shell->cmds_count; j++)
+	{
+		printf("Token after redir remove %d: %s\n", j, shell->pipe_tok[j]);
+    }
 	i = 0;
 	while (i < shell->cmds_count)
 	{
@@ -106,12 +103,6 @@ void	split_line(char *line, t_data *shell)
 		shell->cmds[i] = split_into_wtok(shell->pipe_tok[i], shell->cmds);
 		i++;
 	}
-	////????????????????????????????????????????????????//
-	printf("TYPE %d\n", shell->cmds[0].filetype[0]);
-	printf("NAME %s\n", shell->cmds[0].filenames[0]);
-	printf("TYPE %d\n", shell->cmds[0].filetype[1]);
-	printf("NAME %s\n", shell->cmds[0].filenames[1]);
-
 
 	printf("Number of shell: %d\n", shell->cmds_count);
 	for (int j = 0; j < shell->cmds_count; j++)
@@ -202,19 +193,11 @@ void shell_loop(t_data *shell)
 	while (1)
 	{
 		line = read_line(shell);
-		printf("before line");
 		if (input_validation_pipes(line) == 0 && input_validation_redir(line) == 0 \
 					&& check_input_quotes_pipe(line) == 0)
 		{
-			printf( "1. Before split\n");
 			line = change_to_space(line);
-			printf( "2. Before split\n");
 			split_line(line, shell);
-			printf("3.aafter split\n");
-			// printf("TYPE %d\n", shell->cmds[0].filetype[0]);
-			// printf("NAME %s\n", shell->cmds[0].filenames[0]);
-			// printf("TYPE %d\n", shell->cmds[1].filetype[1]);
-			// printf("NAME %s\n", shell->cmds[1].filenames[1]);
 			if (shell->cmds_count > 0)
 			{
 				i = 0;
@@ -285,6 +268,7 @@ char **copy_envp(char *envp[])
 	new_envp[count] = NULL;
 	return(new_envp);
 }
+
 void init_t_data(t_data *data)
 {
 	data->envp= NULL;
@@ -303,7 +287,6 @@ int	main(int argc, char **argv, char *envp[])
 {
 	t_data data;
 	init_t_data(&data);
-	///init_t_data(&tokens);
 	(void)argv;
 	data.envp = copy_envp(envp);
 	if(argc < 2)

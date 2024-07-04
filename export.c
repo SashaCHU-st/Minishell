@@ -6,14 +6,14 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 13:35:40 by aheinane          #+#    #+#             */
-/*   Updated: 2024/06/26 10:41:22 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/04 16:35:01 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 #include "minishell.h"
 
-void	checking_export(t_built *data)
+void	checking_export(t_data *data)
 {
 	int		i;
 	char	*kuku;
@@ -35,7 +35,7 @@ void	checking_export(t_built *data)
 	}
 }
 
-void	new_envp_size(t_built *data, int new, int i, char **new_envp)
+void	new_envp_size(t_data *data, int new, int i, char **new_envp)
 {
 	while (new < i)
 	{
@@ -44,7 +44,7 @@ void	new_envp_size(t_built *data, int new, int i, char **new_envp)
 	}
 }
 
-void	not_in_var(t_built *data, char *input_copy, char *added_var)
+void	not_in_var(t_data *data, char *input_copy, char *added_var)
 {
 	char	**new_envp;
 	int		envp_size;
@@ -73,7 +73,7 @@ void	not_in_var(t_built *data, char *input_copy, char *added_var)
 		free(new_envp);
 }
 
-void	export_with(t_built *shell, int number_of_inputs)
+void	export_with(t_data *shell, int number_of_inputs)
 {
 	char	*added_var;
 	char	*input_copy;
@@ -83,7 +83,7 @@ void	export_with(t_built *shell, int number_of_inputs)
 	j = 1;
 	while (j < number_of_inputs)
 	{
-		input_copy = ft_strdup(shell->data.cmds->word_tok[j]);
+		input_copy = ft_strdup(shell->cmds->word_tok[j]);
 		if_error_input(input_copy);
 		if_quotes(input_copy);
 		var_index = is_var_in_envp(input_copy, shell);
@@ -101,7 +101,7 @@ void	export_with(t_built *shell, int number_of_inputs)
 	}
 }
 
-void	ft_export(t_built *data, int number_of_inputs)
+void	ft_export(t_data *data, int number_of_inputs)
 {
 	if (number_of_inputs > 1)
 		export_with(data, number_of_inputs);

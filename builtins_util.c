@@ -6,14 +6,14 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 16:17:29 by aheinane          #+#    #+#             */
-/*   Updated: 2024/06/24 16:20:00 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/04 16:49:30 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "builtins.h"
 
-void	unset_var(t_built *data, char *arg)
+void	unset_var(t_data *data, char *arg)
 {
 	int	i;
 	int	j;

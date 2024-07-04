@@ -30,15 +30,15 @@ char	*ft_getenv(t_data *shell, char *env)
 		return (NULL);
 	len = ft_strlen(env);
 	write(2, "im in ft_getenv\n", 17);
-	printf("check %p\n", shell->shell);
-	printf("ENV print: %s \nAfter env print", shell->shell->envp[++i]);
-	while (shell->shell->envp[++i])
+	printf("check %p\n", shell);
+	printf("ENV print: %s \nAfter env print", shell->envp[++i]);
+	while (shell->envp[++i])
 	{
-		if (!ft_strncmp(shell->shell->envp[i], env, len))
+		if (!ft_strncmp(shell->envp[i], env, len))
 		{
-			if(shell->shell->envp[i][len] == '=')
+			if(shell->envp[i][len] == '=')
 			{
-				new_env = ft_strdup(shell->shell->envp[i] + len + 1);
+				new_env = ft_strdup(shell->envp[i] + len + 1);
 				if (!new_env)
 					error_message("Failed to malloc env");
 				return (new_env);

@@ -6,14 +6,14 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 13:45:33 by aheinane          #+#    #+#             */
-/*   Updated: 2024/06/19 14:05:18 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/04 16:34:39 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 #include "minishell.h"
 ///!!!!!!!!!!!! roverka na to chto est' v export a ne v envp
-int	is_var_in_envp(char *arg, t_built *data)
+int	is_var_in_envp(char *arg, t_data *data)
 {
 	int	i;
 	int	len;

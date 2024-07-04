@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 13:39:27 by aheinane          #+#    #+#             */
-/*   Updated: 2024/06/26 10:37:52 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/04 16:32:12 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "minishell.h"
 #include "structs.h"
 
-void	update_pwd(t_built *data, char *original)
+void	update_pwd(t_data *data, char *original)
 {
 	char	*new_pwd;
 	char	*pwd_value;
@@ -43,7 +43,7 @@ void	update_pwd(t_built *data, char *original)
 	}
 }
 
-void	search_old_current(t_built *data)
+void	search_old_current(t_data *data)
 {
 	while (data->envp[data->pwd_index++] != NULL)
 	{
@@ -57,7 +57,7 @@ void	search_old_current(t_built *data)
 	}
 }
 
-void	cd_without_arg(t_built *data, char *original)
+void	cd_without_arg(t_data *data, char *original)
 {
 	int	home;
 
@@ -76,18 +76,18 @@ void	cd_without_arg(t_built *data, char *original)
 		printf("bash: cd: HOME not set\n");
 }
 
-void	cd_with_one_arg(t_built *shell, char *original)
+void	cd_with_one_arg(t_data *shell, char *original)
 {
-	if (chdir(shell->data.cmds->word_tok[1]) == 0)
+	if (chdir(shell->cmds->word_tok[1]) == 0)
 	{
 		search_old_current(shell);
 		update_pwd(shell, original);
 	}
-	else if (chdir(shell->data.cmds->word_tok[1]) != 0)
-		printf("bash: cd: %s No such file or directory\n", shell->data.cmds->word_tok[1]);
+	else if (chdir(shell->cmds->word_tok[1]) != 0)
+		printf("bash: cd: %s No such file or directory\n", shell->cmds->word_tok[1]);
 }
 
-void	ft_cd(t_built *data, int number_of_inputs)
+void	ft_cd(t_data *data, int number_of_inputs)
 {
 	char	*original;
 

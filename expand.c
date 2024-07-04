@@ -19,7 +19,36 @@ static int end_character(char c)
 	|| c == '\"' || c == '\'' || c == '=' || c == ':');
 }
 
-static char *get_expand(char *line)
+char	*ft_getenv(t_data *shell, char *env)
+{
+	char	*new_env;
+	int		i;
+	int		len;
+
+	i = -1;
+	if (!env)
+		return (NULL);
+	len = ft_strlen(env);
+	write(2, "im in ft_getenv\n", 17);
+	printf("check %p\n", shell);
+	printf("ENV print: %s \nAfter env print", shell->envp[++i]);
+	while (shell->envp[++i])
+	{
+		if (!ft_strncmp(shell->envp[i], env, len))
+		{
+			if(shell->envp[i][len] == '=')
+			{
+				new_env = ft_strdup(shell->envp[i] + len + 1);
+				if (!new_env)
+					error_message("Failed to malloc env");
+				return (new_env);
+			}
+		}
+	}
+	return (NULL);
+}
+
+static char *get_expand(t_data *shell, char *line)
 {
 	int		len;
 	char	*value;
@@ -37,14 +66,14 @@ static char *get_expand(char *line)
    		error_message("Malloc filed");
 	ft_strncpy(env, line, len);
 	env[len] = '\0';
-	value = getenv(env);
+	value = ft_getenv(shell, env);
 	if(value)
 		return (ft_strdup(value));
 	else
 		return (ft_strdup(""));
 }
 
-static char	*expand_env(char **line, int *i)
+static char	*expand_env(t_data *shell, char **line, int *i)
 {
 	int		start;
 	char	*value;
@@ -54,7 +83,7 @@ static char	*expand_env(char **line, int *i)
 
 	start = (*i) + 1;
 	var_name_len = 0;
-	value = get_expand(&(*line)[start]);
+	value = get_expand(shell, &(*line)[start]);
 	printf("Value got : %s\n", value);
 	if (!value)
 		error_message("Expansion of env failed");
@@ -76,7 +105,7 @@ static char	*expand_env(char **line, int *i)
 	return (new_line);
 }
 
-char	*expand_var(char *line)
+char	*expand_var(t_data *shell, char *line)
 {
 	//char	*line;
 	//int		i;
@@ -98,9 +127,10 @@ char	*expand_var(char *line)
 			{
 				j = skip_quotes(line, j);
 			}
+			printf("!!!!!!!!");
 			if (line[j + 1] && line[j] == '$' && line[j + 1] != ' ')
 			{
-				expanded_line = expand_env(&line, &j);
+				expanded_line = expand_env(shell, &line, &j);
 				if (!expanded_line)
 				{
 					ft_putendl_fd("Failed to expand", 2);
@@ -111,6 +141,7 @@ char	*expand_var(char *line)
 			}
 			j++;
 		}
+		printf("Expanded value: %s\n", line);
 		return (line);
 	//}	
 }

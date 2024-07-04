@@ -12,13 +12,14 @@
 
 #ifndef BUILTINS_H
 #define BUILTINS_H
+
 # include <stdio.h>
 # include <unistd.h>
 # include <fcntl.h>
 # include <sys/wait.h>
 # include <stdlib.h>
-#include "minishell.h"
-#include "structs.h"
+# include "minishell.h"
+# include "structs.h"
 
 
 typedef struct s_pipex{

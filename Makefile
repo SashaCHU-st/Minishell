@@ -20,7 +20,6 @@ SRCS = minishell.c \
 		open_fd.c \
 		free.c \
 		children.c \
-		builtin.c \
 		expand.c \
 		redirect.c \
 		utils_functions.c \

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: epolkhov <epolkhov@student.42.fr>          #+#  +:+       +#+        */
+/*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024-07-02 15:49:10 by epolkhov          #+#    #+#             */
-/*   Updated: 2024-07-02 15:49:10 by epolkhov         ###   ########.fr       */
+/*   Created: 2024/07/02 15:49:10 by epolkhov          #+#    #+#             */
+/*   Updated: 2024/07/04 12:31:11 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void    make_redirs(t_data *tokens)
 	int			i;
 	int			j;
 	char		*line;
-	e_filetype	type;
+	//e_filetype	type;
 	int			redir_count;
 	char		*filename;
 	int			hd_index;
@@ -63,13 +63,15 @@ void    make_redirs(t_data *tokens)
 		tokens->cmds[i].filetype = malloc(sizeof(int) * (ft_strlen(line) + 1));
 		if (!tokens->cmds[i].filenames || !tokens->cmds[i].filetype)
 			error_message("Memory allocation error");
+		memset(tokens->cmds[i].filenames, 0, sizeof(char *) * (ft_strlen(line) + 1));
+        memset(tokens->cmds[i].filetype, 0, sizeof(int) * (ft_strlen(line) + 1));
 		while (line[j])
 		{
-			type = peek(line, j);
-			if (type != NONE)
+		tokens->cmds[i].type = peek(line, j);
+			if (tokens->cmds[i].type != NONE)
 			{
 				
-				if (type == HERE || type == APPEND)
+				if (tokens->cmds[i].type == HERE || tokens->cmds[i].type == APPEND)
 					j += 2;
 				else
 					j++;
@@ -79,15 +81,15 @@ void    make_redirs(t_data *tokens)
 				printf("Filename: %s\n", filename);
 				if (filename)
 				{
-					if (type == HERE)
+					if (tokens->cmds[i].type == HERE)
 						tokens->cmds[i].filenames[redir_count] = hd_filename(hd_index++);
 					else
 						tokens->cmds[i].filenames[redir_count] = filename;
 					printf("Array filename %d:  %s\n", redir_count, tokens->cmds[i].filenames[redir_count]);
-					printf("Type: %d\n", type);
-					tokens->cmds[i].filetype[redir_count] = type;
+					printf("Type: %d\n", tokens->cmds[i].type);
+					tokens->cmds[i].filetype[redir_count] = tokens->cmds[i].type;
 					printf("FILEtype %d\n", tokens->cmds[i].filetype[redir_count]);
-					printf("Redir count: %d\n",  redir_count);
+					//printf("Redir count: %d\n",  redir_count);
 					redir_count++;
 				}
 				else
@@ -97,6 +99,14 @@ void    make_redirs(t_data *tokens)
 				j++;
 
 		}
+		printf("!!!!!!!%d %d\n", i,tokens->cmds[i].filetype[0]);
+		printf("??????? %d %s\n", i, tokens->cmds[i].filenames[0]);
+		printf("!!!!!!!%d %d\n", i, tokens->cmds[i].filetype[1]);
+		printf("???????%d %s\n", i, tokens->cmds[i].filenames[1]);
+		// printf("!!!!!!!%d\n", tokens->cmds[i].filetype[2]);
+		// printf("???????%s\n", tokens->cmds[i].filenames[2]);
+		// printf("!!!!!!!%d\n", tokens->cmds[i].filetype[3]);
+		// printf("???????%s\n", tokens->cmds[i].filenames[3]);
 		tokens->cmds[i].filenames[redir_count] = NULL;
 		tokens->cmds[i].filetype[redir_count] = NONE;
 		tokens->cmds[i].number_of_redir = redir_count;
@@ -116,6 +126,10 @@ void	remove_redir_from_input(t_data *tokens)
 	int		in_quotes;
 
 	i = -1;
+			printf("!!!!!!!%d %d\n", i,tokens->cmds[i].filetype[0]);
+		printf("??????? %d %s\n", i, tokens->cmds[i].filenames[0]);
+		printf("!!!!!!!%d %d\n", i, tokens->cmds[i].filetype[1]);
+		printf("???????%d %s\n", i, tokens->cmds[i].filenames[1]);
 	while (tokens->pipe_tok[++i] &&  i < tokens->cmds_count)
 	{
 		line = tokens->pipe_tok[i];

@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:52:26 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/04 16:49:05 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/04 17:15:41 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,10 +221,10 @@ void shell_loop(t_data *shell)
 			printf( "2. Before split\n");
 			split_line(line, shell);
 			printf("3.aafter split\n");
-			// printf("TYPE %d\n", tokens->cmds[i].filetype[0]);
-			// printf("NAME %s\n", tokens->cmds[i].filenames[0]);
-			// printf("TYPE %d\n", tokens->cmds[i].filetype[1]);
-			// printf("NAME %s\n", tokens->cmds[i].filenames[1]);
+			// printf("TYPE %d\n", shell->cmds[0].filetype[0]);
+			// printf("NAME %s\n", shell->cmds[0].filenames[0]);
+			// printf("TYPE %d\n", shell->cmds[1].filetype[1]);
+			// printf("NAME %s\n", shell->cmds[1].filenames[1]);
 			if (shell->cmds_count > 0)
 			{
 				i = 0;

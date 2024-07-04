@@ -37,6 +37,7 @@ void	init_t_data(t_data *tokens)
 	tokens->hd_delimeter = NULL;
 	tokens->hd_count = 0;
 	tokens->tempfile_hd = NULL;
+	tokens->shell = ft_calloc(1, sizeof(t_built)); //
 }
 
 void init_cmd(t_cmd *cmd)
@@ -72,23 +73,24 @@ t_data	split_line(char *line)
 		error_message("Failed to allocate memory");
 	i = -1;
 	while (++i < tokens.cmds_count)
-	{
 		init_cmd(&tokens.cmds[i]);
-		//i++;
-	}
 	make_redirs(&tokens);
 	remove_redir_from_input(&tokens);
-	i = -1;
-	while (tokens.pipe_tok[++i] && i < tokens.cmds_count)
-	{
-		tokens.pipe_tok[i] = expand_var(tokens.pipe_tok[i]);
-	}
 	i = 0;
-    while (i < tokens.cmds_count) {
+	while (tokens.pipe_tok[i] && i < tokens.cmds_count)
+	{
+		printf("Before expand_var: pipe_tok[%d] = %s\n", i, tokens.pipe_tok[i]);
+		tokens.pipe_tok[i] = expand_var(&tokens, tokens.pipe_tok[i]);
+		printf("After expand_var: pipe_tok[%d] = %s\n", i, tokens.pipe_tok[i]);
+		i++;
+	}
+	i = -1;
+    while (++i < tokens.cmds_count)
+	{
         int j = 0;
         while (tokens.cmds[i].filenames[j])
 		{
-            tokens.cmds[i].filenames[j] = expand_var(tokens.cmds[i].filenames[j]);
+            tokens.cmds[i].filenames[j] = expand_var(&tokens, tokens.cmds[i].filenames[j]);
 			printf("Expand filename %d: %s\n", j, tokens.cmds[i].filenames[j]);
             if (!tokens.cmds[i].filenames[j])
 			{
@@ -97,20 +99,15 @@ t_data	split_line(char *line)
             }
             j++;
         }
-        i++;
     }
 
 	for (int j = 0; j < tokens.cmds_count; j++)
 	{
 		printf("Token after redir remove %d: %s\n", j, tokens.pipe_tok[j]);
     }
-	i = 0;
-	while (i < tokens.cmds_count)
-	{
-		
+	i = -1;
+	while (++i < tokens.cmds_count)
 		tokens.cmds[i] = split_into_wtok(tokens.pipe_tok[i]);
-		i++;
-	}
 
 
 	printf("Number of tokens: %d\n", tokens.cmds_count);
@@ -198,7 +195,8 @@ void shell_loop(t_built *shell)
 	char	*line;
 	t_pipex	pipex;
 	char	*path;
-	int i;
+	int		i;
+
 	while (1)
 	{
 		line = read_line(shell);
@@ -224,10 +222,10 @@ void shell_loop(t_built *shell)
 					{
 						printf("hellooo\n");
 						if (pipe(pipex.fd) == -1)
-					{
-						perror("Error in pipe()");
-						exit(1);
-					}
+						{
+							perror("Error in pipe()");
+							exit(1);
+						}
 					}
 					pipex.commands_path = ft_split(path, ':');
 					if (pipex.commands_path == NULL)
@@ -278,14 +276,32 @@ char **copy_envp(char *envp[])
 	return(new_envp);
 }
 
+void	init_tbuilt(t_built *data, char **argv, int argc)
+{
+	//data.envp = copy_envp(envp);
+    data->new_envp = NULL;
+    data->argc = argc;
+    data->argv = argv;
+    memset(data->pwd, 0, sizeof(data->pwd));
+    data->pwd_index = -1;
+    data->oldpwd_index = -1;
+    data->input_copy = NULL;
+
+    // Initialize t_data structure inside t_built
+    data->data.pipe_tok = NULL;
+    data->data.cmds_count = 0;
+    data->data.cmds = NULL;
+}
 int	main(int argc, char **argv, char *envp[])
 {
 	t_built data;
 	(void)argv;
+	init_tbuilt(&data, argv, argc);
 	data.envp = copy_envp(envp);
 	if(argc < 2)
 	{
 		if (isatty(STDIN_FILENO))
+
 			shell_loop(&data);
 		else
 		{

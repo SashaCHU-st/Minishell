@@ -26,12 +26,14 @@ typedef struct s_cmd
 	char	**word_tok;
 	int		w_count;
 
-	char **filenames;
-	int *filetype;
-	int number_of_redir;
+	char	**filenames;
+	int		*filetype;
+	int		number_of_redir;
 	//int flag_amb_redir;
 	
 }	t_cmd;
+
+typedef struct s_built t_built;
 
 typedef struct s_data
 {
@@ -41,7 +43,7 @@ typedef struct s_data
 	char	*hd_delimeter;
 	int		hd_count;
 	char	*tempfile_hd;
-	// t_build * shell;
+	t_built *shell;
 }	t_data;
 
 typedef struct s_built{

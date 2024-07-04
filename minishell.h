@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:53:11 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/06/26 11:11:54 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/04 16:48:01 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 #include <fcntl.h>
 # include "libft/libft.h"
 # include "builtins.h"
+# include "structs.h"
 
 
 ///////// input validation /////////
@@ -42,11 +43,11 @@ void	error_message(char *msg);
 char	**do_split(char const *s, char c);
 void	*is_heredoc(char *line, t_data *tokens);
 void	f_free_array(char **r);
-void	f_free_array_3(char ***str);
-void	put_one_space(char *line);
+//void	f_free_array_3(char ***str);
+//void	put_one_space(char *line);
 int	skip_quotes(char *line, int i);
 
-void	put_one_space(char *line);
+//void	put_one_space(char *line);
 int		skip_quotes(char *line, int i);
 int		is_in_quotes(char c, int *in_single_quote, int *in_double_quote);
 char	*hd_filename(int count);
@@ -58,5 +59,9 @@ char	*ft_strncpy(char *dest, const char *src, size_t n);
 char	*ft_strndup(const char *str, size_t n);
 
 //////////////ADDED BY SASHA//////////////
+
+void	split_line(char *line, t_data *shell);
+t_cmd	split_into_wtok(char *pipe_token, t_cmd *cmd);
+void init_t_data(t_data *data);
 
 #endif

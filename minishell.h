@@ -20,9 +20,10 @@
 # include <unistd.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-#include <fcntl.h>
+# include <fcntl.h>
 # include "libft/libft.h"
 # include "builtins.h"
+# include "structs.h"
 
 
 ///////// input validation /////////
@@ -50,7 +51,7 @@ void	put_one_space(char *line);
 int		skip_quotes(char *line, int i);
 int		is_in_quotes(char c, int *in_single_quote, int *in_double_quote);
 char	*hd_filename(int count);
-char	*expand_var(char *line);
+char	*expand_var(t_data *shell, char *line);
 void	make_redirs(t_data *tokens);
 void	remove_redir_from_input(t_data *tokens);
 

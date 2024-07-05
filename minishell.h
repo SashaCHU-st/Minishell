@@ -24,6 +24,8 @@
 # include "libft/libft.h"
 # include "builtins.h"
 # include "structs.h"
+# include <termios.h>
+# include <signal.h>
 
 
 ///////// input validation /////////
@@ -57,11 +59,13 @@ void	remove_redir_from_input(t_data *tokens);
 
 char	*ft_strncpy(char *dest, const char *src, size_t n);
 char	*ft_strndup(const char *str, size_t n);
+int		ft_strcmp(const char *s1, const char *s2);
 
 //////////////ADDED BY SASHA//////////////
 
 void	split_line(char *line, t_data *shell);
-t_cmd	split_into_wtok(char *pipe_token, t_cmd *cmd);
+t_cmd	split_into_wtok(char *pipe_token, t_cmd cmd);
 void init_t_data(t_data *data);
+void    get_signal(t_signal mode);
 
 #endif

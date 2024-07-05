@@ -13,7 +13,7 @@
 #include "minishell.h"
 #include "builtins.h"
 
-t_cmd	split_into_wtok(char *pipe_token, t_cmd *cmd)
+t_cmd	split_into_wtok(char *pipe_token, t_cmd cmd)
 {
 	//t_cmd	cmd;
 
@@ -21,12 +21,12 @@ t_cmd	split_into_wtok(char *pipe_token, t_cmd *cmd)
 	// cmd->w_count = 0;
 	change_space_to_31(pipe_token);
 	remove_quotes(pipe_token);
-	cmd->word_tok = do_split(pipe_token, 31);
-	if (!cmd->word_tok)
-		return (*cmd);
-	while (cmd->word_tok[cmd->w_count])
-		cmd->w_count++;
-	return (*cmd);
+	cmd.word_tok = do_split(pipe_token, 31);
+	if (!cmd.word_tok)
+		return (cmd);
+	while (cmd.word_tok[cmd.w_count])
+		cmd.w_count++;
+	return (cmd);
 }
 
 void init_cmd(t_cmd *cmd)
@@ -100,7 +100,7 @@ void	split_line(char *line, t_data *shell)
 	while (i < shell->cmds_count)
 	{
 		
-		shell->cmds[i] = split_into_wtok(shell->pipe_tok[i], shell->cmds);
+		shell->cmds[i] = split_into_wtok(shell->pipe_tok[i], shell->cmds[i]);
 		i++;
 	}
 
@@ -109,14 +109,13 @@ void	split_line(char *line, t_data *shell)
 	{
 		printf("Token %d: %s\n", j, shell->pipe_tok[j]);
 	}
-	// for (i = 0; i < shell.cmds_count; i++) {
-	// 	printf("Command %d:\n", i);
+	for (i = 0; i < shell->cmds_count; i++) {
+		printf("Command %d:\n", i);
 		
-	// 	for (int j = 0; j < shell.cmds[i].w_count; j++) {
-	// 		printf("  Word %d: %s\n", j, shell.cmds[i].word_tok[j]);
-	// 	}
-		
-	// }
+		for (int j = 0; j < shell->cmds[i].w_count; j++) {
+			printf("  Word %d: %s\n", j, shell->cmds[i].word_tok[j]);
+		}
+	}
 	
 	// for (i = 0; i < shell.cmds_count; i++) {
 	//	 for (int j = 0; j < shell.cmds[i].w_count; j++) {
@@ -155,7 +154,10 @@ char	*read_line(t_data *line)
 	(void)line;
 	input = readline("minishell-$ ");
 	if (!input)
-		error_message("Failed to read line");
+	{
+		printf("exit\n");
+		exit (EXIT_SUCCESS);
+	}
 	if (ft_strncmp(input, "exit", 5) == 0)
 	{
 		free(input);
@@ -192,6 +194,7 @@ void shell_loop(t_data *shell)
 	int i;
 	while (1)
 	{
+		
 		line = read_line(shell);
 		if (input_validation_pipes(line) == 0 && input_validation_redir(line) == 0 \
 					&& check_input_quotes_pipe(line) == 0)
@@ -283,17 +286,21 @@ void init_t_data(t_data *data)
 	data->hd_count = 0;
 	data->tempfile_hd = NULL;
 }
+
 int	main(int argc, char **argv, char *envp[])
 {
 	t_data data;
+
 	init_t_data(&data);
 	(void)argv;
 	data.envp = copy_envp(envp);
 	if(argc < 2)
 	{
 		if (isatty(STDIN_FILENO))
-
+		{
+			get_signal(HANDLER);
 			shell_loop(&data);
+		}
 		else
 		{
 			perror("Terminal is not in interactive mode");

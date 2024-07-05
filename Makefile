@@ -23,6 +23,7 @@ SRCS = minishell.c \
 		expand.c \
 		redirect.c \
 		utils_functions.c \
+		signals.c \
 			
 OBJS = $(SRCS:.c=.o)
 

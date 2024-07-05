@@ -27,11 +27,12 @@ char	*hd_filename(int count)
 	return (file);
 }
 
-void	process_hd(const char *file, const char *delimeter)
+void	process_hd(t_data *tokens, const char *file, const char *delimeter)
 {
 	int	fd;
 	char	*line;
 
+	get_signal(HEREDOC);
 	unlink(file);
 	fd = open(file, O_RDWR | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
@@ -41,16 +42,20 @@ void	process_hd(const char *file, const char *delimeter)
 		line = readline("> ");
         if (!line)
             break;
-		if (strcmp(line, delimeter) == 0)
+		if (ft_strcmp(line, delimeter) == 0)
 		{
 			free(line);
 			break ;
 		}
+		if (ft_strchr(line, '$'))
+			line = expand_var(tokens, line);
 		ft_putendl_fd(line, fd);
 		free(line);
 	}
 	if (close(fd) == -1)
 		error_message("Failed to close fd for heredoc");
+	//get_signal(DEFAULT);
+	exit (0);
 }
 
 void    *is_heredoc(char *line, t_data *tokens)
@@ -96,7 +101,7 @@ void    *is_heredoc(char *line, t_data *tokens)
 			printf("HD tempfile %s\n", tokens->tempfile_hd);
 			if (!tokens->tempfile_hd)
 				error_message("Failed to assign filename for heredoc");
-			process_hd(tokens->tempfile_hd, tokens->hd_delimeter);
+			process_hd(tokens, tokens->tempfile_hd, tokens->hd_delimeter);
             if ( tokens->hd_delimeter != NULL)
 			    free(tokens->hd_delimeter);
 		}

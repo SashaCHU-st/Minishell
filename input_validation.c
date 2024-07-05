@@ -72,7 +72,8 @@ int	input_validation_redir(char *input)
 void	error_message(char *msg)
 {
 	//ft_putstr_fd("Error\n", 2);
-	ft_putendl_fd(msg, 2);
+	//ft_putendl_fd(msg, 2);
+	perror(msg);
 	exit (EXIT_FAILURE);
 }
 

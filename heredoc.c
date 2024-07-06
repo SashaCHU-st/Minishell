@@ -27,7 +27,7 @@ char	*hd_filename(int count)
 	return (file);
 }
 
-void	process_hd(t_data *tokens, const char *file, const char *delimeter)
+void	process_hd(t_data *tokens, const char *file, char *delimeter)
 {
 	int	fd;
 	char	*line;
@@ -54,7 +54,7 @@ void	process_hd(t_data *tokens, const char *file, const char *delimeter)
 	}
 	if (close(fd) == -1)
 		error_message("Failed to close fd for heredoc");
-	//get_signal(DEFAULT);
+	get_signal(DEFAULT);
 	exit (0);
 }
 

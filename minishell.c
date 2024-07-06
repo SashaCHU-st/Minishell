@@ -61,7 +61,6 @@ void	split_line(char *line, t_data *shell)
 	if (!shell->cmds)
 		error_message("Failed to allocate memory");
 	i = -1;
-
 	while (++i < shell->cmds_count)
 		init_cmd(&shell->cmds[i]);
 	make_redirs(shell);
@@ -99,8 +98,9 @@ void	split_line(char *line, t_data *shell)
 	i = 0;
 	while (i < shell->cmds_count)
 	{
-		
 		shell->cmds[i] = split_into_wtok(shell->pipe_tok[i], shell->cmds[i]);
+		if (ft_strncmp (shell->cmds[i].word_tok[0], "exit", 5) == 0)
+			ft_exit(shell, shell->cmds[i].word_tok);
 		i++;
 	}
 
@@ -158,12 +158,12 @@ char	*read_line(t_data *line)
 		printf("exit\n");
 		exit (EXIT_SUCCESS);
 	}
-	if (ft_strncmp(input, "exit", 5) == 0)
-	{
-		free(input);
-		printf ("exit\n");
-		exit(EXIT_SUCCESS);
-	}
+	// if (ft_strncmp(input, "exit", 5) == 0)
+	// {
+	// 	free(input);
+	// 	printf ("exit\n");
+	// 	exit(EXIT_SUCCESS);
+	// }
 	add_history(input);
 	printf("input: %s\n", input);
 	return (input);
@@ -190,11 +190,10 @@ void shell_loop(t_data *shell)
 	char	*line;
 	t_pipex	pipex;
 	char	*path;
+	int 	i;
 
-	int i;
 	while (1)
 	{
-		
 		line = read_line(shell);
 		if (input_validation_pipes(line) == 0 && input_validation_redir(line) == 0 \
 					&& check_input_quotes_pipe(line) == 0)
@@ -213,36 +212,36 @@ void shell_loop(t_data *shell)
 					}
 					else if (shell->cmds->w_count >=1 && if_builtins(shell, &shell->cmds[i]) == 0)
 					{
-					printf("1111");
-					path = mine_path(shell);
-					if(shell->cmds->w_count == 4)
-					{
-						if (pipe(pipex.fd) == -1)
+						printf("1111");
+						path = mine_path(shell);
+						if(shell->cmds->w_count == 4)
 						{
-							perror("Error in pipe()");
-							exit(1);
+							if (pipe(pipex.fd) == -1)
+							{
+								perror("Error in pipe()");
+								exit(1);
+							}
 						}
+						pipex.commands_path = ft_split(path, ':');
+						if (pipex.commands_path == NULL)
+						{
+							close(pipex.fd[0]);
+							close(pipex.fd[1]);
+							free_fun(&pipex);
+							i++;
+						}
+						creating_children(&pipex, shell, shell->cmds->w_count);
+						close(pipex.fd_in);
+						close(pipex.fd_out);
 					}
-					pipex.commands_path = ft_split(path, ':');
-					if (pipex.commands_path == NULL)
-					{
-						close(pipex.fd[0]);
-						close(pipex.fd[1]);
-						free_fun(&pipex);
-						i++;
-					}
-					creating_children(&pipex, shell, shell->cmds->w_count);
-					close(pipex.fd_in);
-					close(pipex.fd_out);
-					}
-				else 
-					printf("HELLO_WORLD\n");
-				i++;
+					else 
+						printf("HELLO_WORLD\n");
+					i++;
 				}
 			free(shell->cmds);
 			}
 		}
-	free(line);
+		free(line);
 	}
 }
 
@@ -285,6 +284,7 @@ void init_t_data(t_data *data)
 	data->hd_delimeter = NULL;
 	data->hd_count = 0;
 	data->tempfile_hd = NULL;
+	data->exit_status = 0;
 }
 
 int	main(int argc, char **argv, char *envp[])

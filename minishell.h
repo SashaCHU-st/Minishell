@@ -47,7 +47,7 @@ void	*is_heredoc(char *line, t_data *tokens);
 void	f_free_array(char **r);
 //void	f_free_array_3(char ***str);
 //void	put_one_space(char *line);
-int	skip_quotes(char *line, int i);
+int		skip_quotes(char *line, int i);
 
 //void	put_one_space(char *line);
 int		skip_quotes(char *line, int i);
@@ -59,13 +59,18 @@ void	remove_redir_from_input(t_data *tokens);
 
 char	*ft_strncpy(char *dest, const char *src, size_t n);
 char	*ft_strndup(const char *str, size_t n);
-int		ft_strcmp(const char *s1, const char *s2);
+int		ft_strcmp(char *s1, char *s2);
 
 //////////////ADDED BY SASHA//////////////
 
 void	split_line(char *line, t_data *shell);
 t_cmd	split_into_wtok(char *pipe_token, t_cmd cmd);
-void init_t_data(t_data *data);
+void 	init_t_data(t_data *data);
 void    get_signal(t_signal mode);
+void	exit_free(t_data *shell, int status);
+void	free_all(t_data *shell);
+void	f_free_cmds(t_cmd *cmds, int cmds_count);
+void	ft_exit(t_data *shell, char **args);
+
 
 #endif

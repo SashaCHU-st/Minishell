@@ -33,11 +33,11 @@ typedef struct s_cmd
 	char	**word_tok;
 	int		w_count;
 
-	char **filenames;
-	int *filetype;
-	int number_of_redir;
+	char 	**filenames;
+	int 	*filetype;
+	int 	number_of_redir;
 	// int	redir_count;
-	 e_filetype	type;
+	e_filetype	type;
 	//int flag_amb_redir;
 	
 }	t_cmd;
@@ -52,13 +52,13 @@ typedef struct s_data
 	char	*hd_delimeter;
 	int		hd_count;
 	char	*tempfile_hd;
-	char **envp;
-	char **new_envp;
-	char pwd[1000];
-	int pwd_index;
-	int oldpwd_index;
-	char *input_copy;
-	// t_build * shell;
+	char 	**envp;
+	char 	**new_envp;
+	char 	pwd[1000];
+	int 	pwd_index;
+	int 	oldpwd_index;
+	char 	*input_copy;
+	int		exit_status;
 }	t_data;
 
 

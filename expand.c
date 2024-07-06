@@ -45,6 +45,18 @@ char	*ft_getenv(t_data *shell, char *env)
 	}
 	return (NULL);
 }
+static char	*receive_exit_status(t_data *shell)
+{
+	char	*status;
+
+	if (shell->exit_status > 255)
+		status = ft_itoa(WEXITSTATUS(shell->exit_status));
+	else
+		status = ft_itoa(shell->exit_status);
+	if (!status)
+		error_message("Malloc failed");
+	return (status);
+}
 
 static char *get_expand(t_data *shell, char *line)
 {
@@ -53,8 +65,9 @@ static char *get_expand(t_data *shell, char *line)
 	char	*env;
 
 	len =  0;
-	// if (line[len] == '?')
-		// return get_exit_status();
+	printf("Line before expand: %c\n", line[len]);
+	if (line[len] == '?')
+		return receive_exit_status(shell);
 	while (!end_character(line[len]))
 		len++;
 	if (len == 0)

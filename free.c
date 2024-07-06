@@ -40,10 +40,62 @@ void	free_array(char **array)
 			i++;
 		}
 	}
+	free (array);
+	array = NULL;
 }
 
 void	ft_error(void)
 {
 	perror("Error fork()");
 	exit(1);
+}
+
+void	f_free_cmds(t_cmd *cmds, int cmds_count)
+{
+	int		i;
+	int		j;
+
+	i = 0;
+	while (i < cmds_count)
+	{
+		j = 0;
+		while (j < cmds->w_count)
+		{
+			free(cmds->word_tok[j]);
+			cmds->word_tok[j] = NULL;
+			j++;
+		}
+		free(cmds->word_tok);
+		cmds->word_tok = NULL;
+		i++;
+	}
+	free(cmds);
+	cmds = NULL;
+}
+
+void	free_all(t_data *shell)
+{
+	if (shell->cmds)
+		f_free_cmds(shell->cmds, shell->cmds_count);
+	if (shell->cmds->filetype)
+		free(shell->cmds->filetype);
+	if (shell->cmds->filenames)
+		free_array(shell->cmds->filenames);
+	if (shell->pipe_tok)
+		free_array(shell->pipe_tok);
+	if (shell->input_copy)
+		free(shell->input_copy);
+	if (shell->hd_delimeter)
+		free (shell->hd_delimeter);
+	if (shell->tempfile_hd)
+		free (shell->tempfile_hd);
+}
+
+void	exit_free(t_data *shell, int status)
+{
+	free_all(shell);
+	free_array(shell->envp);
+	free_array(shell->new_envp);
+	get_signal(DEFAULT);
+	exit (status);
 }

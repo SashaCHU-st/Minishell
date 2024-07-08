@@ -89,7 +89,7 @@ void    get_signal(t_signal mode)
         set_signal_handler(SIGQUIT, SIG_IGN);
         set_signal_handler(SIGINT, hd_handler);
     }
-    else if (mode == NO_SIGNALS)
+    else
     {
         set_signal_handler(SIGQUIT, SIG_IGN);
         set_signal_handler(SIGINT, SIG_IGN);

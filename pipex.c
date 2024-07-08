@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:47:03 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/04 16:50:02 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/08 17:12:19 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,15 @@ char	*path_for_commands(t_pipex *pipex, char **child_command)
 	char	*command_temp;
 	char	**current_path;
 
+	printf("Hello5");
 	current_path = pipex->commands_path;
 	while (*current_path)
 	{
 		command_temp = ft_strjoin(*current_path, "/");
 		if (command_temp == 0)
 			free_fun(pipex);
+		ft_putendl_fd("path_for_commands\n",2);
+		dprintf(2, "child: %s %p \n", *child_command, *child_command);
 		command = ft_strjoin(command_temp, *child_command);
 		free(command_temp);
 		if (command == 0)
@@ -33,6 +36,7 @@ char	*path_for_commands(t_pipex *pipex, char **child_command)
 			return (command);
 		free(command);
 		current_path++;
+		ft_putendl_fd("path_for_commands1111\n",2);
 	}
 	if (!current_path)
 	{
@@ -43,59 +47,50 @@ char	*path_for_commands(t_pipex *pipex, char **child_command)
 }
 
 //void	creating_children( t_pipex *pipex, t_data *shell, int number_of_inputs)
-void	creating_children( t_pipex *pipex, t_data *shell, int number_of_inputs)
+void	creating_children( t_pipex *pipex, t_data *shell)
 {
 	int		first_child = 0;
-	(void)number_of_inputs;
-	printf("!!!!!!!!!%d\n", shell->cmds->w_count);
-	if(shell->cmds->w_count == 0)
-	{
-		first_child = 0;
-		first_child = fork();
-		if (first_child < 0)
-			ft_error();
-		if (first_child == 0)
-			fun_first_child(shell, *pipex);
-	}
-	else if(shell->cmds->w_count == 1)
+
+	if(shell->cmds_count == 1)
 	{
 		printf("Hello1\n");
 		first_child = 0;
 		//check_permissions(shell);
-	if (open_fd_in(pipex, shell) == 1)
-		ft_putstr_fd(": No such file or directory\n", 2);
-	else
-	{
-		first_child = fork();
-		if (first_child < 0)
-			ft_error();
-		if (first_child == 0)
-			fun_first_child(shell, *pipex);
-	}
+		if (open_fd_in(pipex, shell) == 1)
+			ft_putstr_fd(": No such file or directory\n", 2);
+		else
+		{
+			printf("Hello2\n");
+			first_child = fork();
+			printf("Hello3\n");
+			if (first_child < 0)
+				ft_error();
+			if (first_child == 0)
+				fun_first_child(shell, *pipex);
+		}
 	}
 	
-	else if(shell->cmds->w_count == 4)
+	if(shell->cmds_count == 2)
 	{
-		printf("2222222\n");
 		first_child = 0;
 		//check_permissions(shell);
-		//printf("???????%s\n", tokens->cmds[0].filenames[0]);
-	if (open_fd_in(pipex, shell) == 1)
-		ft_putstr_fd(": No such file or directory\n", 2);
-	else
-	{
-		first_child = fork();
-		if (first_child < 0)
+		if (open_fd_in(pipex, shell) == 1)
+			ft_putstr_fd(": No such file or directory\n", 2);
+		else
+		{
+			first_child = fork();
+			if (first_child < 0)
+				ft_error();
+			if (first_child == 0)
+				fun_first_child(shell, *pipex);
+		}
+		open_fd_out(pipex, shell);
+		pipex->second_child=0;
+		pipex->second_child = fork();
+		if (pipex->second_child  < 0)
 			ft_error();
-		if (first_child == 0)
-			fun_first_child(shell, *pipex);
-	}
-	open_fd_out(pipex, shell);
-	pipex->second_child = fork();
-	if (pipex->second_child  < 0)
-		ft_error();
-	if (pipex->second_child == 0)
-		fun_second_child(shell, *pipex);
+		if (pipex->second_child == 0)
+			fun_second_child(shell, *pipex);
 	}
 	close_and_wait(shell, pipex, first_child);
 }

@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:53:11 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/04 16:48:01 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/05 14:16:09 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include "libft/libft.h"
 # include "builtins.h"
 # include "structs.h"
+# include "minishell.h"
 
 
 ///////// input validation /////////
@@ -61,7 +62,7 @@ char	*ft_strndup(const char *str, size_t n);
 //////////////ADDED BY SASHA//////////////
 
 void	split_line(char *line, t_data *shell);
-t_cmd	split_into_wtok(char *pipe_token, t_cmd *cmd);
+t_cmd	split_into_wtok(char *pipe_token, t_cmd cmd);
 void init_t_data(t_data *data);
 
 #endif

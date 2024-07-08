@@ -50,13 +50,19 @@ static void toggle_caret(int is_on)
     struct termios new_attr;
 
     if (tcgetattr(STDIN_FILENO, &new_attr) == -1)
-        error_message("tcgetattr in signals failed");
+    {
+        perror("tcgetattr in signals failed");
+        exit(1);
+    }
     if (!is_on)
         new_attr.c_lflag &= ~ECHOCTL;
     else
         new_attr.c_lflag |= ECHOCTL;
     if (tcsetattr(STDIN_FILENO, TCSANOW, &new_attr) == -1)
-        error_message ("tcsetattr in signals failed");
+    {
+        perror ("tcsetattr in signals failed");
+        exit (1);
+    }
 }
 
 static void	set_signal_handler(int signum, void(*handler)(int))
@@ -67,7 +73,10 @@ static void	set_signal_handler(int signum, void(*handler)(int))
     sigemptyset(&sa.sa_mask);
     sa.sa_flags = SA_RESTART;
     if (sigaction(signum, &sa, NULL) == -1)
-        error_message("Sigaction failed");
+    {
+        perror("Sigaction failed");
+        exit (1);
+    }
 }
 
 void    get_signal(t_signal mode)

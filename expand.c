@@ -38,7 +38,7 @@ char	*ft_getenv(t_data *shell, char *env)
 			{
 				new_env = ft_strdup(shell->envp[i] + len + 1);
 				if (!new_env)
-					error_message("Failed to malloc env");
+					error_message(shell, "Failed to malloc env", 1);
 				return (new_env);
 			}
 		}
@@ -54,7 +54,7 @@ static char	*receive_exit_status(t_data *shell)
 	else
 		status = ft_itoa(shell->exit_status);
 	if (!status)
-		error_message("Malloc failed");
+		error_message(shell, "Malloc failed", 1);
 	return (status);
 }
 
@@ -74,7 +74,7 @@ static char *get_expand(t_data *shell, char *line)
 		return (ft_strdup(""));
 	env = (char *)malloc(sizeof(char) * len + 1);
 	if (!env)
-   		error_message("Malloc filed");
+   		error_message(shell, "Malloc filed", 1);
 	ft_strncpy(env, line, len);
 	env[len] = '\0';
 	value = ft_getenv(shell, env);
@@ -97,7 +97,7 @@ static char	*expand_env(t_data *shell, char **line, int *i)
 	value = get_expand(shell, &(*line)[start]);
 	printf("Value got : %s\n", value);
 	if (!value)
-		error_message("Expansion of env failed");
+		error_message(shell, "Expansion of env failed", 1);
 	while (!end_character((*line)[start + var_name_len]))
 		var_name_len++;
 	new_line_len = ft_strlen(value) + ft_strlen(*line) - var_name_len - 1;
@@ -105,7 +105,7 @@ static char	*expand_env(t_data *shell, char **line, int *i)
 	if (!new_line)
 	{
 		free(value);
-		error_message("Failed to malloc");
+		error_message(shell, "Failed to malloc", 1);
 	}
 	ft_strncpy(new_line, *line, (*i));
 	ft_strncpy(new_line + (*i), value, ft_strlen(value));

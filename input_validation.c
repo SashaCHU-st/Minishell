@@ -13,7 +13,7 @@
 #include "minishell.h"
 #include "builtins.h"
 
-int	input_validation_pipes(char *input)
+int	input_validation_pipes(t_data *shell, char *input)
 {
 	int	i;
 
@@ -25,6 +25,7 @@ int	input_validation_pipes(char *input)
 			if (input[i + 1] == '|')
 			{
 				ft_putendl_fd("Syntax error: multiple pipes", 2);
+				shell->exit_status = 2;
 				return (1);
 			}
 			i++;
@@ -32,7 +33,8 @@ int	input_validation_pipes(char *input)
 				i++;
 			if (input[i] == '|' || input[i] == '\0')
 			{
-				ft_putendl_fd("Syntax error: no input after pip or unexpected token", 2);
+				ft_putendl_fd("Syntax error: no input after pipe or unexpected token", 2);
+				shell->exit_status = 2;
 				return (1);
 			}
 		}
@@ -41,7 +43,7 @@ int	input_validation_pipes(char *input)
 	return (0);
 }
 
-int	input_validation_redir(char *input)
+int	input_validation_redir(t_data *shell, char *input)
 {
 	int	i;
 
@@ -61,7 +63,9 @@ int	input_validation_redir(char *input)
 			if (input[i] == '|' || input[i] == '\0' || input[i] == '<' || input[i] == '>')
 			{
 				ft_putendl_fd("Syntax error: no input after redirection or unexpected token", 2);
+				shell->exit_status = 2;
 				return (1);
+
 			}
 		}
 		i++;
@@ -69,11 +73,14 @@ int	input_validation_redir(char *input)
 	return (0);
 }
 
-void	error_message(char *msg)
+void	error_message(t_data *shell, char *msg, int status)
 {
 	//ft_putstr_fd("Error\n", 2);
 	//ft_putendl_fd(msg, 2);
+	if (shell)
+		free_all(shell);
 	perror(msg);
-	exit (EXIT_FAILURE);
+	shell->exit_status = status;
+	exit (status);
 }
 

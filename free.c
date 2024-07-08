@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:46:00 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/02 15:11:14 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/05 16:01:22 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,9 @@ void	free_fun(t_pipex *pipex)
 		free_array(pipex->com_fir_child);
 	if (pipex->com_sec_child != NULL)
 		free_array(pipex->com_sec_child);
+	close(STDIN_FILENO);
+	close(STDOUT_FILENO);
+//	close(pipex->fd_in);
 	exit(1);
 }
 

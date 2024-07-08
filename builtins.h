@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 13:32:50 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/04 16:48:47 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/08 15:11:40 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,16 @@
 #include "structs.h"
 
 
-typedef struct s_pipex{
-	int		fd[2];
-	int		fd_in;
-	int		fd_out;
-	char	**commands_path;
-	char	**com_fir_child;
-	char	**com_sec_child;
-	int second_child;
+// typedef struct s_pipex{
+// 	int		fd[2];
+// 	int		fd_in;
+// 	int		fd_out;
+// 	char	**commands_path;
+// 	char	**com_fir_child;
+// 	char	**com_sec_child;
+// 	int second_child;
 	
-} t_pipex;
+// } t_pipex;
 
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 int		ft_words(const char *str, char c);
@@ -64,7 +64,7 @@ void	if_error_input(char *input_copy);
 //////
 char	*mine_path(t_data *data);
 //void	creating_children(t_pipex *pipex, t_data *data, int num_commands);
-void	creating_children( t_pipex *pipex, t_data *shell, int number_of_inputs);
+void	creating_children( t_pipex *pipex, t_data *shell);
 void	free_fun(t_pipex *pipex);
 int		open_fd_in(t_pipex *pipex, t_data *data);
 void	open_fd_out(t_pipex *pipex, t_data *data);

@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 15:49:10 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/04 12:31:11 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/08 13:39:20 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,14 +99,10 @@ void    make_redirs(t_data *tokens)
 				j++;
 
 		}
-		printf("!!!!!!!%d %d\n", i,tokens->cmds[i].filetype[0]);
-		printf("??????? %d %s\n", i, tokens->cmds[i].filenames[0]);
-		printf("!!!!!!!%d %d\n", i, tokens->cmds[i].filetype[1]);
-		printf("???????%d %s\n", i, tokens->cmds[i].filenames[1]);
-		// printf("!!!!!!!%d\n", tokens->cmds[i].filetype[2]);
-		// printf("???????%s\n", tokens->cmds[i].filenames[2]);
-		// printf("!!!!!!!%d\n", tokens->cmds[i].filetype[3]);
-		// printf("???????%s\n", tokens->cmds[i].filenames[3]);
+		// printf("INFILE TYPE %d %d\n", i,tokens->cmds[i].filetype[0]);
+		// printf("INFILE NAME %d %s\n", i, tokens->cmds[i].filenames[0]);
+		// printf("OUTFILE TYPE %d %d\n", i, tokens->cmds[i].filetype[1]);
+		// printf("OUTFILE NAME %d %s\n", i, tokens->cmds[i].filenames[1]);
 		tokens->cmds[i].filenames[redir_count] = NULL;
 		tokens->cmds[i].filetype[redir_count] = NONE;
 		tokens->cmds[i].number_of_redir = redir_count;
@@ -124,14 +120,15 @@ void	remove_redir_from_input(t_data *tokens)
 	int		in_single_quote;
 	int		in_double_quote;
 	int		in_quotes;
-
 	i = -1;
-			printf("!!!!!!!%d %d\n", i,tokens->cmds[i].filetype[0]);
-		printf("??????? %d %s\n", i, tokens->cmds[i].filenames[0]);
-		printf("!!!!!!!%d %d\n", i, tokens->cmds[i].filetype[1]);
-		printf("???????%d %s\n", i, tokens->cmds[i].filenames[1]);
+	// 		printf("!!!!!!! %d\n",tokens->cmds[0].filetype[0]);
+	// printf("Hello1\n");
+	// 	printf("??????? %s\n",  tokens->cmds[0].filenames[0]);
+	// 	printf("!!!!!!! %d\n",  tokens->cmds[0].filetype[1]);
+	// 	printf("???????%s\n",  tokens->cmds[0].filenames[1]);
 	while (tokens->pipe_tok[++i] &&  i < tokens->cmds_count)
 	{
+		printf("HELLO FROM WHILE\n");
 		line = tokens->pipe_tok[i];
 		new_line = (char *)malloc(sizeof(char) * (ft_strlen(line) + 1));
 		if (!new_line)
@@ -166,4 +163,5 @@ void	remove_redir_from_input(t_data *tokens)
 		//free(line);
 		//free(new_line);
 	}
+		printf("HELLO FROM REMOVE FILES\n");
 }

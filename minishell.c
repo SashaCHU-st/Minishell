@@ -59,7 +59,7 @@ void	split_line(char *line, t_data *shell)
 	}
 	shell->cmds = (t_cmd *)malloc(sizeof(t_cmd) * shell->cmds_count);
 	if (!shell->cmds)
-		error_message("Failed to allocate memory");
+		error_message(shell, "Failed to allocate memory", 1);
 	i = -1;
 	while (++i < shell->cmds_count)
 		init_cmd(&shell->cmds[i]);
@@ -199,8 +199,8 @@ void shell_loop(t_data *shell)
 	while (1)
 	{
 		line = read_line(shell);
-		if (input_validation_pipes(line) == 0 && input_validation_redir(line) == 0 \
-					&& check_input_quotes_pipe(line) == 0)
+		if (input_validation_pipes(shell, line) == 0 && input_validation_redir(shell, line) == 0 \
+					&& check_input_quotes_pipe(shell, line) == 0)
 		{
 			line = change_to_space(line);
 			split_line(line, shell);

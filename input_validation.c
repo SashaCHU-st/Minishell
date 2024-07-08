@@ -32,7 +32,7 @@ int	input_validation_pipes(char *input)
 				i++;
 			if (input[i] == '|' || input[i] == '\0')
 			{
-				ft_putendl_fd("Syntax error: no input after pipe", 2);
+				ft_putendl_fd("Syntax error: no input after pip or unexpected token", 2);
 				return (1);
 			}
 		}

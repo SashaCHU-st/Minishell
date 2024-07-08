@@ -17,7 +17,7 @@ typedef enum {
     DEFAULT,
     HANDLER,
     HEREDOC,
-    NO_SIGNALS
+    //NO_SIGNALS
 } t_signal;
 
 typedef enum {

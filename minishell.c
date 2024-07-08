@@ -18,7 +18,7 @@ t_cmd	split_into_wtok(char *pipe_token, t_cmd cmd)
 	//t_cmd	cmd;
 
 	// cmd->word_tok = NULL;
-	// cmd->w_count = 0;
+	cmd.w_count = 0;
 	change_space_to_31(pipe_token);
 	remove_quotes(pipe_token);
 	cmd.word_tok = do_split(pipe_token, 31);
@@ -99,8 +99,12 @@ void	split_line(char *line, t_data *shell)
 	while (i < shell->cmds_count)
 	{
 		shell->cmds[i] = split_into_wtok(shell->pipe_tok[i], shell->cmds[i]);
-		if (ft_strncmp (shell->cmds[i].word_tok[0], "exit", 5) == 0)
-			ft_exit(shell, shell->cmds[i].word_tok);
+		if (shell->cmds[i].word_tok[0] != NULL)
+		{
+			if (ft_strncmp (shell->cmds[i].word_tok[0], "exit", 5) == 0)
+				ft_exit(shell, shell->cmds[i].word_tok);
+		}
+		
 		i++;
 	}
 

@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 13:32:50 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/09 15:42:51 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/09 18:42:09 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ int		if_builtins(t_data *data, t_cmd *cmd);
 void	close_and_wait(t_data *shell, t_pipex *pipex, int first_child);
 //void	close_and_wait(t_pipex *data, int first_child, int second_child);
 void	fun_second_child(t_data *shell, t_pipex pipex);
-void	fun_first_child(t_data *shell, t_pipex pipex);
+void	fun_first_child(t_pipex pipex, t_data *shell, int k);
+void setup_pipes_and_execute(t_data *shell, t_pipex pipex);
 
 #endif

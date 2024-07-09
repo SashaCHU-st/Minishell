@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:47:03 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/09 16:00:06 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/09 18:15:13 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,18 +107,18 @@ void creating_children(t_pipex *pipex, t_data *shell)
 	if (first_child == 0)
 	{
 		check_filetype(pipex, &shell->cmds[0]);
-		fun_first_child(shell, *pipex);
+		//fun_first_child(shell, *pipex);
 	}
-		// pipex->second_child = fork();
-		// if (pipex->second_child < 0)
-		// {
-		// 	ft_error();
-		// }
-		// if (pipex->second_child == 0)
-		// {
-		// 	check_filetype(pipex, &shell->cmds[1]);
-		// 	fun_second_child(shell, *pipex);
-		// }
+		pipex->second_child = fork();
+		if (pipex->second_child < 0)
+		{
+			ft_error();
+		}
+		if (pipex->second_child == 0)
+		{
+			check_filetype(pipex, &shell->cmds[1]);
+			fun_second_child(shell, *pipex);
+		}
 	close_and_wait(shell, pipex, first_child);
 }
 

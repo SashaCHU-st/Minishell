@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 10:32:47 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/09 14:56:21 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/09 17:18:25 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,11 @@ typedef struct s_data
 	int		pwd_index;
 	int		oldpwd_index;
 	char	*input_copy;
-	int			redir_count;
+	int		redir_count;
+	int		pipe_count;
+	int		**pipe;
+	int *pid;
+	
 	// t_build * shell;
 }	t_data;
 

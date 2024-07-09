@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 15:49:10 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/08 13:39:20 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/09 15:01:38 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void    make_redirs(t_data *tokens)
 	int			j;
 	char		*line;
 	//e_filetype	type;
-	int			redir_count;
+	//int			redir_count;
 	char		*filename;
 	int			hd_index;
 
@@ -58,7 +58,7 @@ void    make_redirs(t_data *tokens)
 	{
 		j = 0;
 		line = tokens->pipe_tok[i];
-		redir_count = 0;
+		tokens->redir_count = 0;
 		tokens->cmds[i].filenames = malloc(sizeof(char *) * (ft_strlen(line) + 1));
 		tokens->cmds[i].filetype = malloc(sizeof(int) * (ft_strlen(line) + 1));
 		if (!tokens->cmds[i].filenames || !tokens->cmds[i].filetype)
@@ -82,15 +82,17 @@ void    make_redirs(t_data *tokens)
 				if (filename)
 				{
 					if (tokens->cmds[i].type == HERE)
-						tokens->cmds[i].filenames[redir_count] = hd_filename(hd_index++);
+						tokens->cmds[i].filenames[tokens->redir_count] = hd_filename(hd_index++);
 					else
-						tokens->cmds[i].filenames[redir_count] = filename;
-					printf("Array filename %d:  %s\n", redir_count, tokens->cmds[i].filenames[redir_count]);
+						tokens->cmds[i].filenames[tokens->redir_count] = filename;
+					printf("Array filename %d:  %s\n", tokens->redir_count, tokens->cmds[i].filenames[tokens->redir_count]);
+					printf("IIII%d\n", i);
+					printf("tokens->redir_count %d\n",tokens->redir_count);
 					printf("Type: %d\n", tokens->cmds[i].type);
-					tokens->cmds[i].filetype[redir_count] = tokens->cmds[i].type;
-					printf("FILEtype %d\n", tokens->cmds[i].filetype[redir_count]);
+					tokens->cmds[i].filetype[tokens->redir_count] = tokens->cmds[i].type;
+					printf("FILEtype %d\n", tokens->cmds[i].filetype[tokens->redir_count]);
 					//printf("Redir count: %d\n",  redir_count);
-					redir_count++;
+					tokens->redir_count++;
 				}
 				else
 					ft_putendl_fd("Syntax error: no filename", 2);
@@ -103,9 +105,9 @@ void    make_redirs(t_data *tokens)
 		// printf("INFILE NAME %d %s\n", i, tokens->cmds[i].filenames[0]);
 		// printf("OUTFILE TYPE %d %d\n", i, tokens->cmds[i].filetype[1]);
 		// printf("OUTFILE NAME %d %s\n", i, tokens->cmds[i].filenames[1]);
-		tokens->cmds[i].filenames[redir_count] = NULL;
-		tokens->cmds[i].filetype[redir_count] = NONE;
-		tokens->cmds[i].number_of_redir = redir_count;
+		tokens->cmds[i].filenames[tokens->redir_count] = NULL;
+		tokens->cmds[i].filetype[tokens->redir_count] = NONE;
+		tokens->cmds[i].number_of_redir = tokens->redir_count;
 		printf("Redir count: %d\n",  tokens->cmds[i].number_of_redir);
 	}
 }
@@ -128,7 +130,7 @@ void	remove_redir_from_input(t_data *tokens)
 	// 	printf("???????%s\n",  tokens->cmds[0].filenames[1]);
 	while (tokens->pipe_tok[++i] &&  i < tokens->cmds_count)
 	{
-		printf("HELLO FROM WHILE\n");
+
 		line = tokens->pipe_tok[i];
 		new_line = (char *)malloc(sizeof(char) * (ft_strlen(line) + 1));
 		if (!new_line)

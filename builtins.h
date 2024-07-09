@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 13:32:50 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/08 15:11:40 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/09 15:42:51 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,10 @@ char	*mine_path(t_data *data);
 //void	creating_children(t_pipex *pipex, t_data *data, int num_commands);
 void	creating_children( t_pipex *pipex, t_data *shell);
 void	free_fun(t_pipex *pipex);
-int		open_fd_in(t_pipex *pipex, t_data *data);
-void	open_fd_out(t_pipex *pipex, t_data *data);
+//int		open_fd_in(t_pipex *pipex, t_data *data);
+int	open_fd_in(t_pipex *pipex, int filetype, char *filenames);
+void	check_filetype(t_pipex *pipex, t_cmd *cmd);
+void	open_fd_out(t_pipex *pipex, int filetype, char *filename);
 void	free_array(char **array);
 void	ft_error(void);
 char	*path_for_commands(t_pipex *pipex, char **child_command);

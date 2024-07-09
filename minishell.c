@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:52:26 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/09 09:02:11 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/09 18:45:09 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,7 +191,33 @@ void	check_permissions(t_data *shell)
 		exit(1);
 	}
 }
+void	fun_first_child(t_pipex pipex, t_data *shell, int k)
+{
+	char	*final = NULL;
 
+		if (dup2(pipex.fd[1], STDOUT_FILENO) == -1)
+			dprintf(2, "dup2 \n");
+		close(pipex.fd[0]);
+		close(pipex.fd[1]);
+		if (dup2(pipex.fd_in, STDIN_FILENO) == -1)
+			dprintf(2,  "dup2 2\n");
+		close(pipex.fd_in);
+
+	//printf("shell->cmds[0].word_tok[0] %s\n", shell->cmds[0].word_tok[0]);
+	final = path_for_commands(&pipex, &shell->cmds[k].word_tok[0]);
+	if (!final)
+	{
+		free(pipex.com_sec_child);
+		free(final);
+		exit(1);
+	}
+	if (execve(final, shell->cmds[k].word_tok, shell->envp) == -1)
+	{
+		printf("first  chiled execve brocken\n");
+		free_fun(&pipex);
+		}
+	//close(STDIN_FILENO);
+}
 
 void shell_loop(t_data *shell)
 {
@@ -222,14 +248,14 @@ void shell_loop(t_data *shell)
 					else if (shell->cmds_count >=1 && if_builtins(shell, &shell->cmds[i]) == 0)
 					{
 					path = mine_path(shell);
-					if(shell->cmds_count > 1 )
-					{
-						if (pipe(pipex.fd) == -1)
-						{
-							perror("Error in pipe()");
-							exit(1);
-						}
-					}
+					// if(shell->cmds_count > 1 )
+					// {
+					// 	if (pipe(pipex.fd) == -1)
+					// 	{
+					// 		perror("Error in pipe()");
+					// 		exit(1);
+					// 	}
+					// }
 					pipex.commands_path = ft_split(path, ':');
 					if (pipex.commands_path == NULL)
 					{
@@ -238,9 +264,72 @@ void shell_loop(t_data *shell)
 						free_fun(&pipex);
 						i++;
 					}
-					creating_children(&pipex, shell);
-					close(pipex.fd_in);
-					close(pipex.fd_out);
+					/////piping
+					shell->pipe_count = shell->cmds_count;
+					shell->pipe = (int**)malloc(sizeof(int *)* (shell->pipe_count));
+					if(!shell->pipe)
+					{
+						perror("Error in malloc");
+						exit(1);
+					}
+					int j = 0;
+					while (j < shell->pipe_count)
+					{
+						shell->pipe[j]=(int *)malloc(sizeof(int) *2);
+						if(!shell->pipe[j])
+						{
+							perror("Error in malloc");
+							exit(1);
+						}
+						pipe(shell->pipe[j]);
+						j++;
+					}
+					////forking
+					int k = 0;
+					shell->pid = (int*)malloc(sizeof(int) * (shell->cmds_count));
+					if(!shell->pid)
+					{
+							perror("Error in malloc");
+							exit(1);
+					}
+					while (k < shell->cmds_count) 
+					{
+						check_filetype(&pipex, &shell->cmds[0]);
+						shell->pid[k] = fork();
+						if (shell->pid[k] < 0)
+						{
+							if (shell->pid[k] < 0)
+							{
+								while (k != 0)
+									waitpid(shell->pid[k], NULL, 0);
+								k--;
+							}
+							exit( EXIT_FAILURE);
+						}
+						else if (shell->pid[k] == 0)
+							fun_first_child(pipex,shell, k);
+						k++;
+					}
+					////closing
+						int	m;
+
+						m = 0;
+						while (m < (shell->cmds_count - 1))
+						{
+							close(shell->pipe[m][0]);
+							close(shell->pipe[m][1]);
+							m++;
+						}
+						int x;
+						x = 0;
+						while (x < shell->cmds_count)
+						{
+							waitpid(shell->pid[x], NULL, 0);
+							x++;
+						}				
+					// creating_children(&pipex, shell);
+					// close(pipex.fd_in);
+					// close(pipex.fd_out);
 					}
 				i++;
 				}

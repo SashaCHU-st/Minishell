@@ -26,7 +26,6 @@ static e_filetype peek(char *line, int index)
 	return (NONE);
 }
 
-
 static char *take_filename(char *line, int *index)
 {
 	int		start;
@@ -53,6 +52,7 @@ void    make_redirs(t_data *tokens)
 
 	i = -1;
 	hd_index = 1;
+	redir_count = 0;
 	while (tokens->pipe_tok[++i] &&  i < tokens->cmds_count)
 	{
 		j = 0;
@@ -64,6 +64,7 @@ void    make_redirs(t_data *tokens)
 			error_message("Memory allocation error");
 		ft_memset(tokens->cmds[i].filenames, 0, sizeof(char *) * (ft_strlen(line) + 1));
         ft_memset(tokens->cmds[i].filetype, 0, sizeof(int) * (ft_strlen(line) + 1));
+
 		while (line[j])
 		{
 		tokens->cmds[i].type = peek(line, j);
@@ -81,23 +82,26 @@ void    make_redirs(t_data *tokens)
 				if (filename)
 				{
 					if (tokens->cmds[i].type == HERE)
+
 						tokens->cmds[i].filenames[tokens->redir_count] = hd_filename(hd_index++);
 					else
 						tokens->cmds[i].filenames[tokens->redir_count] = filename;
 					tokens->cmds[i].filetype[tokens->redir_count] = tokens->cmds[i].type;
 					tokens->redir_count++;
+
 				}
 				else
 					ft_putendl_fd("Syntax error: no filename", 2);
 			}
 			else
 				j++;
-
 		}
 		tokens->cmds[i].filenames[tokens->redir_count] = NULL;
 		tokens->cmds[i].filetype[tokens->redir_count] = NONE;
 		tokens->cmds[i].number_of_redir = tokens->redir_count;
+
 	}
+	
 }
 
 void	remove_redir_from_input(t_data *tokens)
@@ -117,7 +121,7 @@ void	remove_redir_from_input(t_data *tokens)
 		line = tokens->pipe_tok[i];
 		new_line = (char *)malloc(sizeof(char) * (ft_strlen(line) + 1));
 		if (!new_line)
-			error_message("Failed to malloc for newline");
+			error_message(tokens, "Failed to malloc for newline", 1);
 		j = 0;
 		k = 0;
 		in_single_quote = 0;

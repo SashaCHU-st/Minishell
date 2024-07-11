@@ -63,7 +63,7 @@ void	remove_quotes(char *str)
 	str[j] = '\0';
 }
 
-int	check_input_quotes_pipe(char *line)
+int	check_input_quotes_pipe(t_data *shell, char *line)
 {
 	int	i;
 	int	in_quote;
@@ -85,6 +85,7 @@ int	check_input_quotes_pipe(char *line)
 	if ((in_quote || has_unclosed_quotes(line)))
 	{
 		ft_putendl_fd("Syntax error: unclosed quotes", 2);
+		shell->exit_status = 2;
 		return (1);
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:52:26 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/11 11:24:13 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/11 11:47:55 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,7 @@ shell->cmds_count =0;// CHECK THIS
 			printf("  Word %d: %s\n", j, shell->cmds[i].word_tok[j]);
 		}
 	}
+}
  int if_builtins(t_data *data, t_cmd *cmd)
 {
 	if (ft_strncmp(cmd->word_tok[0], "pwd", 4) == 0)
@@ -168,8 +169,8 @@ void shell_loop(t_data *shell)
 	while (1)
 	{
 		line = read_line(shell);
-		if (input_validation_pipes(line) == 0 && input_validation_redir(line) == 0 \
-					&& check_input_quotes_pipe(line) == 0)
+		if (input_validation_pipes(shell, line) == 0 && input_validation_redir(shell, line) == 0 \
+					&& check_input_quotes_pipe(shell, line) == 0)
 
 		{
 			line = change_to_space(line);

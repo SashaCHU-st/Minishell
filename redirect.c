@@ -53,11 +53,11 @@ void    make_redirs(t_data *tokens)
 
 	i = -1;
 	hd_index = 1;
+	redir_count = 0;
 	while (tokens->pipe_tok[++i] &&  i < tokens->cmds_count)
 	{
 		j = 0;
 		line = tokens->pipe_tok[i];
-		redir_count = 0;
 		tokens->cmds[i].filenames = malloc(sizeof(char *) * (ft_strlen(line) + 1));
 		tokens->cmds[i].filetype = malloc(sizeof(int) * (ft_strlen(line) + 1));
 		if (!tokens->cmds[i].filenames || !tokens->cmds[i].filetype)
@@ -87,8 +87,8 @@ void    make_redirs(t_data *tokens)
 					printf("Array filename %d:  %s\n", redir_count, tokens->cmds[i].filenames[redir_count]);
 					printf("Type: %d\n", tokens->cmds[i].type);
 					tokens->cmds[i].filetype[redir_count] = tokens->cmds[i].type;
-					printf("FILEtype %d\n", tokens->cmds[i].filetype[redir_count]);
-					//printf("Redir count: %d\n",  redir_count);
+					printf("FILEtype %d: %d\n", redir_count, tokens->cmds[i].filetype[redir_count]);
+					printf("Redir count in loop: %d\n",  redir_count);
 					redir_count++;
 				}
 				else
@@ -96,13 +96,14 @@ void    make_redirs(t_data *tokens)
 			}
 			else
 				j++;
-
 		}
 		tokens->cmds[i].filenames[redir_count] = NULL;
 		tokens->cmds[i].filetype[redir_count] = NONE;
 		tokens->cmds[i].number_of_redir = redir_count;
-		printf("Redir count: %d\n",  tokens->cmds[i].number_of_redir);
+		printf(" Total Redir count: %d\n",  tokens->cmds[i].number_of_redir);
+		
 	}
+	
 }
 
 void	remove_redir_from_input(t_data *tokens)

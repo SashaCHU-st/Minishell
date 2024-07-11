@@ -57,6 +57,7 @@ void	split_line(char *line, t_data *shell)
 		while (shell->pipe_tok[shell->cmds_count])
 			shell->cmds_count++;
 	}
+	printf("Total comand count: %d\n", shell->cmds_count);
 	shell->cmds = (t_cmd *)malloc(sizeof(t_cmd) * shell->cmds_count);
 	if (!shell->cmds)
 		error_message(shell, "Failed to allocate memory", 1);
@@ -162,12 +163,6 @@ char	*read_line(t_data *line)
 		printf("exit\n");
 		exit (EXIT_SUCCESS);
 	}
-	// if (ft_strncmp(input, "exit", 5) == 0)
-	// {
-	// 	free(input);
-	// 	printf ("exit\n");
-	// 	exit(EXIT_SUCCESS);
-	// }
 	add_history(input);
 	printf("input: %s\n", input);
 	return (input);

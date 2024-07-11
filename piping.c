@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 10:08:33 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/11 10:34:47 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/11 19:59:57 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	child(t_pipex pipex, t_data *shell, int k)
 		close(shell->pipe[i][1]);
 		i++;
 	}	
-	check_filetype(&pipex,&shell->cmds[k]);
+check_filetype(&pipex,&shell->cmds[k]);
 	final = path_for_commands(&pipex, &shell->cmds[k].word_tok[0]);
 	if (!final)
 	{
@@ -61,12 +61,15 @@ void checking_path (t_data *shell, t_pipex *pipex, int i )
 {
 	char	*path;
 	path = mine_path(shell);
+	if(!path)
+		return ;
 	pipex->commands_path = ft_split(path, ':');
-	if (pipex->commands_path == NULL)
+	if (!pipex->commands_path)
 	{
 		free_fun(pipex);
 		i++;
 	}
+
 }
 void piping(t_data *shell)
 {

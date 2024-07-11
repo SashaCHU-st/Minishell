@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 10:05:10 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/06/26 10:42:57 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/11 15:21:45 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	process_hd(t_data *tokens, const char *file, char *delimeter)
 	int	fd;
 	char	*line;
 
-	get_signal(HEREDOC);
+	//get_signal(HEREDOC);
 	unlink(file);
 	fd = open(file, O_RDWR | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
@@ -54,7 +54,7 @@ void	process_hd(t_data *tokens, const char *file, char *delimeter)
 	}
 	if (close(fd) == -1)
 		error_message(tokens, "Failed to close fd for heredoc", 1);
-	get_signal(DEFAULT);
+	//get_signal(DEFAULT);
 	exit (0);
 }
 

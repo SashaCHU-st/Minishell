@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:53:11 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/04 16:48:01 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/05 14:16:09 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # include "structs.h"
 # include <termios.h>
 # include <signal.h>
+
 
 
 ///////// input validation /////////

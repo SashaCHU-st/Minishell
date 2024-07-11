@@ -6,40 +6,52 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:45:12 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/09 18:42:49 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/09 16:38:57 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "builtins.h"
 
-// void	fun_first_child(t_pipex pipex, t_data *shell, int k)
-// {
-// 	char	*final = NULL;
+void	fun_first_child(t_data *shell, t_pipex pipex)
+{
+	char	*final = NULL;
+	
+	// if(shell->cmds_count==1)
+	// {
+		
+	// 	if (dup2(pipex.fd_in, STDIN_FILENO) == -1)
+	// 		dprintf(2, "dup2 \n");
+	// 	close(pipex.fd_in);
+	// 	if (dup2(pipex.fd_out, STDOUT_FILENO) == -1)
+	// 		dprintf(2,  "dup2 2\n");
+	// 	close(pipex.fd_out);
+	// 	//close(pipex.fd_in);
+	// }
 
-// 		// if (dup2(pipex.fd[1], STDOUT_FILENO) == -1)
-// 		// 	dprintf(2, "dup2 \n");
-// 		// close(pipex.fd[0]);
-// 		// close(pipex.fd[1]);
-// 		// if (dup2(pipex.fd_in, STDIN_FILENO) == -1)
-// 		// 	dprintf(2,  "dup2 2\n");
-// 		//close(pipex.fd_in);
+		if (dup2(pipex.fd[1], STDOUT_FILENO) == -1)
+			dprintf(2, "dup2 \n");
+		close(pipex.fd[0]);
+		close(pipex.fd[1]);
+		if (dup2(pipex.fd_in, STDIN_FILENO) == -1)
+			dprintf(2,  "dup2 2\n");
+		//close(pipex.fd_in);
 
-// 	//printf("shell->cmds[0].word_tok[0] %s\n", shell->cmds[0].word_tok[0]);
-// 	final = path_for_commands(&pipex, &shell->cmds[k].word_tok[0]);
-// 	if (!final)
-// 	{
-// 		free(pipex.com_sec_child);
-// 		free(final);
-// 		exit(1);
-// 	}
-// 	if (execve(final, shell->cmds[k].word_tok, shell->envp) == -1)
-// 	{
-// 		printf("first  chiled execve brocken\n");
-// 		free_fun(&pipex);
-// 		}
-// 	//close(STDIN_FILENO);
-// }
+	//printf("shell->cmds[0].word_tok[0] %s\n", shell->cmds[0].word_tok[0]);
+	final = path_for_commands(&pipex, &shell->cmds[0].word_tok[0]);
+	if (!final)
+	{
+		free(pipex.com_sec_child);
+		free(final);
+		exit(1);
+	}
+	if (execve(final, shell->cmds[0].word_tok, shell->envp) == -1)
+	{
+		printf("first  chiled execve brocken\n");
+		free_fun(&pipex);
+		}
+	//close(STDIN_FILENO);
+}
 
 void	fun_second_child(t_data *shell, t_pipex pipex)
 {

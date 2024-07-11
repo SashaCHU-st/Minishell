@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:52:26 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/09 18:45:09 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/11 10:31:29 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,10 @@ t_cmd	split_into_wtok(char *pipe_token, t_cmd cmd)
 	change_space_to_31(pipe_token);
 	remove_quotes(pipe_token);
 	cmd.word_tok = do_split(pipe_token, 31);
-	// for (int j =0; j < cmd->word_tok; j++;)
-	// 	printf("cmd->word_tok %d\n", cmd->word_tok);
 	if (!cmd.word_tok)
 		return (cmd);
 	while (cmd.word_tok[cmd.w_count])
 		cmd.w_count++;
-	//printf("cmd->w_count %d\n", cmd->w_count);
 	return (cmd);
 }
 
@@ -45,24 +42,16 @@ void	split_line(char *line, t_data *shell)
 	int		i;
 shell->cmds_count =0;
 	
-	printf("input after replacing pipe: %s\n", line);
-	is_heredoc(line, shell); // is_heredoc(line, t_data *tokens);
+	is_heredoc(line, shell);
 	shell->pipe_tok = do_split(line, 31);
 	if (!shell->pipe_tok)
 		return ;
-	//printf("shell->pipe_tok[0] %c\n",*shell->pipe_tok[0]);
-	//printf("shell->pipe_tok[1] %c\n",*shell->pipe_tok[1]);
 	if (shell->pipe_tok)
 	{
 		while (shell->pipe_tok[shell->cmds_count])
-		{
-		printf(" shell->pipe_tok[shell->cmds_count]%s\n",shell->pipe_tok[shell->cmds_count]);
 			shell->cmds_count++;
-			
-		}
-		//printf("THIS ONE shell->cmds_count %d\n",shell->cmds_count);
+
 	}
-	printf("shell->cmds_count %d\n",shell->cmds_count );
 	shell->cmds = (t_cmd *)malloc(sizeof(t_cmd) * shell->cmds_count);
 	if (!shell->cmds)
 		error_message("Failed to allocate memory");
@@ -74,9 +63,6 @@ shell->cmds_count =0;
 	}
 	make_redirs(shell);
 	remove_redir_from_input(shell);
-	printf("shell->cmds_count %d\n",shell->cmds_count );
-// if(shell->cmds_count > 1)
-// {
 	i = -1;
 	while (shell->pipe_tok[++i] && i < shell->cmds_count)
 	{
@@ -121,28 +107,8 @@ shell->cmds_count =0;
 		}
 	}
 }
-	
-
-	
-	
-	
-	// for (i = 0; i < shell.cmds_count; i++) {
-	//	 for (int j = 0; j < shell.cmds[i].w_count; j++) {
-	//		 free(shell.cmds[i].word_tok[j]);
-	//	 }
-	//	 free(shell.cmds[i].word_tok);
-	// }
-	// free(shell.cmds);
-	// f_free_array(shell.pipe_tok);
-	//return (*shell);
-	//}
-
-			
-
-
  int if_builtins(t_data *data, t_cmd *cmd)
 {
-	printf("BUITINS\n");
 	if (ft_strncmp(cmd->word_tok[0], "pwd", 4) == 0)
 			ft_pwd();
 	else if (ft_strncmp(cmd->word_tok[0], "echo", 5) == 0)
@@ -179,57 +145,15 @@ char	*read_line(t_data *line)
 	return (input);
 }
 
-void	check_permissions(t_data *shell)
-{
-	if (shell->cmds->word_tok[2][0] == '\0' || shell->cmds->word_tok[3][0] == '\0')
-	{
-		write(2, "zsh: permission denied:\n", 24);
-	}
-	else if (shell->cmds->word_tok[2][0] == '\0' && shell->cmds->word_tok[3][0] == '\0')
-	{
-		write(2, "zsh: permission denied:\n", 24);
-		exit(1);
-	}
-}
-void	fun_first_child(t_pipex pipex, t_data *shell, int k)
-{
-	char	*final = NULL;
-
-		if (dup2(pipex.fd[1], STDOUT_FILENO) == -1)
-			dprintf(2, "dup2 \n");
-		close(pipex.fd[0]);
-		close(pipex.fd[1]);
-		if (dup2(pipex.fd_in, STDIN_FILENO) == -1)
-			dprintf(2,  "dup2 2\n");
-		close(pipex.fd_in);
-
-	//printf("shell->cmds[0].word_tok[0] %s\n", shell->cmds[0].word_tok[0]);
-	final = path_for_commands(&pipex, &shell->cmds[k].word_tok[0]);
-	if (!final)
-	{
-		free(pipex.com_sec_child);
-		free(final);
-		exit(1);
-	}
-	if (execve(final, shell->cmds[k].word_tok, shell->envp) == -1)
-	{
-		printf("first  chiled execve brocken\n");
-		free_fun(&pipex);
-		}
-	//close(STDIN_FILENO);
-}
-
 void shell_loop(t_data *shell)
 {
 	char	*line;
 	t_pipex	pipex;
-	char	*path;
 	int i;
 	
 	while (1)
 	{
 		line = read_line(shell);
-		//printf("before line\n");
 		if (input_validation_pipes(line) == 0 && input_validation_redir(line) == 0 \
 					&& check_input_quotes_pipe(line) == 0)
 		{
@@ -247,89 +171,10 @@ void shell_loop(t_data *shell)
 					}
 					else if (shell->cmds_count >=1 && if_builtins(shell, &shell->cmds[i]) == 0)
 					{
-					path = mine_path(shell);
-					// if(shell->cmds_count > 1 )
-					// {
-					// 	if (pipe(pipex.fd) == -1)
-					// 	{
-					// 		perror("Error in pipe()");
-					// 		exit(1);
-					// 	}
-					// }
-					pipex.commands_path = ft_split(path, ':');
-					if (pipex.commands_path == NULL)
-					{
-						close(pipex.fd[0]);
-						close(pipex.fd[1]);
-						free_fun(&pipex);
-						i++;
-					}
-					/////piping
-					shell->pipe_count = shell->cmds_count;
-					shell->pipe = (int**)malloc(sizeof(int *)* (shell->pipe_count));
-					if(!shell->pipe)
-					{
-						perror("Error in malloc");
-						exit(1);
-					}
-					int j = 0;
-					while (j < shell->pipe_count)
-					{
-						shell->pipe[j]=(int *)malloc(sizeof(int) *2);
-						if(!shell->pipe[j])
-						{
-							perror("Error in malloc");
-							exit(1);
-						}
-						pipe(shell->pipe[j]);
-						j++;
-					}
-					////forking
-					int k = 0;
-					shell->pid = (int*)malloc(sizeof(int) * (shell->cmds_count));
-					if(!shell->pid)
-					{
-							perror("Error in malloc");
-							exit(1);
-					}
-					while (k < shell->cmds_count) 
-					{
-						check_filetype(&pipex, &shell->cmds[0]);
-						shell->pid[k] = fork();
-						if (shell->pid[k] < 0)
-						{
-							if (shell->pid[k] < 0)
-							{
-								while (k != 0)
-									waitpid(shell->pid[k], NULL, 0);
-								k--;
-							}
-							exit( EXIT_FAILURE);
-						}
-						else if (shell->pid[k] == 0)
-							fun_first_child(pipex,shell, k);
-						k++;
-					}
-					////closing
-						int	m;
-
-						m = 0;
-						while (m < (shell->cmds_count - 1))
-						{
-							close(shell->pipe[m][0]);
-							close(shell->pipe[m][1]);
-							m++;
-						}
-						int x;
-						x = 0;
-						while (x < shell->cmds_count)
-						{
-							waitpid(shell->pid[x], NULL, 0);
-							x++;
-						}				
-					// creating_children(&pipex, shell);
-					// close(pipex.fd_in);
-					// close(pipex.fd_out);
+					checking_path(shell, &pipex, i);
+					piping(shell);
+					forking(shell, pipex);
+					closing(shell);
 					}
 				i++;
 				}

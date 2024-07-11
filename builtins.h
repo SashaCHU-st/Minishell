@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 13:32:50 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/09 18:42:09 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/11 10:42:54 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,6 @@
 # include <stdlib.h>
 #include "minishell.h"
 #include "structs.h"
-
-
-// typedef struct s_pipex{
-// 	int		fd[2];
-// 	int		fd_in;
-// 	int		fd_out;
-// 	char	**commands_path;
-// 	char	**com_fir_child;
-// 	char	**com_sec_child;
-// 	int second_child;
-	
-// } t_pipex;
 
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 int		ft_words(const char *str, char c);
@@ -63,23 +51,20 @@ void	if_error_input(char *input_copy);
 
 //////
 char	*mine_path(t_data *data);
-//void	creating_children(t_pipex *pipex, t_data *data, int num_commands);
-void	creating_children( t_pipex *pipex, t_data *shell);
 void	free_fun(t_pipex *pipex);
-//int		open_fd_in(t_pipex *pipex, t_data *data);
-int	open_fd_in(t_pipex *pipex, int filetype, char *filenames);
-void	check_filetype(t_pipex *pipex, t_cmd *cmd);
-void	open_fd_out(t_pipex *pipex, int filetype, char *filename);
+int		open_fd_in(t_pipex *pipex, int filetype, char *filenames);
+void	open_fd_out(t_pipex *pipex, char *filename);
 void	free_array(char **array);
 void	ft_error(void);
 char	*path_for_commands(t_pipex *pipex, char **child_command);
 
 void	check_permissions(t_data *data);
 int		if_builtins(t_data *data, t_cmd *cmd);
-void	close_and_wait(t_data *shell, t_pipex *pipex, int first_child);
-//void	close_and_wait(t_pipex *data, int first_child, int second_child);
-void	fun_second_child(t_data *shell, t_pipex pipex);
-void	fun_first_child(t_pipex pipex, t_data *shell, int k);
-void setup_pipes_and_execute(t_data *shell, t_pipex pipex);
-
+void	child(t_pipex pipex, t_data *shell, int k);
+void	check_filetype(t_pipex *pipex, t_cmd *cmd);
+void	checking_path (t_data *shell, t_pipex *pipex, int i );
+void	piping(t_data *shell);
+void	forking(t_data *shell, t_pipex pipex);
+void	closing(t_data *shell);
+void file_typing(t_data *tokens, int i, char *filename, char *line, int j, int hd_index);
 #endif

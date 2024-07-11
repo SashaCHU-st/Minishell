@@ -13,20 +13,20 @@
 #include "minishell.h"
 #include "builtins.h"
 
-t_cmd	split_into_wtok(char *pipe_token, t_cmd *cmd)
+t_cmd	split_into_wtok(char *pipe_token, t_cmd cmd)
 {
 	//t_cmd	cmd;
 
 	// cmd->word_tok = NULL;
-	// cmd->w_count = 0;
+	cmd.w_count = 0;
 	change_space_to_31(pipe_token);
 	remove_quotes(pipe_token);
-	cmd->word_tok = do_split(pipe_token, 31);
-	if (!cmd->word_tok)
-		return (*cmd);
-	while (cmd->word_tok[cmd->w_count])
-		cmd->w_count++;
-	return (*cmd);
+	cmd.word_tok = do_split(pipe_token, 31);
+	if (!cmd.word_tok)
+		return (cmd);
+	while (cmd.word_tok[cmd.w_count])
+		cmd.w_count++;
+	return (cmd);
 }
 
 void init_cmd(t_cmd *cmd)
@@ -43,8 +43,8 @@ void init_cmd(t_cmd *cmd)
 
 void	split_line(char *line, t_data *shell)
 {
-	//t_data	tokens;
 	int		i;
+	//shell->cmds_count = 0;
 
 	//init_t_data(&tokens);
 	printf("input after replacing pipe: %s\n", line);
@@ -57,27 +57,23 @@ void	split_line(char *line, t_data *shell)
 		while (shell->pipe_tok[shell->cmds_count])
 			shell->cmds_count++;
 	}
+	printf("Total comand count: %d\n", shell->cmds_count);
 	shell->cmds = (t_cmd *)malloc(sizeof(t_cmd) * shell->cmds_count);
 	if (!shell->cmds)
-		error_message("Failed to allocate memory");
+		error_message(shell, "Failed to allocate memory", 1);
 	i = -1;
-
 	while (++i < shell->cmds_count)
-	{
 		init_cmd(&shell->cmds[i]);
-		//i++;
-	}
 	make_redirs(shell);
-	printf("TYPE %d\n", shell->cmds[0].filetype[0]);
-	printf("NAME %s\n", shell->cmds[0].filenames[0]);
-	printf("TYPE %d\n", shell->cmds[0].filetype[1]);
-	printf("NAME %s\n", shell->cmds[0].filenames[1]);
-	//remove_redir_from_input(shell);
+	remove_redir_from_input(shell);
 	i = -1;
 	while (shell->pipe_tok[++i] && i < shell->cmds_count)
 	{
 		shell->pipe_tok[i] = expand_var(shell, shell->pipe_tok[i]);
+		printf("Expand pipe tok: %s\n", shell->pipe_tok[i]);
+		//i++;
 	}
+	printf("I am here\n");
 	i = 0;
     while (i < shell->cmds_count) {
         int j = 0;
@@ -93,39 +89,38 @@ void	split_line(char *line, t_data *shell)
             }
             j++;
         }
+		i++;
     }
 
-	// for (int j = 0; j < shell.cmds_count; j++)
-	// {
-	// 	printf("Token after redir remove %d: %s\n", j, tokens.pipe_tok[j]);
-    // }
+	for (int j = 0; j < shell->cmds_count; j++)
+	{
+		printf("Token after redir remove %d: %s\n", j, shell->pipe_tok[j]);
+    }
 	i = 0;
 	while (i < shell->cmds_count)
 	{
+		shell->cmds[i] = split_into_wtok(shell->pipe_tok[i], shell->cmds[i]);
+		if (shell->cmds[i].word_tok[0] != NULL)
+		{
+			if (ft_strncmp (shell->cmds[i].word_tok[0], "exit", 5) == 0)
+				ft_exit(shell, shell->cmds[i].word_tok);
+		}
 		
-		shell->cmds[i] = split_into_wtok(shell->pipe_tok[i], shell->cmds);
 		i++;
 	}
-	////????????????????????????????????????????????????//
-	printf("TYPE %d\n", shell->cmds[0].filetype[0]);
-	printf("NAME %s\n", shell->cmds[0].filenames[0]);
-	printf("TYPE %d\n", shell->cmds[0].filetype[1]);
-	printf("NAME %s\n", shell->cmds[0].filenames[1]);
-
 
 	printf("Number of shell: %d\n", shell->cmds_count);
 	for (int j = 0; j < shell->cmds_count; j++)
 	{
 		printf("Token %d: %s\n", j, shell->pipe_tok[j]);
 	}
-	// for (i = 0; i < shell.cmds_count; i++) {
-	// 	printf("Command %d:\n", i);
+	for (i = 0; i < shell->cmds_count; i++) {
+		printf("Command %d:\n", i);
 		
-	// 	for (int j = 0; j < shell.cmds[i].w_count; j++) {
-	// 		printf("  Word %d: %s\n", j, shell.cmds[i].word_tok[j]);
-	// 	}
-		
-	// }
+		for (int j = 0; j < shell->cmds[i].w_count; j++) {
+			printf("  Word %d: %s\n", j, shell->cmds[i].word_tok[j]);
+		}
+	}
 	
 	// for (i = 0; i < shell.cmds_count; i++) {
 	//	 for (int j = 0; j < shell.cmds[i].w_count; j++) {
@@ -164,12 +159,9 @@ char	*read_line(t_data *line)
 	(void)line;
 	input = readline("minishell-$ ");
 	if (!input)
-		error_message("Failed to read line");
-	if (ft_strncmp(input, "exit", 5) == 0)
 	{
-		free(input);
-		printf ("exit\n");
-		exit(EXIT_SUCCESS);
+		printf("exit\n");
+		exit (EXIT_SUCCESS);
 	}
 	add_history(input);
 	printf("input: %s\n", input);
@@ -197,24 +189,16 @@ void shell_loop(t_data *shell)
 	char	*line;
 	t_pipex	pipex;
 	char	*path;
+	int 	i;
 
-	int i;
 	while (1)
 	{
 		line = read_line(shell);
-		printf("before line");
-		if (input_validation_pipes(line) == 0 && input_validation_redir(line) == 0 \
-					&& check_input_quotes_pipe(line) == 0)
+		if (input_validation_pipes(shell, line) == 0 && input_validation_redir(shell, line) == 0 \
+					&& check_input_quotes_pipe(shell, line) == 0)
 		{
-			printf( "1. Before split\n");
 			line = change_to_space(line);
-			printf( "2. Before split\n");
 			split_line(line, shell);
-			printf("3.aafter split\n");
-			// printf("TYPE %d\n", shell->cmds[0].filetype[0]);
-			// printf("NAME %s\n", shell->cmds[0].filenames[0]);
-			// printf("TYPE %d\n", shell->cmds[1].filetype[1]);
-			// printf("NAME %s\n", shell->cmds[1].filenames[1]);
 			if (shell->cmds_count > 0)
 			{
 				i = 0;
@@ -227,36 +211,36 @@ void shell_loop(t_data *shell)
 					}
 					else if (shell->cmds->w_count >=1 && if_builtins(shell, &shell->cmds[i]) == 0)
 					{
-					printf("1111");
-					path = mine_path(shell);
-					if(shell->cmds->w_count == 4)
-					{
-						if (pipe(pipex.fd) == -1)
+						printf("1111");
+						path = mine_path(shell);
+						if(shell->cmds->w_count == 4)
 						{
-							perror("Error in pipe()");
-							exit(1);
+							if (pipe(pipex.fd) == -1)
+							{
+								perror("Error in pipe()");
+								exit(1);
+							}
 						}
+						pipex.commands_path = ft_split(path, ':');
+						if (pipex.commands_path == NULL)
+						{
+							close(pipex.fd[0]);
+							close(pipex.fd[1]);
+							free_fun(&pipex);
+							i++;
+						}
+						creating_children(&pipex, shell, shell->cmds->w_count);
+						close(pipex.fd_in);
+						close(pipex.fd_out);
 					}
-					pipex.commands_path = ft_split(path, ':');
-					if (pipex.commands_path == NULL)
-					{
-						close(pipex.fd[0]);
-						close(pipex.fd[1]);
-						free_fun(&pipex);
-						i++;
-					}
-					creating_children(&pipex, shell, shell->cmds->w_count);
-					close(pipex.fd_in);
-					close(pipex.fd_out);
-					}
-				else 
-					printf("HELLO_WORLD\n");
-				i++;
+					else 
+						printf("HELLO_WORLD\n");
+					i++;
 				}
 			free(shell->cmds);
 			}
 		}
-	free(line);
+		free(line);
 	}
 }
 
@@ -285,6 +269,7 @@ char **copy_envp(char *envp[])
 	new_envp[count] = NULL;
 	return(new_envp);
 }
+
 void init_t_data(t_data *data)
 {
 	data->envp= NULL;
@@ -298,19 +283,23 @@ void init_t_data(t_data *data)
 	data->hd_delimeter = NULL;
 	data->hd_count = 0;
 	data->tempfile_hd = NULL;
+	data->exit_status = 0;
 }
+
 int	main(int argc, char **argv, char *envp[])
 {
 	t_data data;
+
 	init_t_data(&data);
-	///init_t_data(&tokens);
 	(void)argv;
 	data.envp = copy_envp(envp);
 	if(argc < 2)
 	{
 		if (isatty(STDIN_FILENO))
-
+		{
+			get_signal(HANDLER);
 			shell_loop(&data);
+		}
 		else
 		{
 			perror("Terminal is not in interactive mode");

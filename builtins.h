@@ -29,7 +29,7 @@ typedef struct s_pipex{
 	char	**commands_path;
 	char	**com_fir_child;
 	char	**com_sec_child;
-	int second_child;
+	int 	second_child;
 	
 } t_pipex;
 

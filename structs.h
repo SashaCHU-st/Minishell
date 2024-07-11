@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 10:32:47 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/10 17:54:11 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/11 11:48:41 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ typedef struct s_data
 	int		pipe_count;
 	int		**pipe;
 	int *pid;
+	int	exit_status;
 	
 	// t_build * shell;
 }	t_data;

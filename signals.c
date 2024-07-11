@@ -13,12 +13,14 @@
 #include "minishell.h"
 #include <signal.h>
 
+static t_data *signal_shell = NULL;
+
 static void signal_handler(int signal)
 {
     if (signal == SIGINT) //cntr-C
     {
         write(1, "\n", 1);
-        write(1, "^C\n", 3);
+        //write(1, "^C\n", 3);
         
         rl_on_new_line();
         rl_replace_line("", 0);
@@ -31,18 +33,21 @@ static void hd_handler(int signal)
     if (signal == SIGINT)
     {
         write(1, "\n", 1);
-        write(1, "^C\n", 3);
-        rl_on_new_line();
+        //write(1, "^C\n", 3);
+        //rl_on_new_line();
         //rl_replace_line("", 0);
-        rl_redisplay();
+        //rl_redisplay();
+        if (signal_shell)
+            signal_shell->hd_interrupt = 1;
+        //exit(1);
     }
-    else if (signal == SIGQUIT)
-    {
-        rl_on_new_line();
-		rl_redisplay();
-        // write (1, "\n", 1);
-        // exit (1);
-    }
+    // else if (signal == SIGQUIT)
+    // {
+    //     rl_on_new_line();
+	// 	rl_redisplay();
+    //     // write (1, "\n", 1);
+    //     // exit (1);
+    // }
 }
 
 static void toggle_caret(int is_on)
@@ -79,8 +84,10 @@ static void	set_signal_handler(int signum, void(*handler)(int))
     }
 }
 
-void    get_signal(t_signal mode)
+void    get_signal(t_data *shell, t_signal mode)
 {
+    signal_shell = shell;
+
     if (mode == DEFAULT)
     {
         toggle_caret(1);
@@ -98,7 +105,7 @@ void    get_signal(t_signal mode)
         set_signal_handler(SIGQUIT, SIG_IGN);
         set_signal_handler(SIGINT, hd_handler);
     }
-    else
+    else if (mode == NO_SIGNALS)
     {
         set_signal_handler(SIGQUIT, SIG_IGN);
         set_signal_handler(SIGINT, SIG_IGN);

@@ -82,11 +82,11 @@ void    make_redirs(t_data *tokens)
 				if (filename)
 				{
 					if (tokens->cmds[i].type == HERE)
-
 						tokens->cmds[i].filenames[tokens->redir_count] = hd_filename(tokens, hd_index++);
 					else
 						tokens->cmds[i].filenames[tokens->redir_count] = filename;
 					tokens->cmds[i].filetype[tokens->redir_count] = tokens->cmds[i].type;
+					printf("Array filenames: %s\n", tokens->cmds[i].filenames[tokens->redir_count]);
 					tokens->redir_count++;
 
 				}

@@ -12,13 +12,14 @@
 
 #ifndef BUILTINS_H
 #define BUILTINS_H
+
 # include <stdio.h>
 # include <unistd.h>
 # include <fcntl.h>
 # include <sys/wait.h>
 # include <stdlib.h>
-#include "minishell.h"
-#include "structs.h"
+# include "minishell.h"
+# include "structs.h"
 
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 int		ft_words(const char *str, char c);

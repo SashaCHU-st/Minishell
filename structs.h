@@ -13,49 +13,13 @@
 #ifndef STRUCT_H
 #define STRUCT_H
 
-// typedef enum {
-//     NONE,
-//     IN,
-//     OUT,
-//     HERE,
-//     APPEND
-// } e_filetype;
+typedef enum {
+    DEFAULT,
+    HANDLER,
+    HEREDOC,
+    //NO_SIGNALS
+} t_signal;
 
-// typedef struct s_cmd
-// {
-// 	char	**word_tok;
-// 	int		w_count;
-
-// 	char **filenames;
-// 	int *filetype;
-// 	int number_of_redir;
-// 	// int	redir_count;
-// 	 e_filetype	type;
-// 	//int flag_amb_redir;
-	
-// }	t_cmd;
-
-// typedef struct s_data
-// {
-// 	t_cmd	*cmds;
-// 	int		cmds_count;
-// 	char	**pipe_tok;
-// 	char	*hd_delimeter;
-// 	int		hd_count;
-// 	char	*tempfile_hd;
-// 	// t_build * shell;
-// }	t_data;
-
-// typedef struct s_built{
-// 	char **envp;
-// 	char **new_envp;
-// 	char pwd[1000];
-// 	int pwd_index;
-// 	int oldpwd_index;
-// 	char *input_copy;
-// 	t_data data;
-
-// } t_built;
 typedef enum {
     NONE,
     IN,
@@ -79,14 +43,18 @@ typedef struct s_cmd
 	char	**word_tok; // word_tok[0] = cat; word_tok[1] = wc 
 	int		w_count; // skolko slov commande
 
+
 	char **filenames;// reditrect names
 	int *filetype; // tip file
 	int number_of_redir;
+
 	// int	redir_count;
-	 e_filetype	type;
+	e_filetype	type;
 	//int flag_amb_redir;
 	
 }	t_cmd;
+
+typedef struct s_built t_built;
 
 typedef struct s_data
 {
@@ -109,6 +77,7 @@ typedef struct s_data
 	
 	// t_build * shell;
 }	t_data;
+
 
 
 

@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 15:49:10 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/11 10:44:31 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/11 11:51:26 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void    make_redirs(t_data *tokens)
 
 	i = -1;
 	hd_index = 1;
-	redir_count = 0;
+	//redir_count = 0;
 	while (tokens->pipe_tok[++i] &&  i < tokens->cmds_count)
 	{
 		j = 0;
@@ -61,7 +61,7 @@ void    make_redirs(t_data *tokens)
 		tokens->cmds[i].filenames = malloc(sizeof(char *) * (ft_strlen(line) + 1));
 		tokens->cmds[i].filetype = malloc(sizeof(int) * (ft_strlen(line) + 1));
 		if (!tokens->cmds[i].filenames || !tokens->cmds[i].filetype)
-			error_message("Memory allocation error");
+			error_message(tokens, "Memory allocation error", 1);
 		ft_memset(tokens->cmds[i].filenames, 0, sizeof(char *) * (ft_strlen(line) + 1));
         ft_memset(tokens->cmds[i].filetype, 0, sizeof(int) * (ft_strlen(line) + 1));
 
@@ -83,7 +83,7 @@ void    make_redirs(t_data *tokens)
 				{
 					if (tokens->cmds[i].type == HERE)
 
-						tokens->cmds[i].filenames[tokens->redir_count] = hd_filename(hd_index++);
+						tokens->cmds[i].filenames[tokens->redir_count] = hd_filename(tokens, hd_index++);
 					else
 						tokens->cmds[i].filenames[tokens->redir_count] = filename;
 					tokens->cmds[i].filetype[tokens->redir_count] = tokens->cmds[i].type;

@@ -19,10 +19,10 @@ SRCS = minishell.c \
 		pipex.c \
 		open_fd.c \
 		free.c \
-		children.c \
 		expand.c \
 		redirect.c \
 		utils_functions.c \
+		piping.c \
 			
 OBJS = $(SRCS:.c=.o)
 

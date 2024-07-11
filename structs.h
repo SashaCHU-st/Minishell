@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 10:32:47 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/04 16:15:49 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/10 17:54:11 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,26 @@ typedef enum {
     APPEND
 } e_filetype;
 
+typedef struct s_pipex{
+	int		fd[2];
+	int		fd_in;
+	int		fd_out;
+	char	**commands_path;
+	char	**com_fir_child;
+	char	**com_sec_child;
+	int second_child;
+	
+} t_pipex;
 typedef struct s_cmd
 {
-	char	**word_tok;
-	int		w_count;
+	char	**word_tok; // word_tok[0] = cat; word_tok[1] = wc 
+	int		w_count; // skolko slov commande
 
-	char 	**filenames;
-	int 	*filetype;
-	int 	number_of_redir;
+
+	char **filenames;// reditrect names
+	int *filetype; // tip file
+	int number_of_redir;
+
 	// int	redir_count;
 	e_filetype	type;
 	//int flag_amb_redir;
@@ -47,19 +59,26 @@ typedef struct s_built t_built;
 typedef struct s_data
 {
 	t_cmd	*cmds;
-	int		cmds_count;
-	char	**pipe_tok;
+	int		cmds_count; /// skilko command eli et pipe
+	char	**pipe_tok;// vsya commanda <1.txt cat | wc >3.txt; pipe_tok[0] = 1.txt cat  ; pipe_tok = wc 3.txt
 	char	*hd_delimeter;
 	int		hd_count;
 	char	*tempfile_hd;
-	char 	**envp;
-	char 	**new_envp;
-	char 	pwd[1000];
-	int 	pwd_index;
-	int 	oldpwd_index;
-	char 	*input_copy;
-	int		exit_status;
+	char	**envp;
+	char	**new_envp;
+	char	pwd[1000];
+	int		pwd_index;
+	int		oldpwd_index;
+	char	*input_copy;
+	int		redir_count;
+	int		pipe_count;
+	int		**pipe;
+	int *pid;
+	
+	// t_build * shell;
 }	t_data;
+
+
 
 
 #endif

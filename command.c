@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 13:43:44 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/04 16:34:06 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/11 10:26:16 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,21 +70,20 @@ void	ft_echo(t_data *shell, int number_of_inputs)
 		i = 3;
 	}
 	if (number_of_inputs <= 1)// in case after echo there is no arguments
-	{
-		printf("echo argument=%s\n", shell->cmds->word_tok[1]);
-		printf("there is nothing to print, put some arg");
-	}
+
+		ft_putstr_fd("there is nothing to print, put some arg",1);
+
 	else
 	{
 		while (number_of_inputs >= i)
 		{
-			printf("%s", shell->cmds->word_tok[i - 1]);
-			if (number_of_inputs - 1 > i)
-				printf(" ");
+			ft_putstr_fd( shell->cmds->word_tok[i - 1],1);
+			if (number_of_inputs > i)
+				ft_putstr_fd(" ", 1);
 			i++;
 		}
 		if (!flag)
-			printf("\n");
+			ft_putstr_fd("\n", 1);
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 13:32:50 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/11 10:42:54 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/11 11:23:22 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,5 +66,5 @@ void	checking_path (t_data *shell, t_pipex *pipex, int i );
 void	piping(t_data *shell);
 void	forking(t_data *shell, t_pipex pipex);
 void	closing(t_data *shell);
-void file_typing(t_data *tokens, int i, char *filename, char *line, int j, int hd_index);
+void do_all_things(t_data *shell, t_pipex pipex, int i);
 #endif

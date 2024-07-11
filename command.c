@@ -70,7 +70,9 @@ void	ft_echo(t_data *shell, int number_of_inputs)
 		i = 3;
 	}
 	if (number_of_inputs <= 1)// in case after echo there is no arguments
+
 		ft_putstr_fd("there is nothing to print, put some arg",1);
+
 	else
 	{
 		while (number_of_inputs >= i)

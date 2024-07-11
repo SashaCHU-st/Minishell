@@ -26,7 +26,6 @@ static e_filetype peek(char *line, int index)
 	return (NONE);
 }
 
-
 static char *take_filename(char *line, int *index)
 {
 	int		start;
@@ -54,15 +53,15 @@ void    make_redirs(t_data *tokens)
 
 	i = -1;
 	hd_index = 1;
+	redir_count = 0;
 	while (tokens->pipe_tok[++i] &&  i < tokens->cmds_count)
 	{
 		j = 0;
 		line = tokens->pipe_tok[i];
-		redir_count = 0;
 		tokens->cmds[i].filenames = malloc(sizeof(char *) * (ft_strlen(line) + 1));
 		tokens->cmds[i].filetype = malloc(sizeof(int) * (ft_strlen(line) + 1));
 		if (!tokens->cmds[i].filenames || !tokens->cmds[i].filetype)
-			error_message("Memory allocation error");
+			error_message(tokens, "Memory allocation error", 1);
 		memset(tokens->cmds[i].filenames, 0, sizeof(char *) * (ft_strlen(line) + 1));
         memset(tokens->cmds[i].filetype, 0, sizeof(int) * (ft_strlen(line) + 1));
 		while (line[j])
@@ -82,14 +81,14 @@ void    make_redirs(t_data *tokens)
 				if (filename)
 				{
 					if (tokens->cmds[i].type == HERE)
-						tokens->cmds[i].filenames[redir_count] = hd_filename(hd_index++);
+						tokens->cmds[i].filenames[redir_count] = hd_filename(tokens, hd_index++);
 					else
 						tokens->cmds[i].filenames[redir_count] = filename;
 					printf("Array filename %d:  %s\n", redir_count, tokens->cmds[i].filenames[redir_count]);
 					printf("Type: %d\n", tokens->cmds[i].type);
 					tokens->cmds[i].filetype[redir_count] = tokens->cmds[i].type;
-					printf("FILEtype %d\n", tokens->cmds[i].filetype[redir_count]);
-					//printf("Redir count: %d\n",  redir_count);
+					printf("FILEtype %d: %d\n", redir_count, tokens->cmds[i].filetype[redir_count]);
+					printf("Redir count in loop: %d\n",  redir_count);
 					redir_count++;
 				}
 				else
@@ -97,21 +96,14 @@ void    make_redirs(t_data *tokens)
 			}
 			else
 				j++;
-
 		}
-		printf("!!!!!!!%d %d\n", i,tokens->cmds[i].filetype[0]);
-		printf("??????? %d %s\n", i, tokens->cmds[i].filenames[0]);
-		printf("!!!!!!!%d %d\n", i, tokens->cmds[i].filetype[1]);
-		printf("???????%d %s\n", i, tokens->cmds[i].filenames[1]);
-		// printf("!!!!!!!%d\n", tokens->cmds[i].filetype[2]);
-		// printf("???????%s\n", tokens->cmds[i].filenames[2]);
-		// printf("!!!!!!!%d\n", tokens->cmds[i].filetype[3]);
-		// printf("???????%s\n", tokens->cmds[i].filenames[3]);
 		tokens->cmds[i].filenames[redir_count] = NULL;
 		tokens->cmds[i].filetype[redir_count] = NONE;
 		tokens->cmds[i].number_of_redir = redir_count;
-		printf("Redir count: %d\n",  tokens->cmds[i].number_of_redir);
+		printf(" Total Redir count: %d\n",  tokens->cmds[i].number_of_redir);
+		
 	}
+	
 }
 
 void	remove_redir_from_input(t_data *tokens)
@@ -126,16 +118,12 @@ void	remove_redir_from_input(t_data *tokens)
 	int		in_quotes;
 
 	i = -1;
-			printf("!!!!!!!%d %d\n", i,tokens->cmds[i].filetype[0]);
-		printf("??????? %d %s\n", i, tokens->cmds[i].filenames[0]);
-		printf("!!!!!!!%d %d\n", i, tokens->cmds[i].filetype[1]);
-		printf("???????%d %s\n", i, tokens->cmds[i].filenames[1]);
 	while (tokens->pipe_tok[++i] &&  i < tokens->cmds_count)
 	{
 		line = tokens->pipe_tok[i];
 		new_line = (char *)malloc(sizeof(char) * (ft_strlen(line) + 1));
 		if (!new_line)
-			error_message("Failed to malloc for newline");
+			error_message(tokens, "Failed to malloc for newline", 1);
 		j = 0;
 		k = 0;
 		in_single_quote = 0;

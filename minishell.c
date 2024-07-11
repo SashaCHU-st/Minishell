@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:52:26 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/11 11:47:55 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/11 20:01:52 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,25 @@ shell->cmds_count =0;// CHECK THIS
 		}
 	}
 }
- int if_builtins(t_data *data, t_cmd *cmd)
+ int if_it_is_builtins( t_cmd *cmd)
+{
+	if (ft_strncmp(cmd->word_tok[0], "pwd", 4) == 0)
+			return(1);
+	else if (ft_strncmp(cmd->word_tok[0], "echo", 5) == 0)
+			return(1);
+	else if (ft_strncmp(cmd->word_tok[0], "env", 4) == 0)
+			return(1);
+	else if (ft_strncmp(cmd->word_tok[0], "export", 7) == 0)
+			return(1);
+	else if (ft_strncmp(cmd->word_tok[0], "cd", 3) == 0)
+			return(1);
+	else if (ft_strncmp(cmd->word_tok[0], "unset", 6) == 0)
+			return(1);
+	else
+		return(0);
+	return(1);
+}
+ int builtins(t_data *data, t_cmd *cmd)
 {
 	if (ft_strncmp(cmd->word_tok[0], "pwd", 4) == 0)
 			ft_pwd();
@@ -149,7 +167,7 @@ char	*read_line(t_data *line)
 	char	*input;
 
 	(void)line;
-	input = readline("minishell-$ ");
+	input = readline("your 🐰 wrote -$ ");
 	if (!input)
 	{
 		printf("exit\n");
@@ -164,13 +182,13 @@ void shell_loop(t_data *shell)
 {
 	char	*line;
 	t_pipex	pipex;
-	int i;
+	int i = 0;
 	
 	while (1)
 	{
 		line = read_line(shell);
 		if (input_validation_pipes(shell, line) == 0 && input_validation_redir(shell, line) == 0 \
-					&& check_input_quotes_pipe(shell, line) == 0)
+					&& check_input_quotes_pipe(shell,line) == 0)
 
 		{
 			line = change_to_space(line);
@@ -178,24 +196,30 @@ void shell_loop(t_data *shell)
 			if (shell->cmds_count > 0)
 			{
 				i =0;
-				while (i < shell->cmds_count)
-				{
-					if (if_builtins(shell, &shell->cmds[i]) == 1)
-					{
-						i++;
-						continue;
-					}
-					else if (shell->cmds_count >=1 && if_builtins(shell, &shell->cmds[i]) == 0)
-					{
 
-					checking_path(shell, &pipex, i);
+				checking_path(shell, &pipex, i);
+				if (if_it_is_builtins( &shell->cmds[i]) == 1)
+				{
+					if (shell->cmds[i].number_of_redir > 0)
+					{
+						shell->parent_out= dup(STDOUT_FILENO);
+						open_fd_out(&pipex, *shell->cmds->filenames);
+					}
+					builtins(shell, &shell->cmds[i]);
+					if (shell->cmds[i].number_of_redir > 0)
+					{
+						if (dup2(shell->parent_out, STDOUT_FILENO)  < 0)
+							dprintf(2, "dup2 \n");
+						close(shell->parent_out);
+					}
+				}
+				else if (shell->cmds_count >=1)
+				{
 					piping(shell);
 					forking(shell, pipex);
 					closing(shell);
-					}
-				i++;
-
 				}
+				i++;
 			free(shell->cmds);
 			}
 		}

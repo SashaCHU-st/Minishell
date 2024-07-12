@@ -52,7 +52,7 @@ void shell_loop(t_data *shell)
 {
 	char	*line;
 	t_pipex	pipex;
-	int i;
+	int 	i;
 	
 	while (1)
 	{
@@ -64,7 +64,7 @@ void shell_loop(t_data *shell)
 			split_line(line, shell);
 			if (shell->cmds_count > 0)
 			{
-				i =0;
+				i = 0;
 				while (i < shell->cmds_count)
 				{
 					if (if_builtins(shell, &shell->cmds[i]) == 1)
@@ -74,11 +74,10 @@ void shell_loop(t_data *shell)
 					}
 					else if (shell->cmds_count >=1 && if_builtins(shell, &shell->cmds[i]) == 0)
 					{
-
-					checking_path(shell, &pipex, i);
-					piping(shell);
-					forking(shell, pipex);
-					closing(shell);
+						checking_path(shell, &pipex, i);
+						piping(shell);
+						forking(shell, pipex);
+						closing(shell);
 					}
 				i++;
 

@@ -38,6 +38,7 @@ typedef struct s_pipex{
 	int second_child;
 	
 } t_pipex;
+
 typedef struct s_cmd
 {
 	char	**word_tok; // word_tok[0] = cat; word_tok[1] = wc 

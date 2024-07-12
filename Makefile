@@ -25,6 +25,8 @@ SRCS = minishell.c \
 		piping.c \
 		signals.c \
 		exit.c \
+		parse_line.c \
+		initialize.c \
 			
 OBJS = $(SRCS:.c=.o)
 

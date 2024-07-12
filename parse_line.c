@@ -43,6 +43,7 @@ static void	cmd_and_expand(t_data *shell)
 		i++;
 	}
 }
+
 static t_cmd	split_into_wtok(char *pipe_token, t_cmd cmd)
 {
 

@@ -27,17 +27,8 @@ char	*hd_filename(t_data *shell, int count)
 	return (file);
 }
 
-void	process_hd(t_data *tokens, const char *file, char *delimeter)
+static void	hd_readline(char *line, t_data *tokens, char *delimeter, int fd)
 {
-	int	fd;
-	char	*line;
-
-	get_signal(tokens, HEREDOC);
-	unlink(file);
-	fd = open(file, O_RDWR | O_CREAT | O_TRUNC, 0644);
-	if (fd == -1)
-		error_message(tokens, "Failed to open fd for heredoc", 1);
-	tokens->hd_interrupt = 0;
 	while (1)
 	{
 		line = readline("> ");
@@ -56,6 +47,21 @@ void	process_hd(t_data *tokens, const char *file, char *delimeter)
 		ft_putendl_fd(line, fd);
 		free(line);
 	}
+}
+
+void	process_hd(t_data *tokens, const char *file, char *delimeter)
+{
+	int	fd;
+	char	*line;
+
+	line = NULL;
+	get_signal(tokens, HEREDOC);
+	unlink(file);
+	fd = open(file, O_RDWR | O_CREAT | O_TRUNC, 0644);
+	if (fd == -1)
+		error_message(tokens, "Failed to open fd for heredoc", 1);
+	tokens->hd_interrupt = 0;
+	hd_readline(line, tokens, delimeter, fd);
 	if (close(fd) == -1)
 		error_message(tokens, "Failed to close fd for heredoc", 1);
 	get_signal(tokens, DEFAULT);

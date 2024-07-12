@@ -39,6 +39,7 @@ static void hd_handler(int signal)
         //rl_redisplay();
         if (signal_shell)
             signal_shell->hd_interrupt = 1;
+        signal_shell->exit_status = 130;
         //exit(1);
     }
     // else if (signal == SIGQUIT)

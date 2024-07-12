@@ -43,6 +43,24 @@ void	free_array(char **array)
 	array = NULL;
 }
 
+// void	f_free_array(char **str)
+// {
+// 	char	**ptr;
+
+// 	if (!str)
+// 		return ;
+// 	ptr = str;
+// 	while (*ptr)
+// 	{
+// 		free(*ptr);
+// 		*ptr = NULL;
+// 		ptr++;
+// 	}
+// 	free(str);
+// 	str = NULL;
+// }
+
+
 void	ft_error(void)
 {
 	perror("Error fork()");
@@ -52,23 +70,12 @@ void	ft_error(void)
 void	f_free_cmds(t_cmd *cmds, int cmds_count)
 {
 	int		i;
-	//int		j;
 
 	i = 0;
-	if (cmds == NULL)
-		return ;
 	while (i < cmds_count)
 	{
 		if (cmds[i].word_tok != NULL)
 		{
-			// j = 0;
-			// while (j < cmds[i].w_count)
-			// {
-			// 	free(cmds[i].word_tok[j]);
-			// 	cmds[i].word_tok[j] = NULL;
-			// 	j++;
-			// }
-			// free(cmds[i].word_tok);
 			free_array(cmds[i].word_tok);
 			cmds[i].word_tok = NULL;
 		}
@@ -118,8 +125,11 @@ void	free_all(t_data *shell)
 		return ;
 	if (shell->cmds)
 	{
-		f_free_cmds(shell->cmds, shell->cmds_count);
-		shell->cmds = NULL;
+		if (shell->cmds != NULL)
+		{
+			f_free_cmds(shell->cmds, shell->cmds_count);
+			shell->cmds = NULL;
+		}
 	}
 	free_t_data(shell);
 	if (shell->hd_delimeter)

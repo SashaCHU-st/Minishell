@@ -28,7 +28,8 @@ char	*change_to_space(char *line)
 	i = 0;
 	while (line[i])
 	{
-		if (line[i] == '\t' || line[i] == '\v' || line[i] == '\r' || line[i] == '\f')
+		if (line[i] == '\t' || line[i] == '\v' || line[i] == '\r' \
+			|| line[i] == '\f')
 			line[i] = ' ';
 		i++;
 	}
@@ -43,7 +44,11 @@ void	change_space_to_31(char *p_token)
 	while (p_token[i])
 	{
 		if (p_token[i] == '\'' || p_token[i] == '\"')
+		{
 			i = skip_quotes(p_token, i);
+			if (p_token[i] == '\0')
+				break;
+		}
 		if (p_token[i] == ' ')
 			p_token[i] = 31;
 		i++;

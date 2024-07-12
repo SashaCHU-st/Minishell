@@ -6,25 +6,13 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 10:08:33 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/12 14:57:46 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/12 19:25:59 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "builtins.h"
 
-void	check_permissions(t_data *shell)
-{
-	if (shell->cmds->word_tok[2][0] == '\0' || shell->cmds->word_tok[3][0] == '\0')
-	{
-		write(2, "zsh: permission denied:\n", 24);
-	}
-	else if (shell->cmds->word_tok[2][0] == '\0' && shell->cmds->word_tok[3][0] == '\0')
-	{
-		write(2, "zsh: permission denied:\n", 24);
-		exit(1);
-	}
-}
 void	child(t_pipex pipex, t_data *shell, int k)
 {
 	char	*final = NULL;
@@ -64,14 +52,14 @@ void	child(t_pipex pipex, t_data *shell, int k)
 void checking_path (t_data *shell, t_pipex *pipex, int i )
 {
 	char	*path;
-	path = mine_path(shell);
+	path = mine_path(shell, i);
 	if(!path)
 		return ;
 	pipex->commands_path = ft_split(path, ':');
 	if (!pipex->commands_path)
 	{
 		free_fun(pipex);
-		i++;
+		//i++;
 	}
 
 }

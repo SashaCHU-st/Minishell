@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 13:32:50 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/12 13:08:31 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/12 19:20:58 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,26 +51,20 @@ void	if_error_input(char *input_copy);
 
 
 //////
-char	*mine_path(t_data *data);
+char	*mine_path(t_data *shell, int i);
 void	free_fun(t_pipex *pipex);
 int		open_fd_in(t_pipex *pipex, int filetype, char *filenames);
-void	open_fd_out(t_pipex *pipex, char *filename);
+void	open_fd_out(t_pipex *pipex,int filetype, char *filename);
 void	free_array(char **array);
 void	ft_error(void);
 char	*path_for_commands(t_pipex *pipex, char **child_command);
-
-void	check_permissions(t_data *data);
-//int		if_builtins(t_data *data, t_cmd *cmd);
-//int builtins(t_data *data, t_cmd *cmd);
- //int builtins(t_data *data, t_cmd *cmd, t_pipex pipex);
-void	builtins(t_data *data, t_cmd *cmd);
+int		builtins(t_data *data, t_cmd *cmd);
+int		if_it_is_builtins( t_cmd *cmd);
 void	child(t_pipex pipex, t_data *shell, int k);
 void	check_filetype(t_pipex *pipex, t_cmd *cmd);
 void	checking_path (t_data *shell, t_pipex *pipex, int i );
 void	piping(t_data *shell);
 void	forking(t_data *shell, t_pipex pipex);
 void	closing(t_data *shell);
-void	restore_redirection(t_pipex *pipex);
-void redirect(t_data *shell, t_pipex *pipex);
- //int if_builtins(t_data *data, t_cmd *cmd, t_pipex *pipex, int i);
+
 #endif

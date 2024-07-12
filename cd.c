@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 13:39:27 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/04 16:32:12 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/12 19:18:51 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,12 +67,12 @@ void	cd_without_arg(t_data *data, char *original)
 		if (ft_strncmp(data->envp[home], "HOME=", 5) == 0)
 			break ;
 	}
-	if (chdir(data->envp[home] + 5) == 0)////if there is HOME
+	if (chdir(data->envp[home] + 5) == 0)
 	{
 		search_old_current(data);
 		update_pwd(data, original);
 	}
-	else if (chdir(data->envp[home] + 5) != 0)//if HOME unset
+	else if (chdir(data->envp[home] + 5) != 0)
 		printf("bash: cd: HOME not set\n");
 }
 
@@ -94,7 +94,7 @@ void	ft_cd(t_data *data, int number_of_inputs)
 	data->pwd_index = 0;
 	data->oldpwd_index = 0;
 	original = getcwd(data->pwd, sizeof(data->pwd));
-	if (number_of_inputs <  2)// in case after cd there is no arguments -> goes to HOME	
+	if (number_of_inputs <  2)
 		cd_without_arg(data, original);
 	else if (number_of_inputs == 2)// goes to folder
 		cd_with_one_arg(data, original);

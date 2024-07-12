@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:52:26 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/12 10:38:39 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/12 13:11:59 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,7 @@ shell->cmds_count =0;// CHECK THIS
 }
  int if_it_is_builtins( t_cmd *cmd)
 {
+	printf("Hello");
 	if (ft_strncmp(cmd->word_tok[0], "pwd", 4) == 0)
 			return(1);
 	else if (ft_strncmp(cmd->word_tok[0], "echo", 5) == 0)
@@ -143,7 +144,7 @@ shell->cmds_count =0;// CHECK THIS
 		return(0);
 	return(1);
 }
- int builtins(t_data *data, t_cmd *cmd)
+void builtins(t_data *data, t_cmd *cmd)
 {
 	if (ft_strncmp(cmd->word_tok[0], "pwd", 4) == 0)
 			ft_pwd();
@@ -157,9 +158,9 @@ shell->cmds_count =0;// CHECK THIS
 		ft_cd(data, cmd->w_count);
 	else if (ft_strncmp(cmd->word_tok[0], "unset", 6) == 0)
 			ft_unset(data, cmd->w_count);
-	else
-		return(0);
-	return(1);
+	// else
+	// 	return(0);
+	// return(1);
 }
 
 char	*read_line(t_data *line)
@@ -190,16 +191,15 @@ void shell_loop(t_data *shell)
 		if (input_validation_pipes(shell, line) == 0 && input_validation_redir(shell, line) == 0 \
 					&& check_input_quotes_pipe(shell,line) == 0)
 
-		{
+	{
 			line = change_to_space(line);
 			split_line(line, shell);
 			if (shell->cmds_count > 0)
 			{
 				i =0;
-				checking_path(shell, &pipex, i);
-				if (if_it_is_builtins( &shell->cmds[i]) == 1)
-				{
-					if (shell->cmds->filetype[i] == NONE)
+					if (if_it_is_builtins(&shell->cmds[i]) == 1)
+					{
+						if (shell->cmds->filetype[i] == NONE)
 						builtins(shell, &shell->cmds[i]);
 					if (shell->cmds[i].number_of_redir > 0)
 					{
@@ -222,18 +222,21 @@ void shell_loop(t_data *shell)
 							close(shell->parent_out);
 						}
 					}
-				}
-				else if (shell->cmds_count >=1)
-				{
-					piping(shell);
-					forking(shell, pipex);
-					closing(shell);
-				}
+						i++;
+						continue;
+					}
+					if (shell->cmds_count >=1 && if_it_is_builtins(&shell->cmds[i]) == 0)
+					{
+						checking_path(shell, &pipex, i);
+						piping(shell);
+						forking(shell, pipex);
+						closing(shell);
+					}
 				i++;
 			free(shell->cmds);
 			}
 		}
-		free(line);
+	free(line);
 	}
 }
 

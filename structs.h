@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 10:32:47 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/11 11:48:41 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/12 09:49:38 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ typedef struct s_pipex{
 	char	**com_fir_child;
 	char	**com_sec_child;
 	int second_child;
+	    int stdin_backup;
+    int stdout_backup;
 	
 } t_pipex;
 
@@ -74,9 +76,13 @@ typedef struct s_data
 	int		redir_count;
 	int		pipe_count;
 	int		**pipe;
-	int		*pid;
-	int		exit_status;
-	int		hd_interrupt;
+
+	int parent_out;
+		int parent_in;
+	int *pid;
+	int	exit_status;
+  	int		hd_interrupt;
+
 	
 	// t_build * shell;
 }	t_data;

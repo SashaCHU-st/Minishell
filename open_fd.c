@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:46:25 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/11 10:35:21 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/11 19:59:37 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	check_filetype(t_pipex *pipex, t_cmd *cmd)
 	int i = 0;
 	while (i < cmd->number_of_redir)
 	{
-		if (cmd->filetype[i] == IN ) // ||  cmd->filetype[i] == HERE
+		if (cmd->filetype[i] == IN ||  cmd->filetype[i] == HERE) // 
 			open_fd_in(pipex, cmd->filetype[i], cmd->filenames[i]);
 		if (cmd->filetype[i] == OUT ) 
 			open_fd_out(pipex, cmd->filenames[i]);
@@ -29,7 +29,7 @@ void	check_filetype(t_pipex *pipex, t_cmd *cmd)
 
 int	open_fd_in(t_pipex *pipex, int filetype, char *filename)
 {
-	if(filetype == IN)
+	if(filetype == IN ||  filetype == HERE )
 	{
 		if (access(filename, F_OK | R_OK) == -1)
 		{

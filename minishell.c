@@ -6,14 +6,14 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:52:26 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/11 11:47:55 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/12 13:11:59 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "builtins.h"
 
- int if_builtins(t_data *data, t_cmd *cmd)
+void builtins(t_data *data, t_cmd *cmd)
 {
 	if (ft_strncmp(cmd->word_tok[0], "pwd", 4) == 0)
 			ft_pwd();
@@ -27,9 +27,9 @@
 		ft_cd(data, cmd->w_count);
 	else if (ft_strncmp(cmd->word_tok[0], "unset", 6) == 0)
 			ft_unset(data, cmd->w_count);
-	else
-		return(0);
-	return(1);
+	// else
+	// 	return(0);
+	// return(1);
 }
 
 char	*read_line(t_data *line)
@@ -37,7 +37,7 @@ char	*read_line(t_data *line)
 	char	*input;
 
 	(void)line;
-	input = readline("minishell-$ ");
+	input = readline("your 🐰 wrote -$ ");
 	if (!input)
 	{
 		printf("exit\n");
@@ -52,27 +52,51 @@ void shell_loop(t_data *shell)
 {
 	char	*line;
 	t_pipex	pipex;
-	int 	i;
+	int i;
+
 	
 	while (1)
 	{
 		line = read_line(shell);
 		if (input_validation_pipes(shell, line) == 0 && input_validation_redir(shell, line) == 0 \
-					&& check_input_quotes_pipe(shell, line) == 0)
-		{
+					&& check_input_quotes_pipe(shell,line) == 0)
+
+	{
 			line = change_to_space(line);
 			split_line(line, shell);
 			if (shell->cmds_count > 0)
 			{
-				i = 0;
-				while (i < shell->cmds_count)
-				{
-					if (if_builtins(shell, &shell->cmds[i]) == 1)
+				i =0;
+					if (if_it_is_builtins(&shell->cmds[i]) == 1)
 					{
+						if (shell->cmds->filetype[i] == NONE)
+						builtins(shell, &shell->cmds[i]);
+					if (shell->cmds[i].number_of_redir > 0)
+
+					{
+						if(shell->cmds->filetype[i] == OUT)
+						{
+							shell->parent_out= dup(STDOUT_FILENO);
+							open_fd_out(&pipex, *shell->cmds->filenames);
+							check_filetype(&pipex,&shell->cmds[i]);
+							builtins(shell, &shell->cmds[i]);
+							if (dup2(shell->parent_out, STDOUT_FILENO)  < 0)
+								dprintf(2, "dup2 \n");
+							close(shell->parent_out);
+						}
+						if(shell->cmds->filetype[i] == IN)
+						{
+							shell->parent_in= dup(STDIN_FILENO);
+							check_filetype(&pipex,&shell->cmds[i]);
+							if (dup2(shell->parent_in, STDIN_FILENO)  < 0)
+								dprintf(2, "dup2 \n");
+							close(shell->parent_out);
+						}
+					}
 						i++;
 						continue;
 					}
-					else if (shell->cmds_count >=1 && if_builtins(shell, &shell->cmds[i]) == 0)
+					if (shell->cmds_count >=1 && if_it_is_builtins(&shell->cmds[i]) == 0)
 					{
 						checking_path(shell, &pipex, i);
 						piping(shell);
@@ -80,12 +104,10 @@ void shell_loop(t_data *shell)
 						closing(shell);
 					}
 				i++;
-
-				}
 			free(shell->cmds);
 			}
 		}
-		free(line);
+	free(line);
 	}
 }
 

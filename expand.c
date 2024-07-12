@@ -26,7 +26,7 @@ char	*ft_getenv(t_data *shell, char *env)
 	int		len;
 
 	i = -1;
-	if (!env)
+	if (!env || !*env)
 		return (NULL);
 	len = ft_strlen(env);
 	write(2, "im in ft_getenv\n", 17);
@@ -78,10 +78,10 @@ static char *get_expand(t_data *shell, char *line)
 	ft_strncpy(env, line, len);
 	env[len] = '\0';
 	value = ft_getenv(shell, env);
-	if(value)
-		return (ft_strdup(value));
-	else
-		return (ft_strdup(""));
+	free (env);
+	if(!value)
+		value = ft_strdup("");
+	return (value);
 }
 
 static char	*expand_env(t_data *shell, char **line, int *i)
@@ -137,8 +137,10 @@ char	*expand_var(t_data *shell, char *line)
 			if (line[j + 1] && line[j] == '\'' && !in_dquotes)
 			{
 				j = skip_quotes(line, j);
+				if (line[j] == '\0')
+					return (NULL);
 			}
-			if (line[j + 1] && line[j] == '$' && line[j + 1] != ' ')
+			if (line[j] == '$'&& line[j + 1] && line[j + 1] != ' ' && line[j + 1] != '$')
 			{
 				expanded_line = expand_env(shell, &line, &j);
 				if (!expanded_line)
@@ -146,7 +148,7 @@ char	*expand_var(t_data *shell, char *line)
 					ft_putendl_fd("Failed to expand", 2);
 					return(NULL);
 				}
-				//free(tokens->pipe_tok[i]);
+				free(line);
 				line = expanded_line;
 			}
 			j++;

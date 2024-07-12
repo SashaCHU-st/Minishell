@@ -33,22 +33,16 @@ static void hd_handler(int signal)
     if (signal == SIGINT)
     {
         write(1, "\n", 1);
-        //write(1, "^C\n", 3);
-        //rl_on_new_line();
-        //rl_replace_line("", 0);
-        //rl_redisplay();
         if (signal_shell)
+        {
+            signal_shell->exit_status = 130;
             signal_shell->hd_interrupt = 1;
-        signal_shell->exit_status = 130;
+        }
+
+        // rl_replace_line("", 0);
+        // rl_redisplay();
         //exit(1);
     }
-    // else if (signal == SIGQUIT)
-    // {
-    //     rl_on_new_line();
-	// 	rl_redisplay();
-    //     // write (1, "\n", 1);
-    //     // exit (1);
-    // }
 }
 
 static void toggle_caret(int is_on)

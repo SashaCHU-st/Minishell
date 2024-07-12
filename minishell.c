@@ -32,12 +32,32 @@ void builtins(t_data *data, t_cmd *cmd)
 	// return(1);
 }
 
+int if_it_is_builtins( t_cmd *cmd)
+{
+    printf("Hello");
+    if (ft_strncmp(cmd->word_tok[0], "pwd", 4) == 0)
+            return(1);
+    else if (ft_strncmp(cmd->word_tok[0], "echo", 5) == 0)
+            return(1);
+    else if (ft_strncmp(cmd->word_tok[0], "env", 4) == 0)
+            return(1);
+    else if (ft_strncmp(cmd->word_tok[0], "export", 7) == 0)
+            return(1);
+    else if (ft_strncmp(cmd->word_tok[0], "cd", 3) == 0)
+            return(1);
+    else if (ft_strncmp(cmd->word_tok[0], "unset", 6) == 0)
+            return(1);
+    else
+        return(0);
+    return(1);
+}
+
 char	*read_line(t_data *line)
 {
 	char	*input;
 
 	(void)line;
-	input = readline("your 🐰 wrote -$ ");
+	input = readline("sashel -$ ");
 	if (!input)
 	{
 		printf("exit\n");
@@ -54,7 +74,6 @@ void shell_loop(t_data *shell)
 	t_pipex	pipex;
 	int i;
 
-	
 	while (1)
 	{
 		line = read_line(shell);
@@ -128,6 +147,7 @@ char **copy_envp(char *envp[])
 		new_envp[i] = ft_strdup(envp[i]);
 		if (new_envp[i] == NULL)
 		{
+			free_array(new_envp);
 			perror("strdup");
 			exit(EXIT_FAILURE);
 		}

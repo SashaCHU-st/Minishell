@@ -17,7 +17,7 @@ typedef enum {
     DEFAULT,
     HANDLER,
     HEREDOC,
-    //NO_SIGNALS
+    NO_SIGNALS
 } t_signal;
 
 typedef enum {
@@ -40,6 +40,7 @@ typedef struct s_pipex{
     int stdout_backup;
 	
 } t_pipex;
+
 typedef struct s_cmd
 {
 	char	**word_tok; // word_tok[0] = cat; word_tok[1] = wc 
@@ -75,10 +76,13 @@ typedef struct s_data
 	int		redir_count;
 	int		pipe_count;
 	int		**pipe;
+
 	int parent_out;
 		int parent_in;
 	int *pid;
 	int	exit_status;
+  	int		hd_interrupt;
+
 	
 	// t_build * shell;
 }	t_data;

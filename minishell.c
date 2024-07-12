@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:52:26 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/12 10:13:22 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/12 10:38:39 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,6 +199,8 @@ void shell_loop(t_data *shell)
 				checking_path(shell, &pipex, i);
 				if (if_it_is_builtins( &shell->cmds[i]) == 1)
 				{
+					if (shell->cmds->filetype[i] == NONE)
+						builtins(shell, &shell->cmds[i]);
 					if (shell->cmds[i].number_of_redir > 0)
 					{
 						if(shell->cmds->filetype[i] == OUT)

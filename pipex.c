@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:47:03 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/11 10:09:19 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/12 14:28:41 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ char	*path_for_commands(t_pipex *pipex, char **child_command)
 	char	*command_temp;
 	char	**current_path;
 
-	printf("Hello5");
 	current_path = pipex->commands_path;
 	while (*current_path)
 	{
@@ -46,23 +45,35 @@ char	*path_for_commands(t_pipex *pipex, char **child_command)
 	return (NULL);
 }
 
-char	*mine_path(t_data *shell)
+char *mine_path(t_data *shell)
 {
-	//int	i;
+	int i;
+	int j;
 
+	
 	if (shell->envp == NULL)
-		return (0);
-	while (ft_strncmp("PATH=", *shell->envp, 5) != 0)
 	{
+		ft_putstr_fd("Environment variables not found.\n", 2);
+		return (NULL);
+	}
+	while (*shell->envp != NULL && ft_strncmp("PATH=", *shell->envp, 5) != 0)
 		shell->envp++;
-		if (*shell->envp == NULL)
+	if (*shell->envp == NULL)
+	{
+	i = 0;
+		while (i < shell->cmds_count)
 		{
-			ft_putstr_fd(shell->cmds->word_tok[1], 2);
-			ft_putstr_fd(": No such file or directory\n", 2);
-			ft_putstr_fd(shell->cmds->word_tok[2], 2);
-			ft_putstr_fd(": No such file or directory\n", 2);
-			exit(0);
+			ft_putstr_fd("bash: ",2);
+			j = 0;
+			while (j < shell->cmds[i].w_count)
+			{
+				ft_putstr_fd(shell->cmds[i].word_tok[j],2);
+				ft_putstr_fd(": No such file or directory\n", 2);
+				j++;
+			}
+			i++;
 		}
+		return (NULL) ;
 	}
 	return (*shell->envp + 5);
 }

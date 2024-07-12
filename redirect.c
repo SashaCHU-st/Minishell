@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 15:49:10 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/11 11:51:26 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/11 15:38:28 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,6 @@ void    make_redirs(t_data *tokens)
 					tokens->cmds[i].filetype[tokens->redir_count] = tokens->cmds[i].type;
 					printf("Array filenames: %s\n", tokens->cmds[i].filenames[tokens->redir_count]);
 					tokens->redir_count++;
-
 				}
 				else
 					ft_putendl_fd("Syntax error: no filename", 2);
@@ -99,7 +98,7 @@ void    make_redirs(t_data *tokens)
 		tokens->cmds[i].filenames[tokens->redir_count] = NULL;
 		tokens->cmds[i].filetype[tokens->redir_count] = NONE;
 		tokens->cmds[i].number_of_redir = tokens->redir_count;
-
+		printf("Redir count: %d\n",  tokens->cmds[i].number_of_redir);
 	}
 	
 }

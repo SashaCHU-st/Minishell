@@ -62,24 +62,8 @@ static char	**allocate_array(unsigned int nb)
 		return (NULL);
 	return (array);
 }
-void	f_free_array(char **str)
-{
-	char	**ptr;
 
-	if (!str)
-		return ;
-	ptr = str;
-	while (*ptr)
-	{
-		free(*ptr);
-		*ptr = NULL;
-		ptr++;
-	}
-	free(str);
-	str = NULL;
-}
-
-static void	split_array(unsigned int nb, char c, char const *s, char **array)
+static char	**split_array(unsigned int nb, char c, char const *s, char **array)
 {
 	unsigned int start;
 	int len;
@@ -96,7 +80,7 @@ static void	split_array(unsigned int nb, char c, char const *s, char **array)
 			if (!array[i])
 			{
 				f_free_array(array);
-				return ;
+				return (NULL);
 			}
 			i++;
 			start += len;
@@ -105,17 +89,19 @@ static void	split_array(unsigned int nb, char c, char const *s, char **array)
 			start++;
 	}
 	array[i] = NULL;
+	return (array);
 }
 
 static char	**f_fill_array(char const *s, char c, unsigned int nb)
 {
 	char			**array;
+	char	**new_array;
 
 	array = allocate_array(nb);
 	if (!array)
 		return (NULL);
-	split_array(nb, c, s, array);
-	return (array);
+	new_array = split_array(nb, c, s, array);
+	return (new_array);
 }
 
 char	**do_split(char const *s, char c)

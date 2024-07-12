@@ -40,26 +40,25 @@ void	free_array(char **array)
 			i++;
 	}
 	free (array);
-	array = NULL;
+	//array = NULL;
 }
 
-// void	f_free_array(char **str)
-// {
-// 	char	**ptr;
+void	f_free_array(char **str)
+{
+	char	**ptr;
 
-// 	if (!str)
-// 		return ;
-// 	ptr = str;
-// 	while (*ptr)
-// 	{
-// 		free(*ptr);
-// 		*ptr = NULL;
-// 		ptr++;
-// 	}
-// 	free(str);
-// 	str = NULL;
-// }
-
+	if (!str)
+		return ;
+	ptr = str;
+	while (*ptr)
+	{
+		free(*ptr);
+		*ptr = NULL;
+		ptr++;
+	}
+	free(str);
+	//str = NULL;
+}
 
 void	ft_error(void)
 {
@@ -97,6 +96,8 @@ void	f_free_cmds(t_cmd *cmds, int cmds_count)
 
 void	free_t_data(t_data *shell)
 {
+	if (!shell)
+	 	return ;
 	if (shell->pipe_tok)
 	{
 		free_array(shell->pipe_tok);
@@ -125,11 +126,8 @@ void	free_all(t_data *shell)
 		return ;
 	if (shell->cmds)
 	{
-		if (shell->cmds != NULL)
-		{
-			f_free_cmds(shell->cmds, shell->cmds_count);
-			shell->cmds = NULL;
-		}
+		f_free_cmds(shell->cmds, shell->cmds_count);
+		shell->cmds = NULL;
 	}
 	free_t_data(shell);
 	if (shell->hd_delimeter)
@@ -142,13 +140,15 @@ void	free_all(t_data *shell)
 		free (shell->tempfile_hd);
 		shell->tempfile_hd = NULL;
 	}
-	
 }
 
 void	exit_free(t_data *shell, int status)
 {
-	free_all(shell);
-	
+	if (shell)
+	{
+		free_all(shell);
+		free(shell);
+	}
 	get_signal(shell, DEFAULT);
 	exit (status);
 }

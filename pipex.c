@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:47:03 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/11 20:04:58 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/12 14:28:41 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ char *mine_path(t_data *shell)
 	int i;
 	int j;
 
+	
 	if (shell->envp == NULL)
 	{
 		ft_putstr_fd("Environment variables not found.\n", 2);

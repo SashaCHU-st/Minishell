@@ -42,24 +42,6 @@ static unsigned int	num_of_str(const char *s, char c)
 	return (count);
 }
 
-void	f_free_array(char **str)
-{
-	char	**ptr;
-
-	if (!str)
-		return ;
-	ptr = str;
-	while (*ptr)
-	{
-		free(*ptr);
-		*ptr = NULL;
-		ptr++;
-	}
-	free(str);
-	str = NULL;
-}
-
-
 static unsigned int	get_substring_length(const char *s, \
 			unsigned int start, char c)
 {
@@ -80,17 +62,29 @@ static char	**allocate_array(unsigned int nb)
 		return (NULL);
 	return (array);
 }
-
-static char	**f_fill_array(char const *s, char c, unsigned int nb)
+void	f_free_array(char **str)
 {
-	char			**array;
-	unsigned int	start;
-	unsigned int	i;
-	unsigned int	len;
+	char	**ptr;
 
-	array = allocate_array(nb);
-	if (!array)
-		return(NULL);
+	if (!str)
+		return ;
+	ptr = str;
+	while (*ptr)
+	{
+		free(*ptr);
+		*ptr = NULL;
+		ptr++;
+	}
+	free(str);
+	str = NULL;
+}
+
+static void	split_array(unsigned int nb, char c, char const *s, char **array)
+{
+	unsigned int start;
+	int len;
+	unsigned int i;
+
 	start = 0;
 	i = 0;
 	while (i < nb)
@@ -102,7 +96,7 @@ static char	**f_fill_array(char const *s, char c, unsigned int nb)
 			if (!array[i])
 			{
 				f_free_array(array);
-				return (NULL);
+				return ;
 			}
 			i++;
 			start += len;
@@ -111,6 +105,16 @@ static char	**f_fill_array(char const *s, char c, unsigned int nb)
 			start++;
 	}
 	array[i] = NULL;
+}
+
+static char	**f_fill_array(char const *s, char c, unsigned int nb)
+{
+	char			**array;
+
+	array = allocate_array(nb);
+	if (!array)
+		return (NULL);
+	split_array(nb, c, s, array);
 	return (array);
 }
 

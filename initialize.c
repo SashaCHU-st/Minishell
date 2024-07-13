@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   initialize.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: epolkhov <epolkhov@student.42.fr>          #+#  +:+       +#+        */
+/*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024-07-11 12:30:19 by epolkhov          #+#    #+#             */
-/*   Updated: 2024-07-11 12:30:19 by epolkhov         ###   ########.fr       */
+/*   Created: 2024/07/11 12:30:19 by epolkhov          #+#    #+#             */
+/*   Updated: 2024/07/13 12:24:40 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,5 @@ void init_t_data(t_data *data)
 	data->tempfile_hd = NULL;
 	data->exit_status = 0;
 	data->hd_interrupt = 0;
+	data->pipe_count = 0;
 }

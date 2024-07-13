@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 16:17:29 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/04 16:49:30 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/13 16:38:39 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,85 +40,85 @@ void	unset_var(t_data *data, char *arg)
 	}
 }
 
-size_t	ft_strlen(const char *str )
-{
-	size_t	i;
-	size_t	count;
+// size_t	ft_strlen(const char *str )
+// {
+// 	size_t	i;
+// 	size_t	count;
 
-	count = 0;
-	i = 0;
-	while (str[i] != '\0')
-	{
-		i++;
-		count++;
-	}
-	return (count);
-}
+// 	count = 0;
+// 	i = 0;
+// 	while (str[i] != '\0')
+// 	{
+// 		i++;
+// 		count++;
+// 	}
+// 	return (count);
+// }
 
-char	*ft_strdup(const char *src)
-{
-	int		len;
-	int		i;
-	char	*newstr;
+// char	*ft_strdup(const char *src)
+// {
+// 	int		len;
+// 	int		i;
+// 	char	*newstr;
 
-	len = ft_strlen(src);
-	i = 0;
-	newstr = ((char *)malloc(sizeof(char) * (len + 1)));
-	if (newstr == 0)
-		return (0);
-	while (src[i])
-	{
-		newstr[i] = src[i];
-		i++;
-	}
-	newstr[i] = '\0';
-	return (newstr);
-}
+// 	len = ft_strlen(src);
+// 	i = 0;
+// 	newstr = ((char *)malloc(sizeof(char) * (len + 1)));
+// 	if (newstr == 0)
+// 		return (0);
+// 	while (src[i])
+// 	{
+// 		newstr[i] = src[i];
+// 		i++;
+// 	}
+// 	newstr[i] = '\0';
+// 	return (newstr);
+// }
 
-char	*ft_strjoin(char const *s1, char const *s2)
-{
-	size_t	i;
-	size_t	j;
-	char	*new;
+// char	*ft_strjoin(char const *s1, char const *s2)
+// {
+// 	size_t	i;
+// 	size_t	j;
+// 	char	*new;
 
-	i = 0;
-	j = 0;
-	if (!s1 || !s2)
-		return (NULL);
-	new = (char *) malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
-	if (!new)
-		return (NULL);
-	while (s1[i] != '\0')
-	{
-		new[i] = s1[i];
-		i++;
-	}
-	while (s2[j] != '\0')
-	{
-		new[i + j] = s2[j];
-		j++;
-	}
-	new[i + j] = '\0';
-	return (new);
-}
+// 	i = 0;
+// 	j = 0;
+// 	if (!s1 || !s2)
+// 		return (NULL);
+// 	new = (char *) malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+// 	if (!new)
+// 		return (NULL);
+// 	while (s1[i] != '\0')
+// 	{
+// 		new[i] = s1[i];
+// 		i++;
+// 	}
+// 	while (s2[j] != '\0')
+// 	{
+// 		new[i + j] = s2[j];
+// 		j++;
+// 	}
+// 	new[i + j] = '\0';
+// 	return (new);
+// }
 
-char	*ft_strchr(const char *s, int c)
-{
-	size_t	i;
+// char	*ft_strchr(const char *s, int c)
+// {
+// 	size_t	i;
 
-	i = 0;
-	while (s[i] != '\0')
-	{
-		if (s[i] == (char)c)
-		{
-			return ((char *)&s[i]);
-		}
-		i++;
-	}
-	if ((char)c == 0)
-		return ((char *)&s[i]);
-	return (NULL);
-}
+// 	i = 0;
+// 	while (s[i] != '\0')
+// 	{
+// 		if (s[i] == (char)c)
+// 		{
+// 			return ((char *)&s[i]);
+// 		}
+// 		i++;
+// 	}
+// 	if ((char)c == 0)
+// 		return ((char *)&s[i]);
+// 	return (NULL);
+// }
 
 char	*ft_strpbrk(const char *s, int c)
 {
@@ -137,21 +137,21 @@ char	*ft_strpbrk(const char *s, int c)
 		return ((char *)&s[i]);
 	return (NULL);
 }
-int	ft_strncmp(const char *s1, const char *s2, size_t n)
-{
-	size_t	i;
+// int	ft_strncmp(const char *s1, const char *s2, size_t n)
+// {
+// 	size_t	i;
 
-	i = 0;
-	while ((s1[i] != '\0' || s2[i] != '\0') && i < n)
-	{
-		if (s1[i] > s2[i])
-			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
-		else if (s1[i] < s2[i])
-			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
-		i++;
-	}
-	return (0);
-}
+// 	i = 0;
+// 	while ((s1[i] != '\0' || s2[i] != '\0') && i < n)
+// 	{
+// 		if (s1[i] > s2[i])
+// 			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+// 		else if (s1[i] < s2[i])
+// 			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+// 		i++;
+// 	}
+// 	return (0);
+// }
 int	ft_words(const char *str, char c)
 {
 	size_t	i;

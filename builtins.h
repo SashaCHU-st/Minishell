@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 13:32:50 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/12 19:20:58 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/13 16:29:36 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	open_fd_out(t_pipex *pipex,int filetype, char *filename);
 void	free_array(char **array);
 void	ft_error(void);
 char	*path_for_commands(t_pipex *pipex, char **child_command);
-int		builtins(t_data *data, t_cmd *cmd);
+void	builtins(t_data *data, t_cmd *cmd);
 int		if_it_is_builtins( t_cmd *cmd);
 void	child(t_pipex pipex, t_data *shell, int k);
 void	check_filetype(t_pipex *pipex, t_cmd *cmd);
@@ -66,5 +66,9 @@ void	checking_path (t_data *shell, t_pipex *pipex, int i );
 void	piping(t_data *shell);
 void	forking(t_data *shell, t_pipex pipex);
 void	closing(t_data *shell);
-
+void	redirection_out_builtin(t_data *shell, t_pipex *pipex, int i);
+void	redirection_in_builtin(t_data *shell, t_pipex *pipex, int i);
+void	redirection_with_builtins(t_data *shell, t_pipex *pipex, int i);
+void	checking_home(int found_home, t_data *data, int home, char *original);
+void	running_commands(t_data *shell, int i, t_pipex *pipex );
 #endif

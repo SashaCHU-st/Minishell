@@ -26,41 +26,64 @@ int	skip_quotes(char *line, int i)
 
 bool	has_unclosed_quotes(char *line)
 {
-	int	count;
-	int	i;
+	int		i;
+	bool	single_quote_open;
+	bool	double_quote_open;
 
+	single_quote_open = false;
+	double_quote_open = false;
 	i = 0;
-	count = 0;
 	while (line[i])
 	{
-		if (line[i] == '\'' || line[i] == '\"')
-			count++;
+		if (line[i] == '\'')
+			single_quote_open = !single_quote_open;
+		else if (line[i] == '\"')
+			double_quote_open = !double_quote_open;
 		i++;
 	}
-	if (count % 2 == 0)
-		return (false);
-	return (true);
+	if (single_quote_open || double_quote_open)
+		return (true);
+	return (false);
 }
 
-void	remove_quotes(char *str)
+static void copy_before_remove(char *str, bool in_singles, bool in_doubles)
 {
 	int	i;
 	int	j;
 
 	i = 0;
 	j = 0;
-	if (!str)
-		return ;
 	while (str[i])
 	{
-		if (str[i] != '\"' && str[i] != '\'')
+		if (str[i] == '\'' && !in_doubles)
 		{
-			str[j] = str[i];
-			j++;
+			in_singles = !in_singles;
+			i++;
+			continue;
+        }
+		if (str[i] == '\"' && !in_singles)
+		{
+			in_doubles = !in_doubles;
+			i++;
+			continue;
 		}
+		str[j] = str[i];
 		i++;
+		j++;
 	}
 	str[j] = '\0';
+}
+
+void	remove_quotes(char *str)
+{
+	bool inside_singles;
+	bool inside_doubles;
+
+	inside_doubles = false;
+	inside_singles = false;
+	if (!str)
+		return ;
+	copy_before_remove(str, inside_singles, inside_doubles);
 }
 
 int	check_input_quotes_pipe(t_data *shell, char *line)

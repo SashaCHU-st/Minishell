@@ -77,7 +77,7 @@ typedef struct s_data
 	int		pipe_count;
 	int		**pipe;
 	int parent_out;
-		int parent_in;
+	int parent_in;
 	int *pid;
 	int	exit_status;
   	int		hd_interrupt;

@@ -65,6 +65,8 @@ void	process_hd(t_data *tokens, const char *file, char *delimeter)
 	if (close(fd) == -1)
 		error_message(tokens, "Failed to close fd for heredoc", 1);
 	get_signal(tokens, DEFAULT);
+	if (tokens->hd_interrupt)
+		exit (1);
 	exit (0);
 }
 
@@ -129,8 +131,8 @@ void    *is_heredoc(char *line, t_data *tokens)
             else
             {
                 // Parent process should wait for the child process to complete
-                int status;
-                waitpid(pid, &status, 0);
+                //int status;
+                waitpid(pid, &tokens->exit_status, 0);
                 free(tokens->hd_delimeter);
                 tokens->hd_delimeter = NULL;
 				if (tokens->hd_interrupt == 1)

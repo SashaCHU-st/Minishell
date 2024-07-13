@@ -52,11 +52,10 @@ void    make_redirs(t_data *tokens)
 
 	i = -1;
 	hd_index = 1;
-	//redir_count = 0;
 	while (tokens->pipe_tok[++i] &&  i < tokens->cmds_count)
 	{
 		j = 0;
-	tokens->redir_count = 0;
+		tokens->redir_count = 0;
 		line = tokens->pipe_tok[i];
 		tokens->cmds[i].filenames = malloc(sizeof(char *) * (ft_strlen(line) + 1));
 		tokens->cmds[i].filetype = malloc(sizeof(int) * (ft_strlen(line) + 1));
@@ -113,10 +112,10 @@ void	remove_redir_from_input(t_data *tokens)
 	int		in_single_quote;
 	int		in_double_quote;
 	int		in_quotes;
+	
 	i = -1;
 	while (tokens->pipe_tok[++i] &&  i < tokens->cmds_count)
 	{
-
 		line = tokens->pipe_tok[i];
 		new_line = (char *)malloc(sizeof(char) * (ft_strlen(line) + 1));
 		if (!new_line)
@@ -142,14 +141,9 @@ void	remove_redir_from_input(t_data *tokens)
 			}
 			else
 				new_line[k++] = line[j++];
-			//j++;
-			//k++;	
 		}
 		new_line[k] = '\0';
 		free(tokens->pipe_tok[i]);
 		tokens->pipe_tok[i] = new_line;
-		//free(line);
-		//free(new_line);
 	}
-		//printf("HELLO FROM REMOVE FILES\n");
 }

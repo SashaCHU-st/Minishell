@@ -13,6 +13,41 @@
 #include "minishell.h"
 #include "builtins.h"
 
+
+void	check_permissions(t_data *shell)
+{
+	int	i;
+
+	i = 0;
+	if (!shell || !shell->cmds || !shell->cmds->filenames || !shell->cmds->filetype)
+        error_message(shell, "Invalid shell or command structure", 1);
+	while (shell->cmds->filenames[i])
+	{
+		if (access(shell->cmds->filenames[i], F_OK) != 0)
+			error_message(shell, "zsh: no file path", 1);
+		if (shell->cmds->filetype[i] == IN || shell->cmds->filetype[i] == HERE)
+		{
+			if (access(shell->cmds->filenames[i], R_OK) != 0)
+				error_message(shell, "zsh: file is not readable", 1);
+		}
+		else if (shell->cmds->filetype[i] == OUT || shell->cmds->filetype[i] == APPEND)
+		{
+			if (access(shell->cmds->filenames[i], W_OK) != 0)
+				error_message(shell, "zsh: file is not writable", 1);
+		}
+		i++;
+	}
+	// if (shell->cmds->filenames[2][0] == '\0' || shell->cmds->filenames[3][0] == '\0')
+	// {
+	// 	write(2, "zsh: permission denied:\n", 24);
+	// }
+	// else if (shell->cmds->word_tok[2][0] == '\0' && shell->cmds->word_tok[3][0] == '\0')
+	// {
+	// 	write(2, "zsh: permission denied:\n", 24);
+	// 	exit(1);
+	// }
+}
+
 void	child(t_pipex pipex, t_data *shell, int k)
 {
 	char	*final = NULL;
@@ -31,6 +66,7 @@ void	child(t_pipex pipex, t_data *shell, int k)
 		close(shell->pipe[i][1]);
 		i++;
 	}
+	check_permissions(shell);
 	check_filetype(&pipex,&shell->cmds[k]);
 	// if(if_it_is_builtins(&shell->cmds[k]) == 1 && ft_strncmp(shell->cmds[k].word_tok[0], "echo", 5) == 0)
 	// {

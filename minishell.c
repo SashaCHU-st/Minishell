@@ -13,12 +13,13 @@
 #include "minishell.h"
 #include "builtins.h"
 
+
 char	*read_line(t_data *line)
 {
 	char	*input;
 
 	(void)line;
-	input = readline("your 🐰 wrote -$ ");
+	input = readline("sashel -$ ");
 	if (!input)
 	{
 		printf("exit\n");
@@ -84,6 +85,7 @@ char **copy_envp(char *envp[])
 		new_envp[i] = ft_strdup(envp[i]);
 		if (new_envp[i] == NULL)
 		{
+			free_array(new_envp);
 			perror("strdup");
 			exit(EXIT_FAILURE);
 		}
@@ -113,6 +115,6 @@ int	main(int argc, char **argv, char *envp[])
 			perror("Terminal is not in interactive mode");
 			return (EXIT_FAILURE);
 		}
-		return (EXIT_SUCCESS);
 	}
+	return (EXIT_SUCCESS);
 }

@@ -33,22 +33,15 @@ static void hd_handler(int signal)
     if (signal == SIGINT)
     {
         write(1, "\n", 1);
-        //write(1, "^C\n", 3);
-        //rl_on_new_line();
-        //rl_replace_line("", 0);
-        //rl_redisplay();
+        printf("Exit status hd: %d\n", signal_shell->exit_status);
         if (signal_shell)
-            signal_shell->hd_interrupt = 1;
-        signal_shell->exit_status = 130;
-        //exit(1);
+        {
+            signal_shell->exit_status = 130;
+            printf("Exit status afret change hd: %d\n", signal_shell->exit_status);
+            //signal_shell->hd_interrupt = 1;
+        }
+        exit(1);
     }
-    // else if (signal == SIGQUIT)
-    // {
-    //     rl_on_new_line();
-	// 	rl_redisplay();
-    //     // write (1, "\n", 1);
-    //     // exit (1);
-    // }
 }
 
 static void toggle_caret(int is_on)

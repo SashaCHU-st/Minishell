@@ -147,7 +147,7 @@ void	exit_free(t_data *shell, int status)
 	if (shell)
 	{
 		free_all(shell);
-		free(shell);
+		//free(shell);
 	}
 	get_signal(shell, DEFAULT);
 	exit (status);

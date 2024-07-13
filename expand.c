@@ -109,7 +109,8 @@ static char	*expand_env(t_data *shell, char **line, int *i)
 	}
 	ft_strncpy(new_line, *line, (*i));
 	ft_strncpy(new_line + (*i), value, ft_strlen(value));
-	ft_strncpy(new_line + (*i) + ft_strlen(value), *line + start + var_name_len, ft_strlen(*line) - start - var_name_len);
+	ft_strncpy(new_line + (*i) + ft_strlen(value), *line + start + var_name_len, \
+				 ft_strlen(*line) - start - var_name_len);
 	new_line[new_line_len] = '\0';
 	printf("newline 3: %s \n", new_line);
 	free(value);
@@ -118,42 +119,34 @@ static char	*expand_env(t_data *shell, char **line, int *i)
 
 char	*expand_var(t_data *shell, char *line)
 {
-	//char	*line;
-	//int		i;
 	int		j;
 	int		in_dquotes;
 	char	*expanded_line;
 
-	//i = -1;
 	in_dquotes = 0;
-	//while (tokens->pipe_tok[++i] && i < tokens->cmds_count)
-	//{
-		//line = tokens->pipe_tok[i];
-		j = 0;
-		while (line[j])
+	j = 0;
+	while (line[j])
+	{
+		if (line[j] == '\"')
+			in_dquotes = !in_dquotes;
+		if (line[j + 1] && line[j] == '\'' && !in_dquotes)
 		{
-			if (line[j] == '\"')
-				in_dquotes = !in_dquotes;
-			if (line[j + 1] && line[j] == '\'' && !in_dquotes)
-			{
-				j = skip_quotes(line, j);
-				if (line[j] == '\0')
-					return (NULL);
-			}
-			if (line[j] == '$'&& line[j + 1] && line[j + 1] != ' ' && line[j + 1] != '$')
-			{
-				expanded_line = expand_env(shell, &line, &j);
-				if (!expanded_line)
-				{
-					ft_putendl_fd("Failed to expand", 2);
-					return(NULL);
-				}
-				free(line);
-				line = expanded_line;
-			}
-			j++;
+			j = skip_quotes(line, j);
 		}
-		printf("Expanded value: %s\n", line);
-		return (line);
-	//}	
+		if (line[j] == '$'&& line[j + 1] && line[j + 1] != ' ' && line[j + 1] != '$')
+		{
+			expanded_line = expand_env(shell, &line, &j);
+			if (!expanded_line)
+			{
+				ft_putendl_fd("Failed to expand", 2);
+				free(line);
+				return(NULL);
+			}
+			free(line);
+			line = expanded_line;
+		}
+		j++;
+	}
+	printf("Expanded value: %s\n", line);
+	return (line);
 }

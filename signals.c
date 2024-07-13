@@ -33,15 +33,14 @@ static void hd_handler(int signal)
     if (signal == SIGINT)
     {
         write(1, "\n", 1);
+        printf("Exit status hd: %d\n", signal_shell->exit_status);
         if (signal_shell)
         {
             signal_shell->exit_status = 130;
-            signal_shell->hd_interrupt = 1;
+            printf("Exit status afret change hd: %d\n", signal_shell->exit_status);
+            //signal_shell->hd_interrupt = 1;
         }
-
-        // rl_replace_line("", 0);
-        // rl_redisplay();
-        //exit(1);
+        exit(1);
     }
 }
 

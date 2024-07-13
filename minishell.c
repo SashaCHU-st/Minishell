@@ -13,7 +13,6 @@
 #include "minishell.h"
 #include "builtins.h"
 
-
 char	*read_line(t_data *line)
 {
 	char	*input;
@@ -29,6 +28,7 @@ char	*read_line(t_data *line)
 	printf("input: %s\n", input);
 	return (input);
 }
+
 void running_commands(t_data *shell, int i, t_pipex *pipex )
 {
 	if (if_it_is_builtins(&shell->cmds[i]) == 1 && shell->cmds_count == 1)
@@ -45,6 +45,7 @@ void running_commands(t_data *shell, int i, t_pipex *pipex )
 		closing(shell);
 	}
 }
+
 void	shell_loop(t_data *shell)
 {
 	char	*line;
@@ -57,14 +58,13 @@ void	shell_loop(t_data *shell)
 		i =0;
 		if (input_validation_pipes(shell, line) == 0 && input_validation_redir(shell, line) == 0 \
 					&& check_input_quotes_pipe(shell,line) == 0)
-
-	{
+		{
 			line = change_to_space(line);
 			split_line(line, shell);
 			running_commands(shell, i, &pipex);
-		free(shell->cmds);
-	}
-	free(line);
+			free(shell->cmds);
+		}
+		free(line);
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:47:03 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/12 14:28:41 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/13 11:23:07 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,8 @@ char	*path_for_commands(t_pipex *pipex, char **child_command)
 	return (NULL);
 }
 
-char *mine_path(t_data *shell)
+char *mine_path(t_data *shell, int i)
 {
-	int i;
-	int j;
-
-	
 	if (shell->envp == NULL)
 	{
 		ft_putstr_fd("Environment variables not found.\n", 2);
@@ -60,18 +56,11 @@ char *mine_path(t_data *shell)
 		shell->envp++;
 	if (*shell->envp == NULL)
 	{
-	i = 0;
-		while (i < shell->cmds_count)
+		if (i < shell->cmds_count && shell->cmds[i].word_tok[0][0] != '/')
 		{
 			ft_putstr_fd("bash: ",2);
-			j = 0;
-			while (j < shell->cmds[i].w_count)
-			{
-				ft_putstr_fd(shell->cmds[i].word_tok[j],2);
-				ft_putstr_fd(": No such file or directory\n", 2);
-				j++;
-			}
-			i++;
+			ft_putstr_fd(shell->cmds[i].word_tok[0],2);
+			ft_putstr_fd(": No such file or directory\n", 2);
 		}
 		return (NULL) ;
 	}

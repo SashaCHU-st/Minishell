@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 10:08:33 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/12 19:25:59 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/13 16:10:49 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,17 @@ void	child(t_pipex pipex, t_data *shell, int k)
 		close(shell->pipe[i][1]);
 		i++;
 	}
-	
 	check_filetype(&pipex,&shell->cmds[k]);
+	// if(if_it_is_builtins(&shell->cmds[k]) == 1 && ft_strncmp(shell->cmds[k].word_tok[0], "echo", 5) == 0)
+	// {
+	// 	dprintf(2,"I am HERE %d \n", k);
+	// 	if (shell->cmds->filetype[i] == NONE)
+	// 		builtins(shell, &shell->cmds[i]);
+	// 	if (shell->cmds[i].number_of_redir > 0)
+	// 		redirection_with_builtins(shell, &pipex, i);
+	// }
+	///else if(!(if_it_is_builtins(&shell->cmds[k]) == 1 && ft_strncmp(shell->cmds[k].word_tok[0], "echo", 5) == 0))
+	checking_path(shell, &pipex, i); /// ISHET PATH i vozvrashaet tolko path
 	if(shell->cmds[k].word_tok[0][0] == '/')
 		final = &shell->cmds[k].word_tok[0][0];
 	else

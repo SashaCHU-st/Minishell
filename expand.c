@@ -151,7 +151,7 @@ char	*expand_var(t_data *shell, char *line)
 			}
 			j++;
 		}
-		printf("Expanded value: %s\n", line);
+		//printf("Expanded value: %s\n", line);
 		return (line);
 	//}	
 }

@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 13:43:44 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/12 19:19:47 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/13 11:53:15 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,9 +70,7 @@ void	ft_echo(t_data *shell, int number_of_inputs)
 		i = 3;
 	}
 	if (number_of_inputs <= 1)
-
 		ft_putstr_fd("there is nothing to print, put some arg",1);
-
 	else
 	{
 		while (number_of_inputs >= i)

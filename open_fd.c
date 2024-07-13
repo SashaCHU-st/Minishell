@@ -6,14 +6,39 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:46:25 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/12 16:59:43 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/13 12:32:52 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "builtins.h"
 
+void redirection_in_builtin(t_data *shell, t_pipex *pipex, int i)
+{
+	shell->parent_in= dup(STDIN_FILENO);
+	check_filetype(pipex,&shell->cmds[i]);
+	if (dup2(shell->parent_in, STDIN_FILENO)  < 0)
+		dprintf(2, "dup2 \n");
+	close(shell->parent_out);
+}
+void redirection_out_builtin(t_data *shell, t_pipex *pipex, int i)
+{
+	shell->parent_out= dup(STDOUT_FILENO);
+	open_fd_out(pipex, shell->cmds->filetype[i],*shell->cmds->filenames);
+	check_filetype(pipex,&shell->cmds[i]);
+	builtins(shell, &shell->cmds[i]);
+	if (dup2(shell->parent_out, STDOUT_FILENO)  < 0)
+		dprintf(2, "dup2 \n");
+	close(shell->parent_out);
+}
 
+void redirection_with_builtins(t_data *shell, t_pipex *pipex, int i)
+{
+	if(shell->cmds->filetype[i] == OUT)
+		redirection_out_builtin(shell, pipex, i);
+	if(shell->cmds->filetype[i] == IN)
+		redirection_in_builtin(shell, pipex, i);
+}
 void	check_filetype(t_pipex *pipex, t_cmd *cmd)
 {
 	int i = 0;

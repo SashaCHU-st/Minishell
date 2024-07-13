@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 13:39:27 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/04 16:32:12 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/13 16:25:15 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,25 +56,40 @@ void	search_old_current(t_data *data)
 			break ;
 	}
 }
-
-void	cd_without_arg(t_data *data, char *original)
+void checking_home(int found_home, t_data *data, int home, char *original)
 {
-	int	home;
-
+	if (found_home)
+	{
+		if (chdir(data->envp[home] + 5) == 0)
+		{
+			search_old_current(data);
+			update_pwd(data, original);
+		}
+		else
+			ft_putstr_fd("bash: cd: HOME not set\n",1);
+	}
+	else
+		ft_putstr_fd("bash: cd: HOME not set\n",1);
+}
+void cd_without_arg(t_data *data, char *original)
+{
+	int home;
+	int found_home;
+	
 	home = 0;
-	while (data->envp[home++] != NULL)
+	found_home = 0;
+	while (data->envp[home] != NULL)
 	{
 		if (ft_strncmp(data->envp[home], "HOME=", 5) == 0)
-			break ;
+		{
+			found_home = 1;
+			break;
+		}
+		home++;
 	}
-	if (chdir(data->envp[home] + 5) == 0)////if there is HOME
-	{
-		search_old_current(data);
-		update_pwd(data, original);
-	}
-	else if (chdir(data->envp[home] + 5) != 0)//if HOME unset
-		printf("bash: cd: HOME not set\n");
+	checking_home(found_home, data, home, original);
 }
+
 
 void	cd_with_one_arg(t_data *shell, char *original)
 {
@@ -90,14 +105,13 @@ void	cd_with_one_arg(t_data *shell, char *original)
 void	ft_cd(t_data *data, int number_of_inputs)
 {
 	char	*original;
-
 	data->pwd_index = 0;
 	data->oldpwd_index = 0;
 	original = getcwd(data->pwd, sizeof(data->pwd));
-	if (number_of_inputs <  2)// in case after cd there is no arguments -> goes to HOME	
+	if (number_of_inputs <  2)
 		cd_without_arg(data, original);
 	else if (number_of_inputs == 2)// goes to folder
 		cd_with_one_arg(data, original);
 	else if (number_of_inputs > 2)
-		printf("bash: cd: too many arguments\n");
+		ft_putstr_fd("bash: cd: too many arguments\n",1);
 }

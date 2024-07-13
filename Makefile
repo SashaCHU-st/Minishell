@@ -27,6 +27,7 @@ SRCS = minishell.c \
 		exit.c \
 		parse_line.c \
 		initialize.c \
+		builtins.c \
 			
 OBJS = $(SRCS:.c=.o)
 

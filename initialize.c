@@ -40,5 +40,4 @@ void init_t_data(t_data *data)
 	data->exit_status = 0;
 	data->hd_interrupt = 0;
 	data->pipe_count = 0;
-	data->len = 0;
 }

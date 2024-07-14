@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:52:26 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/13 16:34:23 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/14 19:24:04 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,19 +32,25 @@ char	*read_line(t_data *line)
 
 void running_commands(t_data *shell, int i, t_pipex *pipex )
 {
-	if (if_it_is_builtins(&shell->cmds[i]) == 1 && shell->cmds_count == 1)
+	if ((shell->cmds->filetype[i] == HERE || shell->cmds->filetype[i] == OUT || shell->cmds->filetype[i] == IN \
+				|| shell->cmds->filetype[i] == APPEND) && shell->cmds->word_tok[0] == NULL)
+		return ;
+	else if ( shell->cmds_count == 1 && if_it_is_builtins(&shell->cmds[i]) == 1 )
 	{
 		if (shell->cmds->filetype[i] == NONE)
 			builtins(shell, &shell->cmds[i]);
 		if (shell->cmds[i].number_of_redir > 0)
 			redirection_with_builtins(shell, pipex, i);
+		i++;//?
+
 	}
-	else 
+	else
 	{
 		piping(shell);
 		forking(shell, *pipex);
 		closing(shell);
 	}
+	return ;
 }
 
 void	shell_loop(t_data *shell)
@@ -55,6 +61,7 @@ void	shell_loop(t_data *shell)
 
 	while (1)
 	{
+
 		line = read_line(shell);
 		i = 0;
 		if (line[i] == '\0' || line[i] == ' ' || line[i] == '\t' )
@@ -62,6 +69,8 @@ void	shell_loop(t_data *shell)
 			free(line);
 			continue ;
 		}
+		i =0;
+		line = read_line(shell);
 		if (input_validation_pipes(shell, line) == 0 && input_validation_redir(shell, line) == 0 \
 					&& check_input_quotes_pipe(shell,line) == 0)
 		{

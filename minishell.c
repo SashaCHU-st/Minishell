@@ -41,11 +41,7 @@ void running_commands(t_data *shell, int i, t_pipex *pipex )
 			builtins(shell, &shell->cmds[i]);
 		if (shell->cmds[i].number_of_redir > 0)
 			redirection_with_builtins(shell, pipex, i);
-<<<<<<< HEAD
 		i++;
-=======
-		i++;//?
->>>>>>> 12ccbb2387068a8fdddc1690ab5b999d2af0221f
 	}
 	else
 	{
@@ -64,19 +60,8 @@ void	shell_loop(t_data *shell)
 
 	while (1)
 	{
-<<<<<<< HEAD
 		i =0;
 		line = read_line(shell);
-=======
-
-		line = read_line(shell);
-		i = 0;
-		if (line[i] == '\0' || line[i] == ' ' || line[i] == '\t' )
-		{
-			free(line);
-			continue ;
-		}
->>>>>>> 12ccbb2387068a8fdddc1690ab5b999d2af0221f
 		if (input_validation_pipes(shell, line) == 0 && input_validation_redir(shell, line) == 0 \
 					&& check_input_quotes_pipe(shell,line) == 0)
 		{
@@ -86,13 +71,7 @@ void	shell_loop(t_data *shell)
 			running_commands(shell, i, &pipex);
 			free(shell->cmds);
 		}
-<<<<<<< HEAD
 	free(line);
-=======
-		free(line);
-		get_signal(shell, DEFAULT);
-
->>>>>>> 12ccbb2387068a8fdddc1690ab5b999d2af0221f
 	}
 }
 

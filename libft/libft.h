@@ -18,7 +18,6 @@
 # include <limits.h>
 # include <stdint.h>
 
-
 typedef struct s_list
 {
 	void			*content;

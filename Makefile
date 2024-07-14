@@ -1,6 +1,5 @@
 NAME = minishell
-FLAGS = -Wall -Wextra -Werror
-# -g -fsanitize=address
+FLAGS = -Wall -Wextra -Werror 
 LIBFT_DIR = ./libft
 LIBFT_LIB = $(LIBFT_DIR)/libft.a
 
@@ -10,8 +9,26 @@ SRCS = minishell.c \
 		input_validation.c \
 		split_func.c \
 		command.c \
-		builtins_util.c 
-
+		builtins_util.c \
+		export.c \
+		cd.c \
+		export_utils.c \
+		heredoc.c \
+		space_manipulation.c \
+		quotes_handle.c \
+		pipex.c \
+		open_fd.c \
+		free.c \
+		expand.c \
+		redirect.c \
+		utils_functions.c \
+		piping.c \
+		signals.c \
+		exit.c \
+		parse_line.c \
+		initialize.c \
+		builtins.c \
+		cd_utils.c \
 			
 OBJS = $(SRCS:.c=.o)
 
@@ -22,7 +39,7 @@ $(NAME): $(OBJS) $(LIBFT_LIB)
 
 $(LIBFT_LIB): $(LIBFT_DIR)
 	make -C $(LIBFT_DIR)
-
+ 
 %.o: %.c
 	cc $(FLAGS) -c $< -o $@
 

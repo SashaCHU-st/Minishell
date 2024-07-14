@@ -1,193 +1,105 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   command.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/19 13:43:44 by aheinane          #+#    #+#             */
+/*   Updated: 2024/07/14 18:32:19 by aheinane         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "builtins.h"
 #include "minishell.h"
-void ft_pwd()
+
+void	ft_pwd(void)
 {
-	char wd[1000];
-	printf("%s\n",getcwd(wd, sizeof(wd)));
-}
-void ft_cd(t_built *data, int number_of_inputs)
-{
-	if(number_of_inputs <  2)// in case after echo there is no arguments
-			printf(" ");
-		else if(number_of_inputs == 2)
-		{
-			printf("%s\n",getcwd(data->pwd, sizeof(data->pwd)));
-			if (chdir(data->inputs[1]) != 0)
-            {
-                printf("ERROOR");
-            }
-			printf("%s\n",getcwd(data->pwd, sizeof(data->pwd)));
-		} 
+	printf("%s\n", getcwd(NULL, 0));
 }
 
-int is_var_in_envp(char *var, char **envp)
+void	if_quotes(char *str)
 {
-    int i = 0;
-    int len = strchr(var, '=') - var;
-    while (envp[i] != NULL)
-    {
-        if (strncmp(envp[i], var, len) == 0 && envp[i][len] == '=')
-        {
-            return i;
-        }
-        i++;
-    }
-    return -1;
-}
+	char	*write_ptr;
+	char	quote_char;
+	char	*read_ptr;
 
-void ft_export(t_built *data, int number_of_inputs)
-{
-    char *added_var;
-    int j = 1;
-    int i = 0;
-
-    printf("Number of inputs: %d\n", number_of_inputs);
-
-    if (number_of_inputs > 1)
-    {
-        while (j < number_of_inputs)
-        {
-            int var_index = is_var_in_envp(data->inputs[j], data->envp);
-            if (var_index >= 0) // Variable exists, update it
-            {
-                free(data->envp[var_index]);
-                added_var = strdup(data->inputs[j]);
-                if (added_var != NULL)
-                {
-                    data->envp[var_index] = added_var;
-                    printf("declare -x %s\n", added_var);
-                }
-            }
-            else // Variable does not exist, add it
-            {
-                // Count the number of current environment variables
-                while (data->envp[i] != NULL)
-                    i++;
-
-                // Allocate memory for the new environment array
-                char **new_envp = malloc((i + 2) * sizeof(char *));
-                if (new_envp == NULL)
-                {
-                    perror("malloc");
-                    exit(EXIT_FAILURE);
-                }
-
-                // Copy the old environment variables to the new array
-                for (int k = 0; k < i; k++)
-                {
-                    new_envp[k] = data->envp[k];
-                }
-
-                // Add the new variable
-                added_var = strdup(data->inputs[j]);
-                if (added_var != NULL)
-                {
-                    new_envp[i] = added_var;
-                    new_envp[i + 1] = NULL;
-
-                    // Free the old environment array if it was allocated
-                    free(data->envp);
-                    data->envp = new_envp;
-
-                    printf("declare -x %s\n", added_var);
-                }
-                else
-                {
-                    free(new_envp);
-                }
-            }
-            j++;
-        }
-    }
-    else if (number_of_inputs == 1)
-    {
-        printf("ONLY EXPORT\n");
-        i = 0;
-        while (data->envp[i] != NULL)
-        {
-            char *kuku = strchr(data->envp[i], '=');
-            if (kuku != NULL)
-            {
-                printf("declare -x %.*s=\"%s\"\n", (int)(kuku - data->envp[i]), data->envp[i], kuku + 1);
-            }
-            else
-            {
-                printf("declare -x %s\n", data->envp[i]);
-            }
-            i++;
-        }
-    }
-}
-
-
-
-void ft_unset(t_built *data, int number_of_inputs)
-{
-	int k = 1;
-		//int count = number_of_inputs;
-		if(number_of_inputs == 1)
-			printf(" ");
-		if(number_of_inputs >= 2)
-		{
-			//printf("ENVP\n");
-			//int i = 0;
-			//while (data->envp[i] != NULL && data->envp[i + 1] != NULL)
-			//	printf("%s\n", data->envp[i++]);
-			//while (--count > 1)
-			//	unset_var(data, data->inputs[k]);
-			while(k < number_of_inputs)
-			//{
-				unset_var(data, data->inputs[k++]);
-			//	k++;
-			//}
-			printf("\n");printf("\n");printf("\n");// DELETE THIS 
-			printf("UPDATED\n");
-			int i = 0;
-			while (data->envp[i] != NULL && data->envp[i + 1] != NULL)
-				printf("%s\n", data->envp[i++]);
-		}
-}
-
-void ft_echo(t_built *data, int number_of_inputs)
-{
-	int flag =0;
-	int i = 2;
-	if(number_of_inputs > 2 && ft_strncmp(data->inputs[1], "-n", 3) == 0)// in case there is -n as 3d arg
+	write_ptr = str;
+	read_ptr = str;
+	quote_char = 0;
+	while (*read_ptr)
 	{
-			flag = 1;
-			i = 3;
+		if (*read_ptr == '\'' || *read_ptr == '\"')
+		{
+			if (quote_char == 0)
+				quote_char = *read_ptr;
+			else if (quote_char == *read_ptr)
+				quote_char = 0;
+			read_ptr++;
+		}
+		else
+			*write_ptr++ = *read_ptr++;
 	}
-	if(number_of_inputs <=1)// in case after echo there is no arguments
-		printf("there is nothing to print, put some arg"); 
+	*write_ptr = '\0';
+}
+
+void	ft_unset(t_data *shell, int number_of_inputs)
+{
+	int	k;
+
+	k = 1;
+	if (number_of_inputs == 1)
+		ft_putstr_fd("", 1);
+	if (number_of_inputs >= 2)
+	{
+		while (k < number_of_inputs)
+			unset_var(shell, shell->cmds->word_tok[k++]);
+	}
+}
+
+void	ft_echo(t_data *shell, int number_of_inputs)
+{
+	int	flag;
+	int	i;
+
+	i = 2;
+	flag = 0;
+	if (number_of_inputs > 2 && ft_strncmp(shell->cmds->word_tok[1], "-n", 3) == 0)
+	{
+		flag = 1;
+		i = 3;
+	}
+	if (number_of_inputs <= 1)
+		ft_putstr_fd("there is nothing to print, put some arg", 1);
 	else
 	{
-		while(number_of_inputs >= i)
+		while (number_of_inputs >= i)
 		{
-			printf("%s", data->inputs[i-1]);
-			if(number_of_inputs - 1 > i)
-				printf(" ");
+			ft_putstr_fd(shell->cmds->word_tok[i - 1], 1);
+			if (number_of_inputs > i)
+				ft_putstr_fd("", 1);
 			i++;
 		}
-		if(!flag)
-			printf("\n");
+		if (!flag)
+			ft_putstr_fd("\n", 1);
 	}
 }
 
-void ft_env(t_built *data)
+void	ft_env(t_data *data)
 {	
-	int i = 0;
-	//char *env = data->envp[i];
+	int		i;
+	char	*kuku;
+
+	i = 0;
 	while (data->envp[i] != NULL)
 	{
-		char  *kuku = ft_strchr(data->envp[i], '=');
-		if(kuku != NULL)
+		kuku = ft_strchr(data->envp[i], '=');
+		if (kuku != NULL)
 		{
 			printf("%s\n", data->envp[i]);
 			i++;
 		}
 		else
 			i++;
-		
-
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 20:25:40 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/06/06 15:59:23 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/06/26 10:45:35 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,33 +42,6 @@ static unsigned int	num_of_str(const char *s, char c)
 	return (count);
 }
 
-// static int	f_free_array(char **r)
-// {
-// 	char	**ptr;
-
-// 	if (!r)
-// 		return (1);
-// 	ptr = r;
-// 	while (*ptr)
-// 	{
-// 		free(*ptr);
-// 		ptr++;
-// 	}
-// 	free(r);
-// 	return (1);
-// }
-
-char	*f_free_array(char **str)
-{
-	while (*str)
-	{
-		free(*str);
-		*str = NULL;
-		str++;
-	}
-	free(str);
-	return (NULL);
-}
 static unsigned int	get_substring_length(const char *s, \
 			unsigned int start, char c)
 {
@@ -90,14 +63,12 @@ static char	**allocate_array(unsigned int nb)
 	return (array);
 }
 
-static char	**f_fill_array(char const *s, char c, unsigned int nb)
+static char	**split_array(unsigned int nb, char c, char const *s, char **array)
 {
-	char			**array;
-	unsigned int	start;
-	unsigned int	i;
-	unsigned int	len;
+	unsigned int start;
+	int len;
+	unsigned int i;
 
-	array = allocate_array(nb);
 	start = 0;
 	i = 0;
 	while (i < nb)
@@ -107,7 +78,10 @@ static char	**f_fill_array(char const *s, char c, unsigned int nb)
 			len = get_substring_length(s, start, c);
 			array[i] = ft_substr(s, start, len);
 			if (!array[i])
+			{
 				f_free_array(array);
+				return (NULL);
+			}
 			i++;
 			start += len;
 		}
@@ -116,6 +90,18 @@ static char	**f_fill_array(char const *s, char c, unsigned int nb)
 	}
 	array[i] = NULL;
 	return (array);
+}
+
+static char	**f_fill_array(char const *s, char c, unsigned int nb)
+{
+	char			**array;
+	char	**new_array;
+
+	array = allocate_array(nb);
+	if (!array)
+		return (NULL);
+	new_array = split_array(nb, c, s, array);
+	return (new_array);
 }
 
 char	**do_split(char const *s, char c)

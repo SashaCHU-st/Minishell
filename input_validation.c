@@ -6,40 +6,14 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 20:18:08 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/06/06 15:59:17 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/06/26 10:42:18 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "builtins.h"
 
-bool	has_unclosed_quotes(char *line)
-{
-	int	count;
-	int	i;
-
-	i = 0;
-	count = 0;
-	while (line[i])
-	{
-		if (line[i] == '\'' || line[i] == '\"')
-			count++;
-		i++;
-	}
-	if (count % 2 == 0)
-		return (false);
-	return (true);
-}
-
-bool	check_space(char ch)
-{
-	if (ch == ' ' || ch == '\t' || ch == '\n' || ch == '\r' || \
-		ch == '\f' || ch == '\v')
-		return (true);
-	return (false);
-}
-
-void	input_validation_pipes(char *input)
+int	input_validation_pipes(t_data *shell, char *input)
 {
 	int	i;
 
@@ -50,23 +24,26 @@ void	input_validation_pipes(char *input)
 		{
 			if (input[i + 1] == '|')
 			{
-				perror("Syntax error: double pipes");
-				exit(1);
+				ft_putendl_fd("Syntax error: multiple pipes", 2);
+				shell->exit_status = 2;
+				return (1);
 			}
 			i++;
 			while (check_space(input[i]))
 				i++;
 			if (input[i] == '|' || input[i] == '\0')
 			{
-				perror("Syntax error: no input after pipe");
-				exit(1);
+				ft_putendl_fd("Syntax error: no input after pipe or unexpected token", 2);
+				shell->exit_status = 2;
+				return (1);
 			}
 		}
 		i++;
 	}
+	return (0);
 }
 
-void	input_validation_redir(char *input)
+int	input_validation_redir(t_data *shell, char *input)
 {
 	int	i;
 
@@ -82,19 +59,28 @@ void	input_validation_redir(char *input)
 			else
 				i++;
 			while (check_space(input[i]))
-				i++;
-			if (input[i] == '|' || input[i] == '\0')
+				i++;	
+			if (input[i] == '|' || input[i] == '\0' || input[i] == '<' || input[i] == '>')
 			{
-				perror("Syntax error: no input after redirection");
-				exit(1);
+				ft_putendl_fd("Syntax error: no input after redirection or unexpected token", 2);
+				shell->exit_status = 2;
+				return (1);
+
 			}
 		}
 		i++;
 	}
+	return (0);
 }
-void	error_message(char *msg)
+
+void	error_message(t_data *shell, char *msg, int status)
 {
 	//ft_putstr_fd("Error\n", 2);
-	ft_putendl_fd(msg, 2);
-	exit (EXIT_FAILURE);
+	//ft_putendl_fd(msg, 2);
+	if (shell)
+		free_all(shell);
+	perror(msg);
+	shell->exit_status = status;
+	exit (status);
 }
+

@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 10:32:47 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/13 12:21:34 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/14 15:09:19 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ typedef struct s_data
 	int *pid;
 	int	exit_status;
   	int		hd_interrupt;
+	char *path;
 
 	
 	// t_build * shell;

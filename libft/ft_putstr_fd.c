@@ -22,10 +22,9 @@
 void	ft_putstr_fd(char *s, int fd)
 {
 	int	i;
-	
+
 	i = ft_strlen(s);
 	write (fd, s, i);
-	/*
 	i = 0;
 	while (s[i] != '\0')
 	{

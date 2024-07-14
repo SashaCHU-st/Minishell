@@ -74,5 +74,7 @@ void	f_free_cmds(t_cmd *cmds, int cmds_count);
 void	free_t_data(t_data *shell);
 void	ft_exit(t_data *shell, char **args);
 void	f_free_array(char **r);
+void	check_permissions(t_data *shell);
+
 
 # endif

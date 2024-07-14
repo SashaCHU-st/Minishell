@@ -1,0 +1,118 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   signals.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: epolkhov <epolkhov@student.42.fr>          #+#  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024-07-05 15:25:17 by epolkhov          #+#    #+#             */
+/*   Updated: 2024-07-05 15:25:17 by epolkhov         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
+#include <signal.h>
+
+static t_data *signal_shell = NULL;
+
+static void signal_handler(int signal)
+{
+    if (signal == SIGINT) //cntr-C
+    {
+        
+    //    // write(1, "^C\n", 3); //?
+        write(1, "\n", 1);
+        
+        rl_on_new_line();
+        rl_replace_line("", 0);
+        rl_redisplay();
+        if (signal_shell)
+        {
+            signal_shell->hd_interrupt = 1; // Set the interrupt flag
+        }
+        //write(1, "\r", 1); // Carriage return to start of line
+        //rl_replace_line("", 0); // Clear the input buffer
+        //rl_on_new_line(); // Move the cursor to the new line
+        //write(1, "sashel -$ ^C\n", 13); // Print the prompt and ^C
+        //rl_redisplay(); // Redisplay the prompt
+    }
+}
+
+static void hd_handler(int signal)
+{
+    if (signal == SIGINT)
+    {
+        //write(1, "\n", 1);
+        write(1, ">^C\n", 4);
+        printf("Exit status hd: %d\n", signal_shell->exit_status);
+        if (signal_shell)
+        {
+            signal_shell->exit_status = 130;
+            printf("Exit status afret change hd: %d\n", signal_shell->exit_status);
+            signal_shell->hd_interrupt = 1;
+        }
+        exit(1);
+    }
+}
+
+static void toggle_caret(int is_on)
+{
+    struct termios new_attr;
+
+    if (tcgetattr(STDIN_FILENO, &new_attr) == -1)
+    {
+        perror("tcgetattr in signals failed");
+        exit(1);
+    }
+    if (!is_on)
+        new_attr.c_lflag &= ~ECHOCTL;
+    else
+        new_attr.c_lflag |= ECHOCTL;
+    if (tcsetattr(STDIN_FILENO, TCSANOW, &new_attr) == -1)
+    {
+        perror ("tcsetattr in signals failed");
+        exit (1);
+    }
+}
+
+static void	set_signal_handler(int signum, void(*handler)(int))
+{
+	struct	sigaction sa;
+
+    sa.sa_handler = handler;
+    sigemptyset(&sa.sa_mask);
+    sa.sa_flags = 0;///SA_RESTART;
+    if (sigaction(signum, &sa, NULL) == -1)
+    {
+        perror("Sigaction failed");
+        exit (1);
+    }
+}
+
+void    get_signal(t_data *shell, t_signal mode)
+{
+    signal_shell = shell;
+
+    if (mode == DEFAULT)
+    {
+        toggle_caret(1);
+        set_signal_handler(SIGQUIT, SIG_DFL);
+        set_signal_handler(SIGINT, SIG_DFL);
+    }
+    else if (mode == HANDLER)
+    {
+        toggle_caret(0);
+        set_signal_handler(SIGQUIT, SIG_IGN);
+        set_signal_handler(SIGINT, signal_handler);
+    }
+    else if (mode == HEREDOC)
+    {
+        set_signal_handler(SIGQUIT, SIG_IGN);
+        set_signal_handler(SIGINT, hd_handler);
+    }
+    else if (mode == NO_SIGNALS)
+    {
+        set_signal_handler(SIGQUIT, SIG_IGN);
+        set_signal_handler(SIGINT, SIG_IGN);
+    }
+}

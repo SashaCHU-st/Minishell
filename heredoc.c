@@ -83,9 +83,10 @@ void hd_execute(t_data *tokens)
     {
 		process_hd(tokens, tokens->tempfile_hd, tokens->hd_delimeter);
 		free(tokens->hd_delimeter);
-		//exit(0); // Child process exits after processing
+		exit(0); // Child process exits after processing
 	}
-	waitpid(pid, &tokens->exit_status, 0);
+	else 
+		waitpid(pid, &tokens->exit_status, 0);
 	free(tokens->hd_delimeter);
 	tokens->hd_delimeter = NULL;
 	get_signal(tokens, HANDLER);

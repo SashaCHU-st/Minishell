@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 16:34:09 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/14 18:25:44 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/14 19:40:49 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ int	if_it_is_builtins( t_cmd *cmd)
 
 void	builtins(t_data *data, t_cmd *cmd)
 {
+	dprintf(2, "JJ\n");
 	if (ft_strncmp(cmd->word_tok[0], "pwd", 4) == 0)
 		ft_pwd();
 	else if (ft_strncmp(cmd->word_tok[0], "echo", 5) == 0)

@@ -76,4 +76,5 @@ void	ft_exit(t_data *shell, char **args);
 void	f_free_array(char **r);
 void	check_permissions(t_data *shell);
 
+
 # endif

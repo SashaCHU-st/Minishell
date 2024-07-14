@@ -42,7 +42,6 @@ void running_commands(t_data *shell, int i, t_pipex *pipex )
 		if (shell->cmds[i].number_of_redir > 0)
 			redirection_with_builtins(shell, pipex, i);
 		i++;//?
-
 	}
 	else
 	{
@@ -69,8 +68,6 @@ void	shell_loop(t_data *shell)
 			free(line);
 			continue ;
 		}
-		i =0;
-		line = read_line(shell);
 		if (input_validation_pipes(shell, line) == 0 && input_validation_redir(shell, line) == 0 \
 					&& check_input_quotes_pipe(shell,line) == 0)
 		{
@@ -82,6 +79,7 @@ void	shell_loop(t_data *shell)
 		}
 		free(line);
 		get_signal(shell, DEFAULT);
+
 	}
 }
 

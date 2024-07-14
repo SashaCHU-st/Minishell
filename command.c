@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 13:43:44 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/13 11:53:15 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/14 18:32:19 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	ft_unset(t_data *shell, int number_of_inputs)
 
 	k = 1;
 	if (number_of_inputs == 1)
-		printf(" ");
+		ft_putstr_fd("", 1);
 	if (number_of_inputs >= 2)
 	{
 		while (k < number_of_inputs)
@@ -70,14 +70,14 @@ void	ft_echo(t_data *shell, int number_of_inputs)
 		i = 3;
 	}
 	if (number_of_inputs <= 1)
-		ft_putstr_fd("there is nothing to print, put some arg",1);
+		ft_putstr_fd("there is nothing to print, put some arg", 1);
 	else
 	{
 		while (number_of_inputs >= i)
 		{
-			ft_putstr_fd( shell->cmds->word_tok[i - 1],1);
+			ft_putstr_fd(shell->cmds->word_tok[i - 1], 1);
 			if (number_of_inputs > i)
-				ft_putstr_fd(" ", 1);
+				ft_putstr_fd("", 1);
 			i++;
 		}
 		if (!flag)

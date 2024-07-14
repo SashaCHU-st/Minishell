@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_line.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: epolkhov <epolkhov@student.42.fr>          #+#  +:+       +#+        */
+/*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024-07-11 11:12:53 by epolkhov          #+#    #+#             */
-/*   Updated: 2024-07-11 11:12:53 by epolkhov         ###   ########.fr       */
+/*   Created: 2024/07/11 11:12:53 by epolkhov          #+#    #+#             */
+/*   Updated: 2024/07/13 17:36:22 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,10 +82,10 @@ void	split_line(char *line, t_data *shell)
 	while (++i < shell->cmds_count)
 	{
 		shell->cmds[i] = split_into_wtok(shell->pipe_tok[i], shell->cmds[i]);
-		if (shell->cmds[i].word_tok[0] != NULL)
-		{
-			if (ft_strncmp (shell->cmds[i].word_tok[0], "exit", 5) == 0)
-				ft_exit(shell, shell->cmds[i].word_tok);
-		}
+		// if (shell->cmds[i].word_tok[0] != NULL)
+		// {
+		// 	if (ft_strncmp (shell->cmds[i].word_tok[0], "exit", 5) == 0)
+		// 		ft_exit(shell, shell->cmds[i].word_tok);
+		// }
 	}
 }

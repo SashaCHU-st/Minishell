@@ -14,12 +14,10 @@
 
 static void	cmd_and_redir(t_data *shell)
 {
-	int	i;
-
 	shell->cmds = (t_cmd *)malloc(sizeof(t_cmd) * shell->cmds_count);
 	if (!shell->cmds)
 		error_message(shell, "Failed to allocate memory", 1);
-	i = -1;
+	 int i = -1;
 	while (++i < shell->cmds_count)
 		init_cmd(&shell->cmds[i]);
 	make_redirs(shell);
@@ -28,16 +26,13 @@ static void	cmd_and_redir(t_data *shell)
 
 static void	cmd_and_expand(t_data *shell)
 {
-	int	i;
-	int	j;
-
-	i = -1;
+	int i = -1;
 	while (shell->pipe_tok[++i] && i < shell->cmds_count)
 		shell->pipe_tok[i] = expand_var(shell, shell->pipe_tok[i]);
 	i = 0;
-	while (i < shell->cmds_count)
+    while (i < shell->cmds_count)
 	{
-		j = 0;
+		int j = 0;
 		while (shell->cmds[i].filenames[j])
 		{
 			shell->cmds[i].filenames[j] = expand_var(shell, shell->cmds[i].filenames[j]);
@@ -51,6 +46,10 @@ static void	cmd_and_expand(t_data *shell)
 
 static t_cmd	split_into_wtok(char *pipe_token, t_cmd cmd)
 {
+
+	//t_cmd	cmd;
+
+	// cmd->word_tok = NULL;
 	//cmd.w_count = 0;/// CHECK LATER
 	change_space_to_31(pipe_token);
 	remove_quotes(pipe_token);
@@ -64,9 +63,9 @@ static t_cmd	split_into_wtok(char *pipe_token, t_cmd cmd)
 
 void	split_line(char *line, t_data *shell)
 {
-	int	i;
+	int		i;
 
-	shell->cmds_count = 0;// CHECK THIS
+	shell->cmds_count =0;// CHECK THIS
 	is_heredoc(line, shell);
 	shell->pipe_tok = do_split(line, 31);
 	if (!shell->pipe_tok)

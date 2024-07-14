@@ -60,21 +60,79 @@ void	process_hd(t_data *tokens, const char *file, char *delimeter)
 	fd = open(file, O_RDWR | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 		error_message(tokens, "Failed to open fd for heredoc", 1);
-	tokens->hd_interrupt = 0;
+	//tokens->hd_interrupt = 0;
 	hd_readline(line, tokens, delimeter, fd);
 	if (close(fd) == -1)
 		error_message(tokens, "Failed to close fd for heredoc", 1);
 	get_signal(tokens, DEFAULT);
-	if (tokens->hd_interrupt)
-		exit (1);
+	// if (tokens->hd_interrupt)
+	// 	exit (1);
 	exit (0);
+}
+
+void hd_execute(t_data *tokens)
+{
+	pid_t pid;
+
+	pid = fork();
+	
+	if (pid < 0)
+		error_message(tokens, "Failed to fork for heredoc processing", 1);
+	get_signal(tokens, NO_SIGNALS);
+	if (pid == 0)
+    {
+		process_hd(tokens, tokens->tempfile_hd, tokens->hd_delimeter);
+		free(tokens->hd_delimeter);
+		exit(0); // Child process exits after processing
+	}
+	else 
+		waitpid(pid, &tokens->exit_status, 0);
+	free(tokens->hd_delimeter);
+	tokens->hd_delimeter = NULL;
+	get_signal(tokens, HANDLER);
+}
+
+void hd_write_to_temp(t_data *tokens)
+{
+	tokens->tempfile_hd = hd_filename(tokens, tokens->hd_count);
+			printf("HD tempfile %s\n", tokens->tempfile_hd);
+			if (!tokens->tempfile_hd)
+				error_message(tokens, "Failed to assign filename for heredoc", 1);
+}
+
+void	r( char *line, int i, t_data *tokens, int in_quote)
+{
+	int	j;
+
+	if ((ft_strncmp(&line[i], "<<", 2) == 0) && !in_quote)
+		{	
+			tokens->hd_count++;//printf("%d\n", tokens->hd_count);
+			i = i + 2;
+			while (check_space(line[i]))
+				i++;
+			j = i;
+			while (line[j] && line[j] != 31 && !check_space(line[j]))
+			{
+				tokens->len++;
+				j++;
+			}
+			tokens->hd_delimeter = (char *)malloc(sizeof(char) * tokens->len + 1);
+			if (tokens->hd_delimeter == NULL)
+				error_message(tokens, "Memory allocation error\n", 1);
+			j = 0;
+			while (line[i] && line[i] != 31 && !check_space(line[i]))
+				tokens->hd_delimeter[j++] = line[i++];
+			tokens->hd_delimeter[j] = '\0';//printf("delimeter Heredoc:%s\n", tokens->hd_delimeter);
+			hd_write_to_temp(tokens);
+			hd_execute(tokens);
+		}
 }
 
 void    *is_heredoc(char *line, t_data *tokens)
 {
 	int		i;
-	int		j;
-	int		len;
+	//int		j;
+	//int		len;
 	int		in_quote;
 	
 	i = 0;
@@ -84,64 +142,66 @@ void    *is_heredoc(char *line, t_data *tokens)
 	{
 		if (line[i] == '\"' || line[i] == '\'')
         {
-            in_quote = !in_quote;
+             in_quote = !in_quote;
             i++;
             continue;
         }
-		if ((ft_strncmp(&line[i], "<<", 2) == 0) && !in_quote)
-		{	
-			tokens->hd_count++;
-			printf("%d\n", tokens->hd_count);
-			i = i + 2;
-			while (check_space(line[i]))
-				i++;
-			j = i;
-			len = 0;
-			while (line[j] && line[j] != 31 && !check_space(line[j]))
-			{
-				len++;
-				j++;
-			}
-			tokens->hd_delimeter = (char *)malloc(sizeof(char) * len + 1);
-			if (tokens->hd_delimeter == NULL)
-				error_message(tokens, "Memory allocation error\n", 1);
-			j = 0;
-			while (line[i] && line[i] != 31 && !check_space(line[i]))
-				tokens->hd_delimeter[j++] = line[i++];
-			tokens->hd_delimeter[j] = '\0';
-			printf("delimeter Heredoc:%s\n", tokens->hd_delimeter);
-			tokens->tempfile_hd = hd_filename(tokens, tokens->hd_count);
-			printf("HD tempfile %s\n", tokens->tempfile_hd);
-			if (!tokens->tempfile_hd)
-				error_message(tokens, "Failed to assign filename for heredoc", 1);
-			// process_hd(tokens, tokens->tempfile_hd, tokens->hd_delimeter);
-            // if ( tokens->hd_delimeter != NULL)
-			//     free(tokens->hd_delimeter);
-			pid_t pid = fork();
-            if (pid == 0)
-            {
-                process_hd(tokens, tokens->tempfile_hd, tokens->hd_delimeter);
-                free(tokens->hd_delimeter);
-                exit(0); // Child process exits after processing
-            }
-            else if (pid < 0)
-            {
-                error_message(tokens, "Failed to fork for heredoc processing", 1);
-            }
-            else
-            {
-                // Parent process should wait for the child process to complete
-                //int status;
-                waitpid(pid, &tokens->exit_status, 0);
-                free(tokens->hd_delimeter);
-                tokens->hd_delimeter = NULL;
-				if (tokens->hd_interrupt == 1)
-					break;
-            }
-		}
+		r(line, i, tokens, in_quote);
+		// if ((ft_strncmp(&line[i], "<<", 2) == 0) && !in_quote)
+		// {	
+		// 	tokens->hd_count++;
+		// 	printf("%d\n", tokens->hd_count);
+		// 	i = i + 2;
+		// 	while (check_space(line[i]))
+		// 		i++;
+		// 	j = i;
+		// 	len = 0;
+		// 	while (line[j] && line[j] != 31 && !check_space(line[j]))
+		// 	{
+		// 		len++;
+		// 		j++;
+		// 	}
+		// 	tokens->hd_delimeter = (char *)malloc(sizeof(char) * len + 1);
+		// 	if (tokens->hd_delimeter == NULL)
+		// 		error_message(tokens, "Memory allocation error\n", 1);
+		// 	j = 0;
+		// 	while (line[i] && line[i] != 31 && !check_space(line[i]))
+		// 		tokens->hd_delimeter[j++] = line[i++];
+		// 	tokens->hd_delimeter[j] = '\0';
+		// 	printf("delimeter Heredoc:%s\n", tokens->hd_delimeter);
+		// 	tokens->tempfile_hd = hd_filename(tokens, tokens->hd_count);
+		// 	printf("HD tempfile %s\n", tokens->tempfile_hd);
+		// 	if (!tokens->tempfile_hd)
+		// 		error_message(tokens, "Failed to assign filename for heredoc", 1);
+		// 	hd_execute(tokens);
+		// }
         if (line[i] != '\0')
 		    i++;
 	}
 	return (0);
 }
 
+// process_hd(tokens, tokens->tempfile_hd, tokens->hd_delimeter);
+            // if ( tokens->hd_delimeter != NULL)
+			//     free(tokens->hd_delimeter);
+			// pid_t pid = fork();
+            // if (pid == 0)
+            // {
+            //     process_hd(tokens, tokens->tempfile_hd, tokens->hd_delimeter);
+            //     free(tokens->hd_delimeter);
+            //     exit(0); // Child process exits after processing
+            // }
+            // else if (pid < 0)
+            // {
+            //     error_message(tokens, "Failed to fork for heredoc processing", 1);
+            // }
+            // else
+            // {
+            //     // Parent process should wait for the child process to complete
+            //     //int status;
+            //     waitpid(pid, &tokens->exit_status, 0);
+            //     free(tokens->hd_delimeter);
+            //     tokens->hd_delimeter = NULL;
+			// 	if (tokens->hd_interrupt == 1)
+			// 		break;
+            // }

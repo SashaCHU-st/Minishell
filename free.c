@@ -35,9 +35,9 @@ void	free_array(char **array)
 		return ;
 	while (array[i])
 	{
-			free(array[i]);
-			array[i] = NULL;
-			i++;
+		free(array[i]);
+		array[i] = NULL;
+		i++;
 	}
 	free (array);
 	//array = NULL;

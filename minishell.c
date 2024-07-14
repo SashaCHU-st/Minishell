@@ -6,19 +6,19 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:52:26 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/14 19:44:42 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/14 19:24:04 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "builtins.h"
 
+
 char	*read_line(t_data *line)
 {
 	char	*input;
 
 	(void)line;
-	//get_signal(line, HANDLER);
 	input = readline("sashel -$ ");
 	if (!input)
 	{
@@ -37,17 +37,14 @@ void running_commands(t_data *shell, int i, t_pipex *pipex )
 		return ;
 	else if ( shell->cmds_count == 1 && if_it_is_builtins(&shell->cmds[i]) == 1 )
 	{
-		dprintf(2,"HH\n");
 		if (shell->cmds->filetype[i] == NONE)
 			builtins(shell, &shell->cmds[i]);
 		if (shell->cmds[i].number_of_redir > 0)
 			redirection_with_builtins(shell, pipex, i);
-		//i++;//?
+		i++;
 	}
 	else
 	{
-		dprintf(2,"Hello\n");
-		
 		piping(shell);
 		forking(shell, *pipex);
 		closing(shell);
@@ -63,15 +60,8 @@ void	shell_loop(t_data *shell)
 
 	while (1)
 	{
-
+		i =0;
 		line = read_line(shell);
-		i = 0;
-		if (line[i] == '\0' || line[i] == ' ' || line[i] == '\t' )
-		{
-			free(line);
-			continue ;
-		}
-			dprintf(2,"Hello\n");
 		if (input_validation_pipes(shell, line) == 0 && input_validation_redir(shell, line) == 0 \
 					&& check_input_quotes_pipe(shell,line) == 0)
 		{
@@ -81,8 +71,7 @@ void	shell_loop(t_data *shell)
 			running_commands(shell, i, &pipex);
 			free(shell->cmds);
 		}
-		free(line);
-		//get_signal(shell, DEFAULT);
+	free(line);
 	}
 }
 

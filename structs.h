@@ -81,8 +81,8 @@ typedef struct s_data
 	int *pid;
 	int	exit_status;
   	int		hd_interrupt;
-	int len;
 	char *path;
+
 	
 	// t_build * shell;
 }	t_data;

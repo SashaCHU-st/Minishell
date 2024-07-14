@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 10:08:33 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/13 16:10:49 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/14 19:23:56 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ void	child(t_pipex pipex, t_data *shell, int k)
 {
 	char	*final = NULL;
 	int	i;
-
 	if (k != 0)
 		dup2(shell->pipe[k - 1][0], STDIN_FILENO);
 	if (k != shell->cmds_count - 1)
@@ -66,41 +65,46 @@ void	child(t_pipex pipex, t_data *shell, int k)
 		close(shell->pipe[i][1]);
 		i++;
 	}
-	check_permissions(shell);
-	check_filetype(&pipex,&shell->cmds[k]);
-	// if(if_it_is_builtins(&shell->cmds[k]) == 1 && ft_strncmp(shell->cmds[k].word_tok[0], "echo", 5) == 0)
-	// {
-	// 	dprintf(2,"I am HERE %d \n", k);
-	// 	if (shell->cmds->filetype[i] == NONE)
-	// 		builtins(shell, &shell->cmds[i]);
-	// 	if (shell->cmds[i].number_of_redir > 0)
-	// 		redirection_with_builtins(shell, &pipex, i);
-	// }
-	///else if(!(if_it_is_builtins(&shell->cmds[k]) == 1 && ft_strncmp(shell->cmds[k].word_tok[0], "echo", 5) == 0))
-	checking_path(shell, &pipex, i); /// ISHET PATH i vozvrashaet tolko path
-	if(shell->cmds[k].word_tok[0][0] == '/')
-		final = &shell->cmds[k].word_tok[0][0];
-	else
-		final = path_for_commands(&pipex, &shell->cmds[k].word_tok[0]);
-	if (!final)
+	checking_path(shell, &pipex, i); 
+	if(if_it_is_builtins(&shell->cmds[k]) == 1 && !shell->path)
 	{
-		free(pipex.com_sec_child);
-		free(final);
-		exit(1);
+		dprintf(2,"Executing built-in command: %s\n", shell->cmds[k].word_tok[0]);
+		//dprintf(2,"Executing built-in command: %c\n", shell->cmds[k].word_tok[0][1]);
+		builtins(shell, &shell->cmds[k]);
+		closing(shell);
+		exit(0);
 	}
-	if (execve(final, shell->cmds[k].word_tok, shell->envp) == -1)
+	else
 	{
-		printf("first  chiled execve brocken\n");
-		free_fun(&pipex);
+		check_permissions(shell);
+		check_filetype(&pipex,&shell->cmds[k]);
+		if(shell->cmds[k].word_tok[0][0] == '/')
+			final = &shell->cmds[k].word_tok[0][0];
+		else
+			final = path_for_commands(&pipex, &shell->cmds[k].word_tok[0]);
+		if (!final)
+		{
+			printf("%s: command not found\n", shell->cmds[k].word_tok[0]);
+			free(final);
+			exit(1);
 		}
+		if (execve(final, shell->cmds[k].word_tok, shell->envp) == -1)
+		{
+			dprintf(2,"first  chiled execve brocken\n");
+			free_fun(&pipex);
+		}
+	}	
 }
+
 void checking_path (t_data *shell, t_pipex *pipex, int i )
 {
-	char	*path;
-	path = mine_path(shell, i);
-	if(!path)
+	//char	*path;
+	shell->path = mine_path(shell, i);
+	if(!shell->path)
+	{
 		return ;
-	pipex->commands_path = ft_split(path, ':');
+	}
+	pipex->commands_path = ft_split(shell->path, ':');
 	if (!pipex->commands_path)
 	{
 		free_fun(pipex);
@@ -154,6 +158,7 @@ void forking(t_data *shell, t_pipex pipex)
 		}
 		else if (shell->pid[k] == 0)
 			child(pipex, shell, k);
+	//dprintf(2, "Hello2\n");
 		k++;
 	}
 }

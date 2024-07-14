@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 13:43:44 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/14 18:32:19 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/14 19:44:08 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	ft_echo(t_data *shell, int number_of_inputs)
 {
 	int	flag;
 	int	i;
-
+dprintf(2, "PP\n");
 	i = 2;
 	flag = 0;
 	if (number_of_inputs > 2 && ft_strncmp(shell->cmds->word_tok[1], "-n", 3) == 0)
@@ -75,6 +75,7 @@ void	ft_echo(t_data *shell, int number_of_inputs)
 	{
 		while (number_of_inputs >= i)
 		{
+	dprintf(2, "LL\n");
 			ft_putstr_fd(shell->cmds->word_tok[i - 1], 1);
 			if (number_of_inputs > i)
 				ft_putstr_fd("", 1);

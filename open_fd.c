@@ -85,9 +85,9 @@ void	open_fd_out(t_pipex *pipex,int filetype, char *filename)
 		{
 			perror("Error in outfile");
 			close(pipex->fd_in);
-			exit(EXIT_FAILURE);
+			//exit(EXIT_FAILURE);
 		}
-		if (dup2(pipex->fd_out, STDOUT_FILENO) < 0)
+		else if (dup2(pipex->fd_out, STDOUT_FILENO) < 0)
 				dprintf(2, "dup2 \n");
 		close(pipex->fd_out);
 	}
@@ -98,7 +98,7 @@ void	open_fd_out(t_pipex *pipex,int filetype, char *filename)
 		{
 			perror("Error in outfile");
 			close(pipex->fd_in);
-			exit(EXIT_FAILURE);
+			//exit(EXIT_FAILURE);
 		}
 		if (dup2(pipex->fd_out, STDOUT_FILENO) < 0)
 				dprintf(2, "dup2 \n");

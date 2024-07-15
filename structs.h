@@ -14,19 +14,19 @@
 #define STRUCT_H
 
 typedef enum {
-    DEFAULT,
-    HANDLER,
-    HEREDOC,
-    NO_SIGNALS
-} t_signal;
+	DEFAULT,
+	HANDLER,
+	HEREDOC,
+	NO_SIGNALS
+}	t_signal;
 
 typedef enum {
-    NONE,
-    IN,
-    OUT,
-    HERE,
-    APPEND
-} e_filetype;
+	NONE,
+	IN,
+	OUT,
+	HERE,
+	APPEND
+}	e_filetype;
 
 typedef struct s_pipex{
 	int		fd[2];
@@ -35,26 +35,19 @@ typedef struct s_pipex{
 	char	**commands_path;
 	char	**com_fir_child;
 	char	**com_sec_child;
-	int second_child;
-	    int stdin_backup;
-    int stdout_backup;
-	
-} t_pipex;
+	int		second_child;
+	int		stdin_backup;
+	int		stdout_backup;
+}	t_pipex;
 
 typedef struct s_cmd
 {
-	char	**word_tok; // word_tok[0] = cat; word_tok[1] = wc 
-	int		w_count; // skolko slov commande
-
-
-	char **filenames;// reditrect names
-	int *filetype; // tip file
-	int number_of_redir;
-
-	// int	redir_count;
+	char		**word_tok; // word_tok[0] = cat; word_tok[1] = wc 
+	int			w_count; // skolko slov commande
+	char		**filenames;// reditrect names
+	int			*filetype; // tip file
+	int			number_of_redir;
 	e_filetype	type;
-	//int flag_amb_redir;
-	
 }	t_cmd;
 
 typedef struct s_built t_built;
@@ -76,18 +69,12 @@ typedef struct s_data
 	int		redir_count;
 	int		pipe_count;
 	int		**pipe;
-	int parent_out;
-	int parent_in;
-	int *pid;
-	int	exit_status;
+	int		parent_out;
+	int		parent_in;
+	int		*pid;
+	int		exit_status;
   	int		hd_interrupt;
-	char *path;
-
-	
-	// t_build * shell;
+	char	*path;
 }	t_data;
-
-
-
 
 #endif

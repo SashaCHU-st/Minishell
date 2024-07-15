@@ -56,19 +56,24 @@ void	shell_loop(t_data *shell)
 {
 	char	*line;
 	t_pipex	pipex;
-	int i;
+	int		i;
 
 	while (1)
 	{
-		i =0;
+		i = 0;
 		line = read_line(shell);
+		if (line[i] == '\0' || line[i] == ' ' || line[i] == '\t' )
+		{
+			free(line);
+			continue ;
+		}
 		if (input_validation_pipes(shell, line) == 0 && input_validation_redir(shell, line) == 0 \
 					&& check_input_quotes_pipe(shell,line) == 0)
 		{
 			line = change_to_space(line);
 			split_line(line, shell);
-			check_permissions(shell);
-			running_commands(shell, i, &pipex);
+			if (!check_permissions(shell))
+				running_commands(shell, i, &pipex);
 			free(shell->cmds);
 		}
 	free(line);

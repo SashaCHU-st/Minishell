@@ -68,6 +68,6 @@ void	redirection_in_builtin(t_data *shell, t_pipex *pipex, int i);
 void	redirection_with_builtins(t_data *shell, t_pipex *pipex, int i);
 void	checking_home(int found_home, t_data *data, int home, char *original);
 void	running_commands(t_data *shell, int i, t_pipex *pipex );
-void	check_permissions(t_data *shell);
+int		check_permissions(t_data *shell);
 
 #endif

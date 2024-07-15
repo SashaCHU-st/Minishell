@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 13:43:44 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/15 11:13:26 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/15 11:32:33 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,11 +57,38 @@ void	ft_unset(t_data *shell, int number_of_inputs)
 	}
 }
 
-void	ft_echo(t_data *shell, int number_of_inputs)
-{
-	int	flag;
-	int	i;
+// void	ft_echo(t_data *shell, int number_of_inputs)
+// {
+// 	int	flag;
+// 	int	i;
 
+// 	i = 2;
+// 	flag = 0;
+// 	if (number_of_inputs > 2 && ft_strncmp(shell->cmds->word_tok[1], "-n", 3) == 0)
+// 	{
+// 		flag = 1;
+// 		i = 3;
+// 	}
+// 	if (number_of_inputs <= 1)
+// 		ft_putstr_fd("there is nothing to print, put some arg", 1);
+// 	else
+// 	{
+// 		while (number_of_inputs >= i)
+// 		{
+// 			ft_putstr_fd(shell->cmds->word_tok[i - 1], 1);
+// 			if (number_of_inputs > i)
+// 				ft_putstr_fd("", 1);
+// 			i++;
+// 		}
+// 		if (!flag)
+// 			ft_putstr_fd("\n", 1);
+// 	}
+// }
+
+void    ft_echo(t_data *shell, int number_of_inputs)
+{
+    int    flag;
+    int    i;
 	i = 2;
 	flag = 0;
 	if (number_of_inputs > 2 && ft_strncmp(shell->cmds->word_tok[1], "-n", 3) == 0)
@@ -83,8 +110,8 @@ void	ft_echo(t_data *shell, int number_of_inputs)
 		if (!flag)
 			ft_putstr_fd("\n", 1);
 	}
-}
 
+}
 void	ft_env(t_data *data)
 {	
 	int		i;

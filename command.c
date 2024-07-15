@@ -57,35 +57,7 @@ void	ft_unset(t_data *shell, int number_of_inputs)
 	}
 }
 
-// void	ft_echo(t_data *shell, int number_of_inputs)
-// {
-// 	int	flag;
-// 	int	i;
-
-// 	i = 2;
-// 	flag = 0;
-// 	if (number_of_inputs > 2 && ft_strncmp(shell->cmds->word_tok[1], "-n", 3) == 0)
-// 	{
-// 		flag = 1;
-// 		i = 3;
-// 	}
-// 	if (number_of_inputs <= 1)
-// 		ft_putstr_fd("there is nothing to print, put some arg", 1);
-// 	else
-// 	{
-// 		while (number_of_inputs >= i)
-// 		{
-// 			ft_putstr_fd(shell->cmds->word_tok[i - 1], 1);
-// 			if (number_of_inputs > i)
-// 				ft_putstr_fd("", 1);
-// 			i++;
-// 		}
-// 		if (!flag)
-// 			ft_putstr_fd("\n", 1);
-// 	}
-// }
-
-void    ft_echo(t_data *shell, int number_of_inputs)
+void	ft_echo(t_data *shell, int number_of_inputs)
 {
     int    flag;
     int    i;
@@ -112,6 +84,7 @@ void    ft_echo(t_data *shell, int number_of_inputs)
             ft_putstr_fd("\n", 1);
     }
 }
+
 void	ft_env(t_data *data)
 {	
 	int		i;

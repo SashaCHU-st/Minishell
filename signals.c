@@ -13,18 +13,15 @@
 #include "minishell.h"
 #include <signal.h>
 
-static t_data *signal_shell = NULL;
-
 static void signal_handler(int signal)
 {
-    if (signal == SIGINT) //cntr-C
+    if (signal == SIGINT)
     {
         write(1, "\n", 1);
-        //write(1, "^C\n", 3);
-        
         rl_on_new_line();
         rl_replace_line("", 0);
         rl_redisplay();
+        signal_status = 1;
     }
 }
 
@@ -33,14 +30,8 @@ static void hd_handler(int signal)
     if (signal == SIGINT)
     {
         write(1, "\n", 1);
-        printf("Exit status hd: %d\n", signal_shell->exit_status);
-        if (signal_shell)
-        {
-            signal_shell->exit_status = 130;
-            printf("Exit status afret change hd: %d\n", signal_shell->exit_status);
-            //signal_shell->hd_interrupt = 1;
-        }
-        exit(1);
+        close(STDIN_FILENO);
+        signal_status = 1;
     }
 }
 
@@ -80,7 +71,7 @@ static void	set_signal_handler(int signum, void(*handler)(int))
 
 void    get_signal(t_data *shell, t_signal mode)
 {
-    signal_shell = shell;
+    (void)shell;
 
     if (mode == DEFAULT)
     {

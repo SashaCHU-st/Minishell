@@ -13,90 +13,6 @@
 #include "minishell.h"
 #include "builtins.h"
 
-int	check_permissions(t_data *shell)
-{
-	int	i;
-	//dprintf (2, "I am in check permissions\n");
-	i = 0;
-	if (!shell || !shell->cmds || !shell->cmds->filenames || !shell->cmds->filetype)
-	{
-		ft_putendl_fd("Invalid shell or command structure", 2);
-		shell->exit_status = 1;
-		return (1);
-	}
-        //error_message(shell, "Invalid shell or command structure", 1);
-	while (shell->cmds->filenames[i])
-	{
-		if (access(shell->cmds->filenames[i], F_OK) != 0)
-		{
-			ft_putendl_fd("zsh: permission denied: no file path", 2);
-			shell->exit_status = 1;
-			return (1);
-		}
-			
-			//error_message(shell, "zsh: no file path", 1);
-		if (shell->cmds->filetype[i] == IN || shell->cmds->filetype[i] == HERE)
-		{
-			if (access(shell->cmds->filenames[i], R_OK) != 0)
-			{
-				ft_putendl_fd("zsh: permission denied: file is not readable", 2);
-				shell->exit_status = 1;
-				return (1);
-			}
-				
-				
-				//error_message(shell, "zsh: file is not readable", 1);
-		}
-		else if (shell->cmds->filetype[i] == OUT || shell->cmds->filetype[i] == APPEND)
-		{
-			if (access(shell->cmds->filenames[i], W_OK) != 0)
-			{
-				ft_putendl_fd("zsh: permission denied: file is not writable", 2);
-				shell->exit_status = 1;
-				return (1);
-			}
-				
-				//error_message(shell, "zsh: file is not writable", 1);
-		}
-		i++;
-	}
-	return (0);
-}
-
-// void	check_permissions(t_data *shell)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	if (!shell || !shell->cmds || !shell->cmds->filenames || !shell->cmds->filetype)
-//         error_message(shell, "Invalid shell or command structure", 1);
-// 	while (shell->cmds->filenames[i])
-// 	{
-// 		if (access(shell->cmds->filenames[i], F_OK) != 0)
-// 			error_message(shell, "zsh: no file path", 1);
-// 		if (shell->cmds->filetype[i] == IN || shell->cmds->filetype[i] == HERE)
-// 		{
-// 			if (access(shell->cmds->filenames[i], R_OK) != 0)
-// 				error_message(shell, "zsh: file is not readable", 1);
-// 		}
-// 		else if (shell->cmds->filetype[i] == OUT || shell->cmds->filetype[i] == APPEND)
-// 		{
-// 			if (access(shell->cmds->filenames[i], W_OK) != 0)
-// 				error_message(shell, "zsh: file is not writable", 1);
-// 		}
-// 		i++;
-// 	}
-// 	// if (shell->cmds->filenames[2][0] == '\0' || shell->cmds->filenames[3][0] == '\0')
-// 	// {
-// 	// 	write(2, "zsh: permission denied:\n", 24);
-// 	// }
-// 	// else if (shell->cmds->word_tok[2][0] == '\0' && shell->cmds->word_tok[3][0] == '\0')
-// 	// {
-// 	// 	write(2, "zsh: permission denied:\n", 24);
-// 	// 	exit(1);
-// 	// }
-// }
-
 void	child(t_pipex pipex, t_data *shell, int k)
 {
 	char	*final = NULL;
@@ -159,8 +75,8 @@ void checking_path (t_data *shell, t_pipex *pipex, int i )
 		free_fun(pipex);
 		//i++;
 	}
-
 }
+
 void piping(t_data *shell)
 {
 	shell->pipe_count = shell->cmds_count - 1;
@@ -212,21 +128,21 @@ void forking(t_data *shell, t_pipex pipex)
 	}
 }
  void closing(t_data *shell)
- {
-		int	m;
+{
+	int	m;
 
-		m = 0;
-		while (m < (shell->cmds_count - 1))
-		{
-			close(shell->pipe[m][0]);
-			close(shell->pipe[m][1]);
-			m++;
-		}
-		int x;
-		x = 0;
-		while (x < shell->cmds_count)
-		{
-			waitpid(shell->pid[x], NULL, 0);
-			x++;
-		}
- }
+	m = 0;
+	while (m < (shell->cmds_count - 1))
+	{
+		close(shell->pipe[m][0]);
+		close(shell->pipe[m][1]);
+		m++;
+	}
+	int x;
+	x = 0;
+	while (x < shell->cmds_count)
+	{
+		waitpid(shell->pid[x], NULL, 0);
+		x++;
+	}
+}

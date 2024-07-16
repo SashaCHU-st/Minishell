@@ -37,8 +37,8 @@ static char *take_filename(char *line, int *index)
 	while (line[*index] && !check_space(line[*index]) && line[*index] != '<' && \
 			 line[*index] != '>' && line[*index] != 31)
 		(*index)++;
-	if (start == *index)
-		return (NULL);
+	// if (start == *index)
+	// 	return (NULL);
 	filename = ft_strndup(&line[start], *index - start);
 	return (filename);
 }
@@ -96,9 +96,8 @@ void    make_redirs(t_data *tokens)
 		tokens->cmds[i].filenames[tokens->redir_count] = NULL;
 		tokens->cmds[i].filetype[tokens->redir_count] = NONE;
 		tokens->cmds[i].number_of_redir = tokens->redir_count;
-		//free (line);
 	}
-	  for (int k = 0; k < tokens->cmds_count; ++k) {
+	  //for (int k = 0; k < tokens->cmds_count; ++k) {
     //     for (int l = 0; l < tokens->cmds[k].number_of_redir; ++l) {
     //         if (tokens->cmds[k].filetype[l] == HERE) {
     //             free(tokens->cmds[k].filenames[l]);  // Freeing filenames for HERE
@@ -106,7 +105,7 @@ void    make_redirs(t_data *tokens)
     //     }
         // free(tokens->cmds[k].filenames);
         // free(tokens->cmds[k].filetype);
-    }
+    //}
 }
 
 void	remove_redir_from_input(t_data *tokens)

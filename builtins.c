@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 16:34:09 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/14 18:25:44 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/15 20:52:44 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,12 @@ int	if_it_is_builtins( t_cmd *cmd)
 		return (0);
 }
 
-void	builtins(t_data *data, t_cmd *cmd)
+void	builtins(t_data *data, t_cmd *cmd, int k)
 {
 	if (ft_strncmp(cmd->word_tok[0], "pwd", 4) == 0)
 		ft_pwd();
 	else if (ft_strncmp(cmd->word_tok[0], "echo", 5) == 0)
-		ft_echo(data, cmd->w_count);
+		ft_echo(data, cmd->w_count, k);
 	else if (ft_strncmp(cmd->word_tok[0], "env", 4) == 0)
 		ft_env(data);
 	else if (ft_strncmp(cmd->word_tok[0], "export", 7) == 0)

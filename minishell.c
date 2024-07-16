@@ -83,7 +83,7 @@ void	shell_loop(t_data *shell)
             }
 			shell->exit_status = 0;
 			
-			if (!check_permissions(shell))
+			//if (!check_permissions(shell))
 				running_commands(shell, i, &pipex);
 			if (shell->cmds)
 				f_free_cmds(shell->cmds, shell->cmds_count);

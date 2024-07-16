@@ -36,9 +36,9 @@ int	open_fd_in(t_data *shell, t_pipex *pipex, int filetype, char *filename)
 	{
 		if (access(filename, F_OK | R_OK) == -1)
 		{
-			perror("No access for input");
+			//perror("No access for input");
 			shell->exit_status = 1;
-			return (1);
+			exit (1);//return (1);
 		}
 		pipex->fd_in = open(filename, O_RDONLY);
 		if (pipex->fd_in == -1)

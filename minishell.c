@@ -82,10 +82,10 @@ void	shell_loop(t_data *shell)
                 continue; // Return to prompt if interrupted
             }
 			shell->exit_status = 0;
-			printf("check me\n");
 			if (!check_permissions(shell))
 				running_commands(shell, i, &pipex);
-			free(shell->cmds);
+			if (shell->cmds)
+				f_free_cmds(shell->cmds, shell->cmds_count);
 		}
 	free(line);
 	}
@@ -126,6 +126,8 @@ int	main(int argc, char **argv, char *envp[])
 	init_t_data(&data);
 	(void)argv;
 	data.envp = copy_envp(envp);
+	if (!data.envp)
+		error_message(&data, "Failed to copy environment", 1);
 	if(argc < 2)
 	{
 		if (isatty(STDIN_FILENO))

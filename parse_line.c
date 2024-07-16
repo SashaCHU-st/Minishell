@@ -77,12 +77,8 @@ void	split_line(char *line, t_data *shell)
 			shell->cmds_count++;
 	}
 	cmd_and_redir(shell);
-	//if (check_permissions(shell) == 0)
-	//{
-		//printf(2, "hello\n");
-		cmd_and_expand(shell);
-		i = -1;
-		while (++i < shell->cmds_count)
-			shell->cmds[i] = split_into_wtok(shell->pipe_tok[i], shell->cmds[i]);
-	//}
+	cmd_and_expand(shell);
+	i = -1;
+	while (++i < shell->cmds_count)
+		shell->cmds[i] = split_into_wtok(shell->pipe_tok[i], shell->cmds[i]);
 }

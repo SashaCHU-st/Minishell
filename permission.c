@@ -20,14 +20,15 @@ void write_msg_status(t_data *shell, char *msg, int status)
 
 int	see_permission(t_data *shell, t_cmd *cmd, int i)
 {
-	if (access(cmd->filenames[i], F_OK) != 0)
-	{
-		write_msg_status(shell, "zsh: permission denied: no file path", 1);
-		return (1);
-	}
+	// if (access(cmd->filenames[i], F_OK) != 0)
+	// {
+	// 	write_msg_status(shell, "zsh: permission denied: no file path", 1);
+	// 	return (1);
+	// }
 	if (cmd->filetype[i] == IN || cmd->filetype[i] == HERE)
 	{
 		dprintf(2, "i am in permisiion IN\n");
+		printf("check file in: %s\n",  cmd->filenames[i]);
 		if (access(cmd->filenames[i], R_OK) != 0)
 		{
 			write_msg_status(shell, "zsh: permission denied: file is not readable", 1);
@@ -37,6 +38,7 @@ int	see_permission(t_data *shell, t_cmd *cmd, int i)
 	if (cmd->filetype[i] == OUT || cmd->filetype[i] == APPEND)
 	{
 		dprintf(2, "i am in permisiion OUT begin\n");
+		printf("check file out: %s\n",  cmd->filenames[i]);
 		if (access(cmd->filenames[i], W_OK) != 0)
 		{
 			dprintf(2, "i am in permisiion OUT\n");
@@ -57,7 +59,7 @@ int	check_permissions(t_data *shell)
 		return (0);
 	else
 	{
-		while (shell->cmds[i].filenames)
+		while (i < shell->cmds_count)
 		{
 			j  = 0;
 			while (shell->cmds[i].filenames[j])
@@ -67,7 +69,6 @@ int	check_permissions(t_data *shell)
 					//f_free_cmds(shell->cmds, shell->cmds_count);
 					return (1);
 				}
-				else
 					j++;
 			}
 			i++;

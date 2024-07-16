@@ -36,9 +36,10 @@ int	see_permission(t_data *shell, t_cmd *cmd, int i)
 	}
 	else if (cmd->filetype[i] == OUT || cmd->filetype[i] == APPEND)
 	{
+		dprintf(2, "i am in permisiion OUT begin\n");
 		if (access(cmd->filenames[i], W_OK) != 0)
 		{
-			
+			dprintf(2, "i am in permisiion OUT\n");
 			write_msg_status(shell, "zsh: permission denied: file is not writable", 1);
 			return (1);
 		}
@@ -52,22 +53,25 @@ int	check_permissions(t_data *shell)
 	int	j;
 
 	i = 0;
-	if (!shell || !shell->cmds || !shell->cmds->filenames || !shell->cmds->filetype)
+	if (shell->cmds[i].filenames[i] ==  NULL)
+		return (0);
+	else
 	{
-		write_msg_status(shell, "Invalid shell or command structure", 1);
-		return (1);
-	}
-	while (shell->cmds[i].filenames)
-	{
-		j  = 0;
-		while (shell->cmds[i].filenames[j])
+		while (shell->cmds[i].filenames)
 		{
-			if (see_permission(shell, &shell->cmds[i], j) == 1)
-				return (1);
-			else
-				j++;
+			j  = 0;
+			while (shell->cmds[i].filenames[j])
+			{
+				if (see_permission(shell, &shell->cmds[i], j) == 1)
+				{
+					//f_free_cmds(shell->cmds, shell->cmds_count);
+					return (1);
+				}
+				else
+					j++;
+			}
+			i++;
 		}
-		i++;
 	}
 	return (0);
 }

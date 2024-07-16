@@ -34,6 +34,7 @@ SRCS = minishell.c \
 		redirect_with_builtins.c \
 		child.c \
 		permission.c \
+		split_fun_utils.c \
 			
 OBJS = $(SRCS:.c=.o)
 

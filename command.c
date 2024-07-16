@@ -58,6 +58,7 @@ void	ft_unset(t_data *shell, int number_of_inputs)
 }
 
 void	ft_echo(t_data *shell, int number_of_inputs, int k)
+
 {
 	int	flag;
 	int	i;

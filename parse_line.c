@@ -65,8 +65,10 @@ void	split_line(char *line, t_data *shell)
 {
 	int		i;
 
-	shell->cmds_count =0;// CHECK THIS
+	shell->cmds_count = 0;// CHECK THIS
+
 	is_heredoc(line, shell);
+
 	shell->pipe_tok = do_split(line, 31);
 	if (!shell->pipe_tok)
 		return ;
@@ -79,12 +81,5 @@ void	split_line(char *line, t_data *shell)
 	cmd_and_expand(shell);
 	i = -1;
 	while (++i < shell->cmds_count)
-	{
 		shell->cmds[i] = split_into_wtok(shell->pipe_tok[i], shell->cmds[i]);
-		// if (shell->cmds[i].word_tok[0] != NULL)
-		// {
-		// 	if (ft_strncmp (shell->cmds[i].word_tok[0], "exit", 5) == 0)
-		// 		ft_exit(shell, shell->cmds[i].word_tok);
-		// }
-	}
 }

@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 13:39:27 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/14 18:30:23 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/15 15:10:44 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,25 +20,16 @@ void	update_pwd(t_data *data, char *original)
 	char	*pwd_value;
 	char	*old_pwd;
 
+	new_pwd = NULL;
+	old_pwd = NULL;
 	if (data->envp[data->pwd_index] != NULL)
 	{
 		free(data->envp[data->pwd_index]);
 		pwd_value = getcwd(NULL, 0);
 		if (pwd_value != NULL)
 		{
-			new_pwd = ft_strjoin("PWD=", pwd_value);
-			if (new_pwd != NULL)
-			{
-				data->envp[data->pwd_index] = ft_strdup(new_pwd);
-				free(new_pwd);
-			}
-			old_pwd = ft_strjoin("OLDPWD=", original);
-			if (old_pwd != NULL)
-			{
-				data->envp[data->oldpwd_index] = ft_strdup(old_pwd);
-				free(old_pwd);
-			}
-			free(pwd_value);
+			new_pwd_k(old_pwd, pwd_value, data);
+			old_pwd_k(old_pwd, pwd_value, original, data);
 		}
 	}
 }
@@ -66,9 +57,10 @@ void	checking_home(int found_home, t_data *data, int home, char *original)
 			search_old_current(data);
 			update_pwd(data, original);
 		}
-		else
-			ft_putstr_fd("bash: cd: HOME not set\n", 1);
 	}
 	else
+	{
 		ft_putstr_fd("bash: cd: HOME not set\n", 1);
+		data->exit_status = 1;
+	}
 }

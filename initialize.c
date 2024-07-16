@@ -6,17 +6,16 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 12:30:19 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/13 12:24:40 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/15 16:53:37 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void init_cmd(t_cmd *cmd)
+void	init_cmd(t_cmd *cmd)
 {
 	if (cmd == NULL)
-		return;
-
+		return ;
 	cmd->filenames = NULL;
 	cmd->filetype = NULL;
 	cmd->number_of_redir = 0;
@@ -24,9 +23,9 @@ void init_cmd(t_cmd *cmd)
 	cmd->word_tok = NULL;
 }
 
-void init_t_data(t_data *data)
+void	init_t_data(t_data *data)
 {
-	data->envp= NULL;
+	data->envp = NULL;
 	data->new_envp = NULL;
 	data->pwd_index = 0;
 	data->oldpwd_index = 0;
@@ -40,4 +39,6 @@ void init_t_data(t_data *data)
 	data->exit_status = 0;
 	data->hd_interrupt = 0;
 	data->pipe_count = 0;
+	data->var_name_len = 0;
+	data->envp_size = 0;
 }

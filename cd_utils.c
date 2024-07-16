@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/14 18:29:45 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/14 18:31:22 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/15 15:10:18 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,11 @@ void	cd_with_one_arg(t_data *shell, char *original)
 		update_pwd(shell, original);
 	}
 	else if (chdir(shell->cmds->word_tok[1]) != 0)
-		printf("bash: cd: %s No such file or directory\n", shell->cmds->word_tok[1]);
+	{
+		printf("bash: cd: %s No such file or directory\n", \
+			shell->cmds->word_tok[1]);
+		shell->exit_status = 1;
+	}
 }
 
 void	ft_cd(t_data *data, int number_of_inputs)
@@ -56,5 +60,8 @@ void	ft_cd(t_data *data, int number_of_inputs)
 	else if (number_of_inputs == 2)
 		cd_with_one_arg(data, original);
 	else if (number_of_inputs > 2)
+	{
 		ft_putstr_fd("bash: cd: too many arguments\n", 1);
+		data->exit_status = 1;
+	}
 }

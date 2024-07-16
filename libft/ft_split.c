@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: epolkhov <epolkhov@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 10:08:30 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/05/18 13:01:21 by epolkhov         ###   ########.fr       */
+/*   Updated: 2024/07/15 16:42:30 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,19 +118,3 @@ char	**ft_split(char const *s, char c)
  * 4. The pointer to the newly allocated memory is assigned to newstr[i],
  * 	 storing the extracted word.
  */
-
-#include <stdio.h>
-
-int main()
-{
-	int i = 0;
-	char *str = "akkk, bww, okk";
-	char **words;
-	words = ft_split(str, ',');
-	while (words[i])
-	{
-		printf("Str %d: %s\n", i, words[i]);
-		i++;
-	}
-	return (0);
-}

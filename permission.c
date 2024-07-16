@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 18:02:23 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/16 12:30:47 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/16 18:16:07 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ int	see_permission(t_data *shell, t_cmd *cmd, int i)
 	{
 		dprintf(2, "i am in permisiion IN %d\n", i);
 		dprintf(2, "check file in: %s\n",  cmd->filenames[i]);
+
 		if (access(cmd->filenames[i], R_OK) != 0)
 		{
 			dprintf(2, "i am in permisiion IN\n");
@@ -46,6 +47,7 @@ int	see_permission(t_data *shell, t_cmd *cmd, int i)
 			dprintf(2, "access in %d\n", access(cmd->filenames[i], W_OK));
 			dprintf(2, "i am in permisiion OUT\n");
 			write_msg_status(shell, "sashel: permission denied: file is not writable", 1);
+
 			return (1);
 		}
 	}

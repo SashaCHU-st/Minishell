@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 18:02:23 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/16 12:30:47 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/16 15:11:32 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	see_permission(t_data *shell, t_cmd *cmd, int i)
 			return (1);
 		}
 	}
-	else if (cmd->filetype[i] == OUT || cmd->filetype[i] == APPEND)
+	if (cmd->filetype[i] == OUT || cmd->filetype[i] == APPEND)
 	{
 		dprintf(2, "i am in permisiion OUT begin\n");
 		if (access(cmd->filenames[i], W_OK) != 0)

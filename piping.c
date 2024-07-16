@@ -30,6 +30,7 @@ void	checking_path(t_data *shell, t_pipex *pipex, int i)
 }
 
 void	piping(t_data *shell)
+
 {
 	int	j;
 

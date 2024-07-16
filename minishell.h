@@ -26,8 +26,10 @@
 # include "structs.h"
 # include <termios.h>
 # include <signal.h>
+# include <errno.h>
 
 
+extern int signal_status;
 ///////// input validation /////////
 
 int		input_validation_redir(t_data *shell, char *input);

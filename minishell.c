@@ -13,6 +13,7 @@
 #include "minishell.h"
 #include "builtins.h"
 
+int signal_status = 0;
 
 char	*read_line(t_data *line)
 {
@@ -61,6 +62,7 @@ void	shell_loop(t_data *shell)
 
 	while (1)
 	{
+		signal_status = 0;
 		i = 0;
 		line = read_line(shell);
 		if (line[i] == '\0' || line[i] == ' ' || line[i] == '\t' )
@@ -73,6 +75,13 @@ void	shell_loop(t_data *shell)
 		{
 			line = change_to_space(line);
 			split_line(line, shell);
+			if (signal_status)
+            {
+                free(line);
+				shell->exit_status = 130;
+                continue; // Return to prompt if interrupted
+            }
+			shell->exit_status = 0;
 			if (!check_permissions(shell))
 				running_commands(shell, i, &pipex);
 			free(shell->cmds);

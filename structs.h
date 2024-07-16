@@ -18,7 +18,7 @@ typedef enum {
 	HANDLER,
 	HEREDOC,
 	NO_SIGNALS
-} t_signal;
+}	t_signal;
 
 typedef enum {
 	NONE,
@@ -28,6 +28,7 @@ typedef enum {
 	APPEND
 } e_filetype;
 
+
 typedef struct s_pipex{
 	int		fd[2];
 	int		fd_in;
@@ -36,17 +37,17 @@ typedef struct s_pipex{
 	char	**com_fir_child;
 	char	**com_sec_child;
 	int		second_child;
-	int		stdin_backup;
-    int		stdout_backup;
+//	int		stdin_backup;
+   // int		stdout_backup;
 	
 } t_pipex;
 
 typedef struct s_cmd
 {
-	char		**word_tok;
-	int			w_count;
-	char		**filenames;
-	int			*filetype;
+	char		**word_tok; // word_tok[0] = cat; word_tok[1] = wc 
+	int			w_count; // skolko slov commande
+	char		**filenames;// reditrect names
+	int			*filetype; // tip file
 	int			number_of_redir;
 	e_filetype	type;
 }	t_cmd;
@@ -78,10 +79,6 @@ typedef struct s_data
 	char	*path;
 	int		var_name_len;
 	int		envp_size;
-
 }	t_data;
-
-
-
 
 #endif

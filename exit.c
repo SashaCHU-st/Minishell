@@ -75,7 +75,7 @@ void	ft_exit(t_data *shell, char **args)
 	if (args[1])
 	{
 		if (if_non_digit(shell, args[1]))
-			shell->exit_status = 255;
+			shell->exit_status = 2;
 		else
 			shell->exit_status = convert_to_int(shell, args[1]);
 		if (shell->cmds->word_tok[2])

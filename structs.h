@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 10:32:47 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/16 13:51:00 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/15 17:13:01 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ typedef enum {
 	OUT,
 	HERE,
 	APPEND
-}	e_filetype;
+} e_filetype;
+
 
 typedef struct s_pipex{
 	int		fd[2];
@@ -36,17 +37,22 @@ typedef struct s_pipex{
 	char	**com_fir_child;
 	char	**com_sec_child;
 	int		second_child;
-}	t_pipex;
+//	int		stdin_backup;
+   // int		stdout_backup;
+	
+} t_pipex;
 
 typedef struct s_cmd
 {
-	char		**word_tok;
-	int			w_count;
-	char		**filenames;
-	int			*filetype;
+	char		**word_tok; // word_tok[0] = cat; word_tok[1] = wc 
+	int			w_count; // skolko slov commande
+	char		**filenames;// reditrect names
+	int			*filetype; // tip file
 	int			number_of_redir;
 	e_filetype	type;
 }	t_cmd;
+
+typedef struct s_built t_built;
 
 typedef struct s_data
 {
@@ -73,7 +79,6 @@ typedef struct s_data
 	char	*path;
 	int		var_name_len;
 	int		envp_size;
-	int		hd_index;
 }	t_data;
 
 #endif

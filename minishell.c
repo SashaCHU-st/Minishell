@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:52:26 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/16 12:24:00 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/16 14:20:19 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,6 @@ void	shell_loop(t_data *shell)
                 continue; // Return to prompt if interrupted
             }
 			shell->exit_status = 0;
-			
 			if (!check_permissions(shell))
 				running_commands(shell, i, &pipex);
 			if (shell->cmds)

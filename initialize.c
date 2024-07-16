@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 12:30:19 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/15 16:53:37 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/16 13:51:24 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,5 @@ void	init_t_data(t_data *data)
 	data->pipe_count = 0;
 	data->var_name_len = 0;
 	data->envp_size = 0;
+	data->hd_index = 0;
 }

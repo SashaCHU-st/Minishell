@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   space_manipulation.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: epolkhov <epolkhov@student.42.fr>          #+#  +:+       +#+        */
+/*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024-06-26 10:32:30 by epolkhov          #+#    #+#             */
-/*   Updated: 2024-06-26 10:32:30 by epolkhov         ###   ########.fr       */
+/*   Created: 2024/06/26 10:32:30 by epolkhov          #+#    #+#             */
+/*   Updated: 2024/07/16 13:41:55 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	change_space_to_31(char *p_token)
 		{
 			i = skip_quotes(p_token, i);
 			if (p_token[i] == '\0')
-				break;
+				break ;
 		}
 		if (p_token[i] == ' ')
 			p_token[i] = 31;

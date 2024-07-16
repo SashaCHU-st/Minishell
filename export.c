@@ -6,71 +6,63 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 13:35:40 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/04 16:35:01 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/15 16:59:47 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 #include "minishell.h"
 
-void	checking_export(t_data *data)
+void	if_added_var(char *added_var, char **new_envp, t_data *data)
 {
-	int		i;
-	char	*kuku;
-
-	i = 0;
-	while (data->envp[i] != NULL)
+	if (added_var != NULL)
 	{
-		if (data->envp[i][0] != '_')
-		{
-			kuku = ft_strchr(data->envp[i], '=');
-			if (kuku != NULL)
-				printf("declare -x %.*s=\"%s\"\n", (int)(kuku - data->envp[i]), data->envp[i], kuku + 1);
-			else
-				printf("declare -x %s\n", data->envp[i]);
-			i++;
-		}
-		else
-			i++;
+		new_envp[data->envp_size] = added_var;
+		new_envp[data->envp_size + 1] = NULL;
+		free(data->envp);
+		data->envp = new_envp;
 	}
-}
-
-void	new_envp_size(t_data *data, int new, int i, char **new_envp)
-{
-	while (new < i)
+	else if (!added_var)
 	{
-		new_envp[new] = data->envp[new];
-		new++;
+		free(new_envp);
+		data->exit_status = 1;
+		perror("ft_strdup");
 	}
 }
 
 void	not_in_var(t_data *data, char *input_copy, char *added_var)
 {
 	char	**new_envp;
-	int		envp_size;
 	int		new;
 
 	new = 0;
-	envp_size = 0;
-	while (data->envp[envp_size] != NULL)
-		envp_size++;
-	new_envp = malloc((envp_size + 2) * sizeof(char *));
+	while (data->envp[data->envp_size] != NULL)
+		data->envp_size++;
+	new_envp = malloc((data->envp_size + 2) * sizeof(char *));
 	if (new_envp == NULL)
 	{
 		perror("malloc");
+		data->exit_status = 1;
 		exit(EXIT_FAILURE);
 	}
-	new_envp_size(data, new, envp_size, new_envp);
+	new_envp_size(data, new, data->envp_size, new_envp);
+	added_var = ft_strdup(input_copy);
+	if_added_var(added_var, new_envp, data);
+}
+
+void	found_var(t_data *shell, int index, char *added_var, char *input_copy)
+{
+	free(shell->envp[index]);
 	added_var = ft_strdup(input_copy);
 	if (added_var != NULL)
+		shell->envp[index] = added_var;
+	else if (!added_var)
 	{
-		new_envp[envp_size] = added_var;
-		new_envp[envp_size + 1] = NULL;
-		free(data->envp);
-		data->envp = new_envp;
+		perror("ft_strdup");
+		shell->exit_status = 1;
+		free(input_copy);
+		return ;
 	}
-	else
-		free(new_envp);
 }
 
 void	export_with(t_data *shell, int number_of_inputs)
@@ -80,20 +72,21 @@ void	export_with(t_data *shell, int number_of_inputs)
 	int		j;
 	int		var_index;
 
+	added_var = NULL;
 	j = 1;
 	while (j < number_of_inputs)
 	{
 		input_copy = ft_strdup(shell->cmds->word_tok[j]);
-		if_error_input(input_copy);
-		if_quotes(input_copy);
+		if (input_copy == NULL)
+		{
+			perror("ft_strdup");
+			shell->exit_status = 1;
+			return ;
+		}
+		input_checker(shell, input_copy);
 		var_index = is_var_in_envp(input_copy, shell);
 		if (var_index >= 0)
-		{
-			free(shell->envp[var_index]);
-			added_var = ft_strdup(input_copy);
-			if (added_var != NULL)
-				shell->envp[var_index] = added_var;
-		}
+			found_var(shell, var_index, added_var, input_copy);
 		else
 			not_in_var(shell, input_copy, added_var);
 		free(input_copy);

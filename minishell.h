@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:53:11 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/05 14:16:09 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/15 16:03:26 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,4 +77,6 @@ void	free_t_data(t_data *shell);
 void	ft_exit(t_data *shell, char **args);
 void	f_free_array(char **r);
 
+//static char	*get_expand(t_data *shell, char *line);
+//static int	end_character(char c);
 # endif

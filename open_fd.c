@@ -62,7 +62,8 @@ void	open_fd_out(t_data *shell, t_pipex *pipex, int filetype, char *filename)
 		if (pipex->fd_out == -1)
 		{
 			close(pipex->fd_in);
-			shell->exit_status = 1;
+			//shell->exit_status = 1;
+			write_msg_status(shell, "sashel: permission denied: file is not writable", 1);
 			exit(1);
 		}
 		if (dup2(pipex->fd_out, STDOUT_FILENO) < 0)
@@ -74,8 +75,9 @@ void	open_fd_out(t_data *shell, t_pipex *pipex, int filetype, char *filename)
 		pipex->fd_out = open(filename, O_CREAT | O_APPEND | O_RDWR, 0644);
 		if (pipex->fd_out == -1)
 		{
-			shell->exit_status = 1;
+			//shell->exit_status = 1;
 			close(pipex->fd_in);
+			write_msg_status(shell, "sashel: permission denied: file is not writable", 1);
 			exit(1);
 		}
 		if (dup2(pipex->fd_out, STDOUT_FILENO) < 0)

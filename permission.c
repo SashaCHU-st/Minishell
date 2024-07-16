@@ -20,17 +20,19 @@ void write_msg_status(t_data *shell, char *msg, int status)
 
 int	see_permission(t_data *shell, t_cmd *cmd, int i)
 {
-	// if (access(cmd->filenames[i], F_OK) != 0)
-	// {
-	// 	write_msg_status(shell, "zsh: permission denied: no file path", 1);
-	// 	return (1);
-	// }
+	if (access(cmd->filenames[i], F_OK) != 0)
+	{
+		write_msg_status(shell, "zsh: permission denied: no file path", 1);
+		return (1);
+	}
 	if (cmd->filetype[i] == IN || cmd->filetype[i] == HERE)
 	{
 		dprintf(2, "i am in permisiion IN %d\n", i);
-		printf("check file in: %s\n",  cmd->filenames[i]);
+		dprintf(2, "check file in: %s\n",  cmd->filenames[i]);
 		if (access(cmd->filenames[i], R_OK) != 0)
 		{
+			dprintf(2, "i am in permisiion IN\n");
+			dprintf(2, "access in %d\n", access(cmd->filenames[i], R_OK));
 			write_msg_status(shell, "sashel: permission denied: file is not readable", 1);
 			return (1);
 		}
@@ -38,9 +40,10 @@ int	see_permission(t_data *shell, t_cmd *cmd, int i)
 	if (cmd->filetype[i] == OUT || cmd->filetype[i] == APPEND)
 	{
 		dprintf(2, "i am in permisiion OUT begin\n");
-		printf("check file out: %s\n",  cmd->filenames[i]);
+		dprintf(2, "check file out: %s\n",  cmd->filenames[i]);
 		if (access(cmd->filenames[i], W_OK) != 0)
 		{
+			dprintf(2, "access in %d\n", access(cmd->filenames[i], W_OK));
 			dprintf(2, "i am in permisiion OUT\n");
 			write_msg_status(shell, "sashel: permission denied: file is not writable", 1);
 			return (1);

@@ -76,5 +76,6 @@ void	found_var(t_data *shell, int var_index, char *added_var, char *input_copy);
 void	input_checker(t_data *shell, char *input_copy);
 void	if_added_var (char *added_var, char **new_envp, t_data *data);
 void	new_envp_size(t_data *data, int new, int i, char **new_envp);
+void 	write_msg_status(t_data *shell, char *msg, int status);
 
 #endif

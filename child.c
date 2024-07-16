@@ -62,6 +62,7 @@ void	child(t_pipex pipex, t_data *shell, int k)
 
 	i = 0;
 	dup_close(k, shell);
+	check_filetype(shell,&pipex,&shell->cmds[k]);
 	check_permissions(shell, k);
 	if(if_it_is_builtins(&shell->cmds[k]) == 1)
 	{
@@ -71,7 +72,6 @@ void	child(t_pipex pipex, t_data *shell, int k)
 	else
 	{
 		checking_path(shell, &pipex, i); 
-		check_filetype(shell,&pipex,&shell->cmds[k]);
 		if(shell->cmds[k].word_tok[0][0] == '/')
 			final = &shell->cmds[k].word_tok[0][0];
 		else

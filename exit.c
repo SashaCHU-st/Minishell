@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/06 13:51:19 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/13 19:36:35 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/15 15:24:57 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,12 +78,12 @@ void	ft_exit(t_data *shell, char **args)
 			shell->exit_status = 255;
 		else
 			shell->exit_status = convert_to_int(shell, args[1]);
-		// if (args[2])
-		// {
-		// 	printf ("exit: too many arguments\n");
-		// 	shell->exit_status = 1;
-		// 	return ;
-		// }
+		if (shell->cmds->word_tok[2])
+		{
+			printf ("exit: too many arguments\n");
+			shell->exit_status = 1;
+			return ;
+		}
 	}
 	else
 		shell->exit_status = WEXITSTATUS(shell->exit_status);

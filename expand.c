@@ -68,11 +68,6 @@ static char *get_expand(t_data *shell, char *line)
 	printf("Line before expand: %c\n", line[len]);
 	if (line[len] == '?')
 		return receive_exit_status(shell);
-	else
-	{
-		printf("bash $%c: No such file or directory\n", line[len]);
-		return (NULL);
-	}
 	while (!end_character(line[len]))
 		len++;
 	if (len == 0)

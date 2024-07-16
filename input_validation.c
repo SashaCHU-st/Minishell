@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 20:18:08 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/06/26 10:42:18 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/15 15:46:37 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,13 +59,12 @@ int	input_validation_redir(t_data *shell, char *input)
 			else
 				i++;
 			while (check_space(input[i]))
-				i++;	
+				i++;
 			if (input[i] == '|' || input[i] == '\0' || input[i] == '<' || input[i] == '>')
 			{
 				ft_putendl_fd("Syntax error: no input after redirection or unexpected token", 2);
 				shell->exit_status = 2;
 				return (1);
-
 			}
 		}
 		i++;
@@ -75,12 +74,9 @@ int	input_validation_redir(t_data *shell, char *input)
 
 void	error_message(t_data *shell, char *msg, int status)
 {
-	//ft_putstr_fd("Error\n", 2);
-	//ft_putendl_fd(msg, 2);
 	if (shell)
 		free_all(shell);
 	perror(msg);
 	shell->exit_status = status;
 	exit (status);
 }
-

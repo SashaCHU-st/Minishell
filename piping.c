@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 10:08:33 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/15 20:06:29 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/16 19:52:07 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,34 +57,6 @@ void	piping(t_data *shell)
 		j++;
 	}
 }
-
-// void	forking(t_data *shell, t_pipex pipex)
-// {
-// 	int	k;
-
-// 	k = 0;
-// 	shell->pid = (int *)malloc(sizeof(int) * (shell->cmds_count));
-// 	if (!shell->pid)
-// 	{
-// 		perror("Error in malloc");
-// 		exit(1);
-// 	}
-// 	while (k < shell->cmds_count)
-// 	{
-// 		// printf("%s %s \n", (shell->cmds + k)->word_tok[0], (shell->cmds + k)->word_tok[1]);
-// 		// k++;
-// 		// continue;
-// 		shell->pid[k] = fork();
-// 		if (shell->pid[k] < 0)
-// 		{
-// 			shell->exit_status = 1;
-// 			exit(EXIT_FAILURE);
-// 		}
-// 		else if (shell->pid[k] == 0)
-// 			child(pipex, shell, k);
-// 		k++;
-// 	}
-// }
 
 void	closing(t_data *shell)
 {

@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 10:32:47 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/15 17:13:01 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/16 20:12:02 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,17 +37,15 @@ typedef struct s_pipex{
 	char	**com_fir_child;
 	char	**com_sec_child;
 	int		second_child;
-//	int		stdin_backup;
-   // int		stdout_backup;
 	
 } t_pipex;
 
 typedef struct s_cmd
 {
-	char		**word_tok; // word_tok[0] = cat; word_tok[1] = wc 
-	int			w_count; // skolko slov commande
-	char		**filenames;// reditrect names
-	int			*filetype; // tip file
+	char		**word_tok;
+	int			w_count;
+	char		**filenames;
+	int			*filetype;
 	int			number_of_redir;
 	e_filetype	type;
 }	t_cmd;

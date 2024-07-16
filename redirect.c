@@ -6,14 +6,14 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 15:49:10 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/13 13:55:42 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/16 13:51:57 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "builtins.h"
 
-static e_filetype peek(char *line, int index)
+static e_filetype	peek(char *line, int index)
 {
 	if (line[index] == '<' && line[index + 1] == '<') 
 		return (HERE);
@@ -26,7 +26,7 @@ static e_filetype peek(char *line, int index)
 	return (NONE);
 }
 
-static char *take_filename(char *line, int *index)
+static char	*take_filename(char *line, int *index)
 {
 	int		start;
 	char	*filename;
@@ -48,10 +48,9 @@ void    make_redirs(t_data *tokens)
 	int			j;
 	char		*line;
 	char		*filename;
-	int			hd_index;
 
 	i = -1;
-	hd_index = 1;
+	tokens->hd_index = 1;
 	while (tokens->pipe_tok[++i] &&  i < tokens->cmds_count)
 	{
 		j = 0;
@@ -62,7 +61,7 @@ void    make_redirs(t_data *tokens)
 		if (!tokens->cmds[i].filenames || !tokens->cmds[i].filetype)
 			error_message(tokens, "Memory allocation error", 1);
 		ft_memset(tokens->cmds[i].filenames, 0, sizeof(char *) * (ft_strlen(line) + 1));
-        ft_memset(tokens->cmds[i].filetype, 0, sizeof(int) * (ft_strlen(line) + 1));
+		ft_memset(tokens->cmds[i].filetype, 0, sizeof(int) * (ft_strlen(line) + 1));
 
 		while (line[j])
 		{
@@ -81,11 +80,10 @@ void    make_redirs(t_data *tokens)
 				if (filename)
 				{
 					if (tokens->cmds[i].type == HERE)
-						tokens->cmds[i].filenames[tokens->redir_count] = hd_filename(tokens, hd_index++);
+						tokens->cmds[i].filenames[tokens->redir_count] = hd_filename(tokens, tokens->hd_index++);
 					else
 						tokens->cmds[i].filenames[tokens->redir_count] = filename;
 					tokens->cmds[i].filetype[tokens->redir_count] = tokens->cmds[i].type;
-					printf("Array filenames: %s\n", tokens->cmds[i].filenames[tokens->redir_count]);
 					tokens->redir_count++;
 				}
 				else
@@ -97,7 +95,6 @@ void    make_redirs(t_data *tokens)
 		tokens->cmds[i].filenames[tokens->redir_count] = NULL;
 		tokens->cmds[i].filetype[tokens->redir_count] = NONE;
 		tokens->cmds[i].number_of_redir = tokens->redir_count;
-		//printf("Redir count: %d\n",  tokens->cmds[i].number_of_redir);
 	}
 	
 }

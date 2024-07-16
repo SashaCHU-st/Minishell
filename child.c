@@ -62,7 +62,7 @@ void	child(t_pipex pipex, t_data *shell, int k)
 
 	i = 0;
 	dup_close(k, shell);
-	check_permissions(shell);
+	check_permissions(shell, k);
 	if(if_it_is_builtins(&shell->cmds[k]) == 1)
 	{
 		builtins(shell, &shell->cmds[k], k);

@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 11:12:53 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/13 17:36:22 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/16 12:25:01 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ void	split_line(char *line, t_data *shell)
 	shell->cmds_count = 0;// CHECK THIS
 
 	is_heredoc(line, shell);
-
 	shell->pipe_tok = do_split(line, 31);
 	if (!shell->pipe_tok)
 		return ;
@@ -78,8 +77,12 @@ void	split_line(char *line, t_data *shell)
 			shell->cmds_count++;
 	}
 	cmd_and_redir(shell);
-	cmd_and_expand(shell);
-	i = -1;
-	while (++i < shell->cmds_count)
-		shell->cmds[i] = split_into_wtok(shell->pipe_tok[i], shell->cmds[i]);
+	//if (check_permissions(shell) == 0)
+	//{
+		//printf(2, "hello\n");
+		cmd_and_expand(shell);
+		i = -1;
+		while (++i < shell->cmds_count)
+			shell->cmds[i] = split_into_wtok(shell->pipe_tok[i], shell->cmds[i]);
+	//}
 }

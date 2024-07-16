@@ -6,14 +6,14 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:47:03 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/13 11:23:07 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/15 13:40:15 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "builtins.h"
 
-char	*path_for_commands(t_pipex *pipex, char **child_command)
+char	*path_for_commands(t_data *shell,t_pipex *pipex, char **child_command)
 {
 	char	*command;
 	char	*command_temp;
@@ -24,18 +24,21 @@ char	*path_for_commands(t_pipex *pipex, char **child_command)
 	{
 		command_temp = ft_strjoin(*current_path, "/");
 		if (command_temp == 0)
+		{
+			shell->exit_status = 1;
 			free_fun(pipex);
-		///ft_putendl_fd("path_for_commands\n",2);
-		//dprintf(2, "child: %s %p \n", *child_command, *child_command);
+		}
 		command = ft_strjoin(command_temp, *child_command);
 		free(command_temp);
 		if (command == 0)
+		{
+			shell->exit_status = 1;
 			free_fun(pipex);
+		}
 		if (access(command, F_OK | X_OK) == 0)
 			return (command);
 		free(command);
 		current_path++;
-		//ft_putendl_fd("path_for_commands1111\n",2);
 	}
 	if (!current_path)
 	{
@@ -61,6 +64,7 @@ char *mine_path(t_data *shell, int i)
 			ft_putstr_fd("bash: ",2);
 			ft_putstr_fd(shell->cmds[i].word_tok[0],2);
 			ft_putstr_fd(": No such file or directory\n", 2);
+			shell->exit_status = 127;
 		}
 		return (NULL) ;
 	}

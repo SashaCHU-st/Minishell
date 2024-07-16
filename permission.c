@@ -51,28 +51,22 @@ int	see_permission(t_data *shell, t_cmd *cmd, int i)
 
 int	check_permissions(t_data *shell)
 {
-	int	i;
 	int	j;
-
-	i = 0;
-	if (shell->cmds[i].filenames[i] ==  NULL)
+	j  = 0;
+	if (shell->cmds->filenames[j] ==  NULL)
 		return (0);
 	else
 	{
-		while (i < shell->cmds_count)
-		{
-			j  = 0;
-			while (shell->cmds[i].filenames[j])
+			
+			while (shell->cmds->filenames[j])
 			{
-				if (see_permission(shell, &shell->cmds[i], j) == 1)
+				if (see_permission(shell, shell->cmds, j) == 1)
 				{
 					//f_free_cmds(shell->cmds, shell->cmds_count);
 					return (1);
 				}
 					j++;
 			}
-			i++;
-		}
 	}
 	return (0);
 }

@@ -56,19 +56,24 @@ void    make_redirs(t_data *tokens)
 		j = 0;
 		tokens->redir_count = 0;
 		line = tokens->pipe_tok[i];
-		tokens->cmds[i].filenames = malloc(sizeof(char *) * (ft_strlen(line) + 1));
-		tokens->cmds[i].filetype = malloc(sizeof(int) * (ft_strlen(line) + 1));
+		// tokens->cmds[i].filenames = malloc(sizeof(char *) * (ft_strlen(line) + 1));
+		// tokens->cmds[i].filetype = malloc(sizeof(int) * (ft_strlen(line) + 1));
+		tokens->cmds[i].filenames = malloc(sizeof(char *) * (tokens->cmds->number_of_redir + 1));
+		tokens->cmds[i].filetype = malloc(sizeof(int) * (tokens->cmds->number_of_redir + 1));
 		if (!tokens->cmds[i].filenames || !tokens->cmds[i].filetype)
 			error_message(tokens, "Memory allocation error", 1);
 		ft_memset(tokens->cmds[i].filenames, 0, sizeof(char *) * (ft_strlen(line) + 1));
 		ft_memset(tokens->cmds[i].filetype, 0, sizeof(int) * (ft_strlen(line) + 1));
+
+		// ft_memset(tokens->cmds[i].filenames, 0, sizeof(char *) * (ft_strlen(line) + 1));
+        // ft_memset(tokens->cmds[i].filetype, 0, sizeof(int) * (ft_strlen(line) + 1));
+
 
 		while (line[j])
 		{
 		tokens->cmds[i].type = peek(line, j);
 			if (tokens->cmds[i].type != NONE)
 			{
-				
 				if (tokens->cmds[i].type == HERE || tokens->cmds[i].type == APPEND)
 					j += 2;
 				else
@@ -76,7 +81,6 @@ void    make_redirs(t_data *tokens)
 				while (check_space(line[j]))
 					j++;
 				filename = take_filename(line, &j);
-				printf("Filename: %s\n", filename);
 				if (filename)
 				{
 					if (tokens->cmds[i].type == HERE)
@@ -96,7 +100,6 @@ void    make_redirs(t_data *tokens)
 		tokens->cmds[i].filetype[tokens->redir_count] = NONE;
 		tokens->cmds[i].number_of_redir = tokens->redir_count;
 	}
-	
 }
 
 void	remove_redir_from_input(t_data *tokens)

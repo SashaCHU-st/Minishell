@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 18:02:23 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/16 12:30:47 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/16 14:22:41 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void write_msg_status(t_data *shell, char *msg, int status)
 
 int	see_permission(t_data *shell, t_cmd *cmd, int i)
 {
+	printf("I am in perm \n");
 	if (access(cmd->filenames[i], F_OK) != 0)
 	{
 		write_msg_status(shell, "zsh: permission denied: no file path", 1);
@@ -38,7 +39,6 @@ int	see_permission(t_data *shell, t_cmd *cmd, int i)
 	{
 		if (access(cmd->filenames[i], W_OK) != 0)
 		{
-			
 			write_msg_status(shell, "zsh: permission denied: file is not writable", 1);
 			return (1);
 		}
@@ -52,10 +52,11 @@ int	check_permissions(t_data *shell)
 	int	j;
 
 	i = 0;
-	if (!shell || !shell->cmds || !shell->cmds->filenames || !shell->cmds->filetype)
+	if (!shell || !shell->cmds)
 	{
-		write_msg_status(shell, "Invalid shell or command structure", 1);
-		return (1);
+		printf("eeeeee\n");
+		//write_msg_status(shell, "Invalid shell or command structure", 1);
+		return (0);
 	}
 	while (shell->cmds[i].filenames)
 	{

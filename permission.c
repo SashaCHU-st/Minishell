@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 18:02:23 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/16 17:35:56 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/16 18:16:07 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,10 @@ int	see_permission(t_data *shell, t_cmd *cmd, int i)
 	// }
 	if (cmd->filetype[i] == IN || cmd->filetype[i] == HERE)
 	{
+
 		if (access(cmd->filenames[i], R_OK) != 0)
 		{
-			write_msg_status(shell, "zsh: permission denied: file is not readable", 1);
+			write_msg_status(shell, "sashel: permission denied: file is not readable", 1);
 			return (1);
 		}
 	}
@@ -39,30 +40,31 @@ int	see_permission(t_data *shell, t_cmd *cmd, int i)
 		if (access(cmd->filenames[i], W_OK) != 0)
 		{
 			write_msg_status(shell, "zsh: permission denied: file is not writable", 1);
+
 			return (1);
 		}
 	}
 	return(0);
 }
 
-int	check_permissions(t_data *shell)
+int	check_permissions(t_data *shell, int k)
 {
 	int	j;
+	
+
 	j  = 0;
 	if (shell->cmds->filenames[j] ==  NULL)
 		return (0);
 	else
 	{
-			
-			while (shell->cmds->filenames[j])
-			{
-				if (see_permission(shell, shell->cmds, j) == 1)
-				{
-					//f_free_cmds(shell->cmds, shell->cmds_count);
-					return (1);
-				}
-					j++;
-			}
+		while (shell->cmds[k].filenames[j])
+		{
+			//printf("filenames: %s\n",shell->cmds->filenames[j]);
+			if (see_permission(shell, &shell->cmds[k], j) == 1)
+				return (1);
+			j++;
+			//printf("filenames: %s\n",shell->cmds->filenames[j]);
+		}
 	}
 	return (0);
 }

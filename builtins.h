@@ -68,7 +68,7 @@ void	redirection_in_builtin(t_data *shell, t_pipex *pipex, int i);
 void	redirection_with_builtins(t_data *shell, t_pipex *pipex, int i);
 void	checking_home(int found_home, t_data *data, int home, char *original);
 void	running_commands(t_data *shell, int i, t_pipex *pipex );
-int		check_permissions(t_data *shell);
+int		check_permissions(t_data *shell, int k);
 void	old_pwd_k(char *old_pwd, char *pwd_value, char *original, t_data *data);
 void	new_pwd_k(char *new_pwd, char *pwd_value, t_data *data);
 void	dup_close (int k, t_data *shell);

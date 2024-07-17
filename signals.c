@@ -36,7 +36,7 @@ static void	hd_handler(int signal)
 
 static void	toggle_caret(int is_on)
 {
-	struct termios new_attr;
+	struct termios	new_attr;
 
 	if (tcgetattr(STDIN_FILENO, &new_attr) == -1)
 	{
@@ -54,7 +54,7 @@ static void	toggle_caret(int is_on)
 	}
 }
 
-static void	set_signal_handler(int signum, void(*handler)(int))
+static void	set_signal_handler(int signum, void (*handler)(int))
 {
 	struct sigaction	sa;
 

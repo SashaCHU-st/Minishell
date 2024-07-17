@@ -33,8 +33,9 @@ SRCS = minishell.c \
 		free_all.c \
 		redirect_with_builtins.c \
 		child.c \
-		permission.c \
 		unset_var.c \
+		expand_utils.c \
+		redirect_utils.c \
 		
 OBJS = $(SRCS:.c=.o)
 

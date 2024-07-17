@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:52:26 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/17 11:21:14 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/17 14:20:13 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,9 +99,9 @@ char	**copy_envp(char *envp[])
 
 	count = 0;
 	i = 0;
-	new_envp = malloc((count + 1) * sizeof(char *));
 	while (envp[count] != NULL)
 		count++;
+	new_envp = malloc((count + 1) * sizeof(char *));
 	if (new_envp == NULL)
 	{
 		perror("malloc");

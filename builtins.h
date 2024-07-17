@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 13:32:50 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/17 17:07:58 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/17 19:19:16 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,10 @@ void	export_with(t_data *data, int number_of_inputs);
 void	if_error_input(t_data *shell, char *input_copy);
 char	*mine_path(t_data *shell, int i);
 void	free_fun(t_pipex *pipex);
-int		open_fd_in(t_data *shell, t_pipex *pipex, int filetype, char *filenames);
-void	open_fd_out(t_data *shell, t_pipex *pipex, int filetype, char *filename);
+int		open_fd_in(t_data *shell, t_pipex *pipex,
+			int filetype, char *filenames);
+void	open_fd_out(t_data *shell, t_pipex *pipex,
+			int filetype, char *filename);
 void	free_array(char **array);
 void	ft_error(void);
 char	*path_commands(t_data *shell, t_pipex *pipex, char **child_command);
@@ -71,17 +73,22 @@ void	running_commands(t_data *shell, int i, t_pipex *pipex );
 void	old_pwd_k(char *old_pwd, char *pwd_value, char *original, t_data *data);
 void	new_pwd_k(char *new_pwd, char *pwd_value, t_data *data);
 void	dup_close(int k, t_data *shell);
-void	found_var(t_data *shell, int var_index, char *added_var, char *input_copy);
+void	found_var(t_data *shell, int var_index,
+			char *added_var, char *input_copy);
 void	input_checker(t_data *shell, char *input_copy);
 void	if_added_var(char *added_var, char **new_envp, t_data *data);
 void	new_envp_size(t_data *data, int new, int i, char **new_envp);
-void	write_msg_status(t_data *shell, char *msg, int status);
+void	msg_status(t_data *shell, char *msg, int status);
 void	exeve_for_commands(t_data *shell, t_pipex pipex, char *final, int k);
-void	open_fd_out_app(t_data *shell, t_pipex *pipex, int filetype, char *filename);
+void	open_fd_out_app(t_data *shell, t_pipex *pipex,
+			int filetype, char *filename);
 void	free_for_path(t_data *shell, t_pipex *pipex);
 char	*ft_getenv(t_data *shell, char *env);
 char	*expand_var(t_data *shell, char *line);
-void	creating_filename (int j, char *line, int i,  t_data *sh);
+void	creating_filename(int j, char *line, int i, t_data *sh);
 void	removing( t_data *sh, int j, int k, int i);
+void	updating_variables(t_data *sh, int j, int k, int i);
+void	if_exist_filename(t_data *sh, int i);
+void	updating_filenames(t_data *sh, int i, char *line);
 
 #endif

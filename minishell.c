@@ -59,13 +59,15 @@ void	shell_loop(t_data *sh)
 {
 	char	*l;
 	t_pipex	pipex;
-
 	while (1)
 	{
 		sh->exit_status = 0;
 		l = read_line(sh);
-		if (empty_line(sh, l))
+		if (empty_line(l))
+		{
+			sh->exit_status = 2;
 			continue ;
+		}
 		if (in_pipes(sh, l) == 0 && in_redir(sh, l) == 0 && q_pipe(sh, l) == 0)
 		{
 			l = change_to_space(l);
@@ -78,6 +80,7 @@ void	shell_loop(t_data *sh)
 			}
 			sh->exit_status = 0;
 			running_commands(sh, 0, &pipex);
+			printf("exit status shell loop: %d\n", sh->exit_status);
 		}
 		free(l);
 	}
@@ -120,7 +123,7 @@ int	main(int argc, char **argv, char *envp[])
 	{
 		if (isatty(STDIN_FILENO))
 		{
-			get_signal(&data, HANDLER);
+			get_signal(HANDLER);
 			shell_loop(&data);
 		}
 		else

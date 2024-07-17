@@ -32,6 +32,7 @@ extern int	g_signal_status;
 
 ///////// input validation /////////
 
+
 int				in_redir(t_data *shell, char *input);
 int				in_pipes(t_data *shell, char *input);
 bool			empty_line(t_data *shell, char *line);
@@ -70,8 +71,8 @@ int				ft_strcmp(char *s1, char *s2);
 
 //////////////exit and free//////////////
 
-void			get_signal(t_data *shell, t_signal mode);
 
+void			get_signal(t_data *shell, t_signal mode);
 void			exit_free(t_data *shell, int status);
 void			free_all(t_data *shell);
 void			f_free_cmds(t_cmd *cmds, int cmds_count);

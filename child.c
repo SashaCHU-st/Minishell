@@ -66,9 +66,9 @@ void	exeve_for_commands(t_data *shell, t_pipex pipex, char *final, int k)
 		final = path_commands(shell, &pipex, &shell->cmds[k].word_tok[0]);
 	if (!final)
 	{
-		printf("%s: command not found\n", shell->cmds[k].word_tok[0]);
-		shell->exit_status = 127;
+		printf("%s: yyyyy command not found\n", shell->cmds[k].word_tok[0]);
 		free(final);
+		shell->exit_status = 127;
 		exit(1);
 	}
 	if (execve(final, shell->cmds[k].word_tok, shell->envp) == -1)
@@ -85,6 +85,7 @@ void	child(t_pipex pipex, t_data *shell, int k)
 
 	final = NULL;
 	i = 0;
+	dprintf(2, "line %s\n", shell->cmds[0].word_tok[0]);
 	dup_close(k, shell);
 	check_filetype(shell, &pipex, &shell->cmds[k]);
 	if (if_it_is_builtins(&shell->cmds[k]) == 1)

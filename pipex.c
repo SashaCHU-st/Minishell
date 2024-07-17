@@ -6,14 +6,14 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:47:03 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/15 13:40:15 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/17 11:41:42 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "builtins.h"
 
-char	*path_for_commands(t_data *shell,t_pipex *pipex, char **child_command)
+char	*path_commands(t_data *shell, t_pipex *pipex, char **child)
 {
 	char	*command;
 	char	*command_temp;
@@ -28,7 +28,7 @@ char	*path_for_commands(t_data *shell,t_pipex *pipex, char **child_command)
 			shell->exit_status = 1;
 			free_fun(pipex);
 		}
-		command = ft_strjoin(command_temp, *child_command);
+		command = ft_strjoin(command_temp, *child);
 		free(command_temp);
 		if (command == 0)
 		{
@@ -42,13 +42,13 @@ char	*path_for_commands(t_data *shell,t_pipex *pipex, char **child_command)
 	}
 	if (!current_path)
 	{
-		ft_putstr_fd(*child_command, 2);
+		ft_putstr_fd(*child, 2);
 		ft_putstr_fd(": command not found\n", 2);
 	}
 	return (NULL);
 }
 
-char *mine_path(t_data *shell, int i)
+char	*mine_path(t_data *shell, int i)
 {
 	if (shell->envp == NULL)
 	{
@@ -59,14 +59,19 @@ char *mine_path(t_data *shell, int i)
 		shell->envp++;
 	if (*shell->envp == NULL)
 	{
-		if (i < shell->cmds_count && shell->cmds[i].word_tok[0][0] != '/')
+		i = 0;
+		while (i < shell->cmds_count)
 		{
-			ft_putstr_fd("bash: ",2);
-			ft_putstr_fd(shell->cmds[i].word_tok[0],2);
-			ft_putstr_fd(": No such file or directory\n", 2);
-			shell->exit_status = 127;
+			if(shell->cmds[i].word_tok[0][0] != '/')
+			{
+				ft_putstr_fd("bash: ", 2);
+				ft_putstr_fd(shell->cmds[i].word_tok[0], 2);
+				ft_putstr_fd(": No such file or directory\n", 2);
+				shell->exit_status = 127;
+			}
+			i++;
 		}
-		return (NULL) ;
+		return (NULL);
 	}
 	return (*shell->envp + 5);
 }

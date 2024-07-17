@@ -6,41 +6,12 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 20:25:40 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/06/26 10:45:35 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/17 17:37:10 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "builtins.h"
-
-static unsigned int	num_of_str(const char *s, char c)
-{
-	unsigned int	count;
-	int				in_field;
-
-	if (!s)
-		return (0);
-	count = 0;
-	in_field = 0;
-	while (*s)
-	{
-		if (*s == c)
-		{
-			if (in_field)
-				in_field = 0;
-		}
-		else
-		{
-			if (!in_field)
-			{
-				in_field = 1;
-				count++;
-			}
-		}
-		s++;
-	}
-	return (count);
-}
 
 static unsigned int	get_substring_length(const char *s, \
 			unsigned int start, char c)
@@ -65,9 +36,9 @@ static char	**allocate_array(unsigned int nb)
 
 static char	**split_array(unsigned int nb, char c, char const *s, char **array)
 {
-	unsigned int start;
-	int len;
-	unsigned int i;
+	unsigned int	start;
+	int				len;
+	unsigned int	i;
 
 	start = 0;
 	i = 0;
@@ -94,7 +65,7 @@ static char	**split_array(unsigned int nb, char c, char const *s, char **array)
 
 static char	**f_fill_array(char const *s, char c, unsigned int nb)
 {
-	char			**array;
+	char	**array;
 	char	**new_array;
 
 	array = allocate_array(nb);

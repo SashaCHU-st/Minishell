@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:52:26 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/17 10:29:01 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/17 11:21:14 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	running_commands(t_data *shell, int i, t_pipex *pipex )
 	}
 	else
 	{
-		checking_path(shell, pipex, i);
+		//checking_path(shell, pipex, i);
 		piping(shell);
 		forking(shell, *pipex);
 		closing(shell);

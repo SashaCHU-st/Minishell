@@ -6,16 +6,16 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 15:49:10 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/13 13:55:42 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/17 17:19:44 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "builtins.h"
 
-static e_filetype peek(char *line, int index)
+static e_filetype	peek(char *line, int index)
 {
-	if (line[index] == '<' && line[index + 1] == '<') 
+	if (line[index] == '<' && line[index + 1] == '<')
 		return (HERE);
 	if (line[index] == '<')
 		return (IN);
@@ -26,7 +26,7 @@ static e_filetype peek(char *line, int index)
 	return (NONE);
 }
 
-static char *take_filename(char *line, int *index)
+static char	*take_filename(char *line, int *index)
 {
 	int		start;
 	char	*filename;
@@ -35,121 +35,83 @@ static char *take_filename(char *line, int *index)
 		(*index)++;
 	start = *index;
 	while (line[*index] && !check_space(line[*index]) && line[*index] != '<' && \
-			 line[*index] != '>' && line[*index] != 31)
+			line[*index] != '>' && line[*index] != 31)
 		(*index)++;
-	// if (start == *index)
-	// 	return (NULL);
 	filename = ft_strndup(&line[start], *index - start);
 	return (filename);
 }
 
-
-void    make_redirs(t_data *tokens)
+void	creating_filename(int j, char *line, int i, t_data *sh)
 {
-	int			i;
-	int			j;
-	char		*line;
-	char		*filename;
-	int			hd_index;
-
-	i = -1;
-	hd_index = 1;
-	while (tokens->pipe_tok[++i] &&  i < tokens->cmds_count)
+	j = 0;
+	sh->redir_count = 0;
+	line = sh->pipe_tok[i];
+	sh->cmds[i].filenames = malloc(sizeof(char *) * (ft_strlen(line) + 1));
+	sh->cmds[i].filetype = malloc(sizeof(int) * (ft_strlen(line) + 1));
+	if (!sh->cmds[i].filenames || !sh->cmds[i].filetype)
+		error_message(sh, "Memory allocation error", 1);
+	while (line[j])
 	{
-		j = 0;
-		tokens->redir_count = 0;
-		line = tokens->pipe_tok[i];
-		tokens->cmds[i].filenames = malloc(sizeof(char *) * (ft_strlen(line) + 1));
-		tokens->cmds[i].filetype = malloc(sizeof(int) * (ft_strlen(line) + 1));
-		if (!tokens->cmds[i].filenames || !tokens->cmds[i].filetype)
-			error_message(tokens, "Memory allocation error", 1);
-		// ft_memset(tokens->cmds[i].filenames, 0, sizeof(char *) * (ft_strlen(line) + 1));
-        // ft_memset(tokens->cmds[i].filetype, 0, sizeof(int) * (ft_strlen(line) + 1));
-
-		while (line[j])
+		sh->cmds[i].type = peek(line, j);
+		if (sh->cmds[i].type != NONE)
 		{
-		tokens->cmds[i].type = peek(line, j);
-			if (tokens->cmds[i].type != NONE)
-			{
-				if (tokens->cmds[i].type == HERE || tokens->cmds[i].type == APPEND)
-					j += 2;
-				else
-					j++;
-				while (check_space(line[j]))
-					j++;
-				filename = take_filename(line, &j);
-				if (filename)
-				{
-					if (tokens->cmds[i].type == HERE)
-						tokens->cmds[i].filenames[tokens->redir_count] = hd_filename(tokens, hd_index++);
-					else
-						tokens->cmds[i].filenames[tokens->redir_count] = filename;
-					tokens->cmds[i].filetype[tokens->redir_count] = tokens->cmds[i].type;
-					tokens->redir_count++;
-				}
-				else
-					ft_putendl_fd("Syntax error: no filename", 2);
-			}
+			if (sh->cmds[i].type == HERE || sh->cmds[i].type == APPEND)
+				j += 2;
 			else
 				j++;
-		}
-		tokens->cmds[i].filenames[tokens->redir_count] = NULL;
-		tokens->cmds[i].filetype[tokens->redir_count] = NONE;
-		tokens->cmds[i].number_of_redir = tokens->redir_count;
-	}
-	  //for (int k = 0; k < tokens->cmds_count; ++k) {
-    //     for (int l = 0; l < tokens->cmds[k].number_of_redir; ++l) {
-    //         if (tokens->cmds[k].filetype[l] == HERE) {
-    //             free(tokens->cmds[k].filenames[l]);  // Freeing filenames for HERE
-    //         }
-    //     }
-        // free(tokens->cmds[k].filenames);
-        // free(tokens->cmds[k].filetype);
-    //}
-}
-
-void	remove_redir_from_input(t_data *tokens)
-{
-	char	*line;
-	char	*new_line;
-	int		i;
-	int		j;
-	int		k;
-	int		in_single_quote;
-	int		in_double_quote;
-	int		in_quotes;
-	
-	i = -1;
-	while (tokens->pipe_tok[++i] &&  i < tokens->cmds_count)
-	{
-		line = tokens->pipe_tok[i];
-		new_line = (char *)malloc(sizeof(char) * (ft_strlen(line) + 1));
-		if (!new_line)
-			error_message(tokens, "Failed to malloc for newline", 1);
-		j = 0;
-		k = 0;
-		in_single_quote = 0;
-		in_double_quote = 0;
-		while (line[j])
-		{
-			in_quotes = is_in_quotes(line[j], &in_single_quote, &in_double_quote);
-			if ((line[j] == '<' || line[j] == '>') && !in_quotes)
+			while (check_space(line[j]))
+				j++;
+			sh->filename = take_filename(line, &j);
+			if (sh->filename)
 			{
-				if ((line[j] == '<' && line[j + 1] == '<' ) || (line[j] == '>' && line[j + 1] == '>'))
-					j += 2;
+				if (sh->cmds[i].type == HERE)
+					sh->cmds[i].filenames[sh->redir_count] = hd_filename(sh,
+							sh->hd_index++);
 				else
-					j++;
-				while (check_space(line[j]))
-					j++;
-				while (line[j] && line[j] != '<' && \
-						line[j] != '>' && line[j] != 31 && line[j] != ' ')
-					j++;
+					sh->cmds[i].filenames[sh->redir_count] = sh->filename;
+				sh->cmds[i].filetype[sh->redir_count] = sh->cmds[i].type;
+				sh->redir_count++;
 			}
 			else
-				new_line[k++] = line[j++];
+				ft_putendl_fd("Syntax error: no filename", 2);
 		}
-		new_line[k] = '\0';
-		free(tokens->pipe_tok[i]);
-		tokens->pipe_tok[i] = new_line;
+		else
+			j++;
 	}
+}
+
+void	removing(t_data *sh, int j, int k, int i)
+{
+	sh->line = sh->pipe_tok[i];
+	sh->new_line = (char *)malloc(sizeof(char) * (ft_strlen(sh->line) + 1));
+	if (!sh->new_line)
+		error_message(sh, "Failed to malloc for newline", 1);
+	j = 0;
+	k = 0;
+	sh->in_single_quote = 0;
+	sh->in_double_quote = 0;
+	while (sh->line[j])
+	{
+		sh->in_quotes = is_in_quotes(sh->line[j], &sh->in_single_quote,
+				&sh->in_double_quote);
+		if ((sh->line[j] == '<' || sh->line[j] == '>') && !sh->in_quotes)
+		{
+			if ((sh->line[j] == '<' && sh->line[j + 1] == '<' )
+				|| (sh->line[j] == '>' && sh->line[j + 1] == '>'))
+				j += 2;
+			else
+				j++;
+			while (check_space(sh->line[j]))
+				j++;
+			while (sh->line[j] && sh->line[j] != '<'
+				&& sh->line[j] != '>' && sh->line[j] != 31
+				&& sh->line[j] != ' ')
+				j++;
+		}
+		else
+			sh->new_line[k++] = sh->line[j++];
+	}
+	sh->new_line[k] = '\0';
+	free(sh->pipe_tok[i]);
+	sh->pipe_tok[i] = sh->new_line;
 }

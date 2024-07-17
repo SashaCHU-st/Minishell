@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 16:22:11 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/17 11:21:26 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/17 13:40:48 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,27 @@ void	forking(t_data *shell, t_pipex pipex)
 	}
 }
 
+void	exeve_for_commands(t_data *shell, t_pipex pipex, char *final, int k)
+{
+	checking_path(shell, &pipex, k);
+	if (shell->cmds[k].word_tok[0][0] == '/')
+		final = &shell->cmds[k].word_tok[0][0];
+	else
+		final = path_commands(shell, &pipex, &shell->cmds[k].word_tok[0]);
+	if (!final)
+	{
+		printf("%s: command not found\n", shell->cmds[k].word_tok[0]);
+		shell->exit_status = 127;
+		free(final);
+		exit(1);
+	}
+	if (execve(final, shell->cmds[k].word_tok, shell->envp) == -1)
+	{
+		shell->exit_status = 127;
+		free_fun(&pipex);
+	}
+}
+
 void	child(t_pipex pipex, t_data *shell, int k)
 {
 	char	*final;
@@ -72,23 +93,5 @@ void	child(t_pipex pipex, t_data *shell, int k)
 		exit(0);
 	}
 	else
-	{
-		checking_path(shell, &pipex, i);
-		if (shell->cmds[k].word_tok[0][0] == '/')
-			final = &shell->cmds[k].word_tok[0][0];
-		else
-			final = path_commands(shell, &pipex, &shell->cmds[k].word_tok[0]);
-		if (!final)
-		{
-			printf("%s: command not found\n", shell->cmds[k].word_tok[0]);
-			shell->exit_status = 127;
-			free(final);
-			exit(1);
-		}
-		if (execve(final, shell->cmds[k].word_tok, shell->envp) == -1)
-		{
-			shell->exit_status = 127;
-			free_fun(&pipex);
-		}
-	}
+		exeve_for_commands(shell, pipex, final, k);
 }

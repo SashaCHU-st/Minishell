@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 10:08:33 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/17 11:28:17 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/17 13:11:46 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ void	checking_path(t_data *shell, t_pipex *pipex, int i)
 }
 
 void	piping(t_data *shell)
-
 {
 	int	j;
 

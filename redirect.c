@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 15:49:10 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/17 17:19:44 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/17 19:17:25 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,7 @@ void	creating_filename(int j, char *line, int i, t_data *sh)
 	j = 0;
 	sh->redir_count = 0;
 	line = sh->pipe_tok[i];
-	sh->cmds[i].filenames = malloc(sizeof(char *) * (ft_strlen(line) + 1));
-	sh->cmds[i].filetype = malloc(sizeof(int) * (ft_strlen(line) + 1));
-	if (!sh->cmds[i].filenames || !sh->cmds[i].filetype)
-		error_message(sh, "Memory allocation error", 1);
+	updating_filenames(sh, i, line);
 	while (line[j])
 	{
 		sh->cmds[i].type = peek(line, j);
@@ -63,15 +60,7 @@ void	creating_filename(int j, char *line, int i, t_data *sh)
 				j++;
 			sh->filename = take_filename(line, &j);
 			if (sh->filename)
-			{
-				if (sh->cmds[i].type == HERE)
-					sh->cmds[i].filenames[sh->redir_count] = hd_filename(sh,
-							sh->hd_index++);
-				else
-					sh->cmds[i].filenames[sh->redir_count] = sh->filename;
-				sh->cmds[i].filetype[sh->redir_count] = sh->cmds[i].type;
-				sh->redir_count++;
-			}
+				if_exist_filename(sh, i);
 			else
 				ft_putendl_fd("Syntax error: no filename", 2);
 		}
@@ -80,7 +69,7 @@ void	creating_filename(int j, char *line, int i, t_data *sh)
 	}
 }
 
-void	removing(t_data *sh, int j, int k, int i)
+void	updating_variables(t_data *sh, int j, int k, int i)
 {
 	sh->line = sh->pipe_tok[i];
 	sh->new_line = (char *)malloc(sizeof(char) * (ft_strlen(sh->line) + 1));
@@ -90,6 +79,11 @@ void	removing(t_data *sh, int j, int k, int i)
 	k = 0;
 	sh->in_single_quote = 0;
 	sh->in_double_quote = 0;
+}
+
+void	removing(t_data *sh, int j, int k, int i)
+{
+	updating_variables(sh, j, k, i);
 	while (sh->line[j])
 	{
 		sh->in_quotes = is_in_quotes(sh->line[j], &sh->in_single_quote,

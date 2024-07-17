@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 16:44:41 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/17 17:08:16 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/17 19:20:56 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,4 +43,23 @@ void	make_redirs(t_data *sh)
 		sh->cmds[i].filetype[sh->redir_count] = NONE;
 		sh->cmds[i].number_of_redir = sh->redir_count;
 	}
+}
+
+void	if_exist_filename(t_data *sh, int i)
+{
+	if (sh->cmds[i].type == HERE)
+		sh->cmds[i].filenames[sh->redir_count] = hd_filename(sh,
+				sh->hd_index++);
+	else
+		sh->cmds[i].filenames[sh->redir_count] = sh->filename;
+	sh->cmds[i].filetype[sh->redir_count] = sh->cmds[i].type;
+	sh->redir_count++;
+}
+
+void	updating_filenames(t_data *sh, int i, char *line)
+{
+	sh->cmds[i].filenames = malloc(sizeof(char *) * (ft_strlen(line) + 1));
+	sh->cmds[i].filetype = malloc(sizeof(int) * (ft_strlen(line) + 1));
+	if (!sh->cmds[i].filenames || !sh->cmds[i].filetype)
+		error_message(sh, "Memory allocation error", 1);
 }

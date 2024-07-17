@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 16:22:56 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/16 20:11:29 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/17 17:52:29 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,4 +85,33 @@ bool	empty_line(t_data *shell, char *line)
 	}
 	free(line);
 	return (true);
+}
+
+unsigned int	num_of_str(const char *s, char c)
+{
+	unsigned int	count;
+	int				in_field;
+
+	if (!s)
+		return (0);
+	count = 0;
+	in_field = 0;
+	while (*s)
+	{
+		if (*s == c)
+		{
+			if (in_field)
+				in_field = 0;
+		}
+		else
+		{
+			if (!in_field)
+			{
+				in_field = 1;
+				count++;
+			}
+		}
+		s++;
+	}
+	return (count);
 }

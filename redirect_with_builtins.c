@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 15:48:00 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/16 19:54:55 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/17 13:54:48 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,15 @@ void	redirection_in_builtin(t_data *shell, t_pipex *pipex, int i)
 	close(shell->parent_out);
 }
 
-void	redirection_out_builtin(t_data *shell, t_pipex *pipex, int i)
+void	redirection_out_builtin(t_data *shel, t_pipex *pipex, int i)
 {
-	shell->parent_out = dup(STDOUT_FILENO);
-	open_fd_out(shell, pipex, shell->cmds->filetype[i], *shell->cmds->filenames);
-	check_filetype(shell, pipex, &shell->cmds[i]);
-	builtins(shell, &shell->cmds[i], i);
-	if (dup2(shell->parent_out, STDOUT_FILENO) < 0)
+	shel->parent_out = dup(STDOUT_FILENO);
+	open_fd_out(shel, pipex, shel->cmds->filetype[i], *shel->cmds->filenames);
+	check_filetype(shel, pipex, &shel->cmds[i]);
+	builtins(shel, &shel->cmds[i], i);
+	if (dup2(shel->parent_out, STDOUT_FILENO) < 0)
 		printf("dup2 \n");
-	close(shell->parent_out);
+	close(shel->parent_out);
 }
 
 void	redirection_with_builtins(t_data *shell, t_pipex *pipex, int i)

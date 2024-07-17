@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:47:03 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/16 20:09:13 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/17 10:45:14 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,17 @@ char	*mine_path(t_data *shell, int i)
 		shell->envp++;
 	if (*shell->envp == NULL)
 	{
-		if (i < shell->cmds_count && shell->cmds[i].word_tok[0][0] != '/')
+		i = 0;
+		while (i < shell->cmds_count)
 		{
-			ft_putstr_fd("bash: ", 2);
-			ft_putstr_fd(shell->cmds[i].word_tok[0], 2);
-			ft_putstr_fd(": No such file or directory\n", 2);
-			shell->exit_status = 127;
+			if(shell->cmds[i].word_tok[0][0] != '/')
+			{
+				ft_putstr_fd("bash: ", 2);
+				ft_putstr_fd(shell->cmds[i].word_tok[0], 2);
+				ft_putstr_fd(": No such file or directory\n", 2);
+				shell->exit_status = 127;
+			}
+			i++;
 		}
 		return (NULL);
 	}

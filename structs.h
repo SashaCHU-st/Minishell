@@ -6,12 +6,15 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 10:32:47 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/16 20:12:02 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/17 10:11:46 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# ifndef STRUCT_H
+#ifndef STRUCT_H
 # define STRUCT_H
+
+# include "minishell.h"
+# include "structs.h"
 
 typedef enum {
 	DEFAULT,

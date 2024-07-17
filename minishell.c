@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:52:26 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/16 20:00:35 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/17 10:29:01 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ void	running_commands(t_data *shell, int i, t_pipex *pipex )
 		return ;
 	else if (shell->cmds_count == 1 && if_it_is_builtins(&shell->cmds[i]) == 1)
 	{
-		printf("one_cmd\n");
 		if (shell->cmds->filetype[i] == NONE)
 			builtins(shell, &shell->cmds[i], i);
 		if (shell->cmds[i].number_of_redir > 0)
@@ -49,6 +48,7 @@ void	running_commands(t_data *shell, int i, t_pipex *pipex )
 	}
 	else
 	{
+		checking_path(shell, pipex, i);
 		piping(shell);
 		forking(shell, *pipex);
 		closing(shell);

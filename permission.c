@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-// #include "minishell.h"
+ #include "minishell.h"
 
-// void write_msg_status(t_data *shell, char *msg, int status)
+// void msg_status(t_data *shell, char *msg, int status)
 // {
 // 	ft_putendl_fd(msg, 2);
 // 	shell->exit_status = status;

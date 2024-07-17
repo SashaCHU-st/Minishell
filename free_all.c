@@ -65,6 +65,6 @@ void	exit_free(t_data *shell, int status)
 {
 	if (shell)
 		free_all(shell);
-	get_signal(shell, DEFAULT);
+	//get_signal(shell, DEFAULT);
 	exit (status);
 }

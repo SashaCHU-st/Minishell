@@ -27,6 +27,31 @@ char	*hd_filename(t_data *shell, int count)
 	return (file);
 }
 
+static int	process_line(char *line, t_data *tokens, char *delimiter, int fd)
+{
+	if (ft_strcmp(line, delimiter) == 0)
+	{
+		free(line);
+		return (1);
+	}
+	if (ft_strchr(line, '$'))
+		line = expand_var(tokens, line);
+	ft_putendl_fd(line, fd);
+	free(line);
+	return (0);
+}
+
+static int	handle_error(int stdin)
+{
+	if (errno && errno == EBADF)
+	{
+		dup2(stdin, STDIN_FILENO);
+		close(stdin);
+		return (-1);
+	}
+	return (0);
+}
+
 static int	hd_readline(char *line, t_data *tokens, char *delimeter, int fd)
 {
 	int	stdin;
@@ -42,28 +67,15 @@ static int	hd_readline(char *line, t_data *tokens, char *delimeter, int fd)
 			free(line);
 			dup2(stdin, STDIN_FILENO);
 			close(stdin);
-			return -1;
+			return (-1);
 		}
 		line = readline("> ");
 		if (!line)
-			break;
-		if (ft_strcmp(line, delimeter) == 0)
-		{
-			free(line);
 			break ;
-		}
-		if (ft_strchr(line, '$'))
-			line = expand_var(tokens, line);
-		ft_putendl_fd(line, fd);
-		free(line);
+		if (process_line(line, tokens, delimeter, fd))
+			break ;
 	}
-	if (errno && errno == EBADF)
-	{
-		dup2(stdin, STDIN_FILENO);
-		close(stdin);
-		return (-1);
-	}
-	return (0);
+	return (handle_error(stdin));
 }
 
 int	process_hd(t_data *tokens, const char *file, char *delimeter)
@@ -111,7 +123,6 @@ void	*is_heredoc(char *line, t_data *tokens)
 		if ((ft_strncmp(&line[i], "<<", 2) == 0) && !in_quote)
 		{	
 			tokens->hd_count++;
-			printf("%d\n", tokens->hd_count);
 			i = i + 2;
 			while (check_space(line[i]))
 				i++;
@@ -133,9 +144,7 @@ void	*is_heredoc(char *line, t_data *tokens)
 				tokens->hd_delimeter[j++] = line[i++];
 			}
 			tokens->hd_delimeter[j] = '\0';
-			printf("delimeter Heredoc:%s\n", tokens->hd_delimeter);
 			tokens->tempfile_hd = hd_filename(tokens, tokens->hd_count);
-			printf("HD tempfile %s\n", tokens->tempfile_hd);
 			if (!tokens->tempfile_hd)
 				error_message(tokens, "Failed to assign filename for heredoc", 1);
 			if (process_hd(tokens, tokens->tempfile_hd, tokens->hd_delimeter) == -1)
@@ -144,12 +153,11 @@ void	*is_heredoc(char *line, t_data *tokens)
 				tokens->hd_delimeter = NULL;
 				break ;
 			}
-			if (tokens->hd_delimeter != NULL)
-				free(tokens->hd_delimeter);
+			free(tokens->hd_delimeter);
+			tokens->hd_delimeter = NULL;
 		}
 		if (line[i] != '\0')
 			i++;
 	}
 	return (0);
 }
-

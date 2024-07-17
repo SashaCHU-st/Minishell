@@ -13,7 +13,7 @@
 #include "minishell.h"
 #include "builtins.h"
 
-int signal_status = 0;
+int	g_signal_status = 0;
 
 char	*read_line(t_data *line)
 {
@@ -48,7 +48,6 @@ void	running_commands(t_data *shell, int i, t_pipex *pipex )
 	}
 	else
 	{
-		//checking_path(shell, pipex, i);
 		piping(shell);
 		forking(shell, *pipex);
 		closing(shell);
@@ -56,42 +55,34 @@ void	running_commands(t_data *shell, int i, t_pipex *pipex )
 	return ;
 }
 
-void	shell_loop(t_data *shell)
+void	shell_loop(t_data *sh)
 {
-	char	*line;
+	char	*l;
 	t_pipex	pipex;
-	int		i;
 
 	while (1)
 	{
-		signal_status = 0;
-		i = 0;
-		line = read_line(shell);
-		if (line[i] == '\0' || line[i] == ' ' || line[i] == '\t' )
-		{
-			free(line);
+		l = read_line(sh);
+		if (empty_line(sh, l))
 			continue ;
-		}
-		if (input_validation_pipes(shell, line) == 0
-			&& input_validation_redir(shell, line) == 0
-			&& check_input_quotes_pipe(shell,line) == 0)
+		if (in_pipes(sh, l) == 0 && in_redir(sh, l) == 0 && q_pipe(sh, l) == 0)
 		{
-			line = change_to_space(line);
-			split_line(line, shell);
-			if (signal_status)
+			l = change_to_space(l);
+			split_line(l, sh);
+			if (g_signal_status)
 			{
-				free(line);
-				shell->exit_status = 130;
+				free(l);
+				sh->exit_status = 130;
 				continue ;
 			}
-			shell->exit_status = 0;
-			running_commands(shell, i, &pipex);
+			sh->exit_status = 0;
+			running_commands(sh, 0, &pipex);
 		}
-		free (line);
+		free(l);
 	}
 }
 
-char	**copy_envp(char *envp[])
+static char	**copy_envp(t_data *shell, char *envp[])
 {
 	int		count;
 	char	**new_envp;
@@ -103,19 +94,12 @@ char	**copy_envp(char *envp[])
 		count++;
 	new_envp = malloc((count + 1) * sizeof(char *));
 	if (new_envp == NULL)
-	{
-		perror("malloc");
-		exit(EXIT_FAILURE);
-	}
+		error_message(shell, "Failed to allocate memory", 1);
 	while (i < count)
 	{
 		new_envp[i] = ft_strdup(envp[i]);
 		if (new_envp[i] == NULL)
-		{
-			free_array(new_envp);
-			perror("strdup");
-			exit(EXIT_FAILURE);
-		}
+			error_message(shell, "Failed to duplicate string", 1);
 		i++;
 	}
 	new_envp[count] = NULL;
@@ -128,7 +112,7 @@ int	main(int argc, char **argv, char *envp[])
 
 	init_t_data(&data);
 	(void)argv;
-	data.envp = copy_envp(envp);
+	data.envp = copy_envp(&data, envp);
 	if (!data.envp)
 		error_message(&data, "Failed to copy environment", 1);
 	if (argc < 2)

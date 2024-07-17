@@ -66,3 +66,23 @@ int	ft_strcmp(char *s1, char *s2)
 	}
 	return ((unsigned char)*s1 - (unsigned char)*s2);
 }
+
+bool	empty_line(t_data *shell, char *line)
+{
+	int	i;
+
+	i = 0;
+	if (!line)
+		return (true);
+	while (line[i])
+	{
+		if (!isspace(line[i]))
+		{
+			shell->exit_status = 2;
+			return (false);
+		}
+		i++;
+	}
+	free(line);
+	return (true);
+}

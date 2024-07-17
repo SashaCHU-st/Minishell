@@ -43,7 +43,8 @@ char	*path_commands(t_data *shell, t_pipex *pipex, char **child)
 	if (!current_path)
 	{
 		ft_putstr_fd(*child, 2);
-		ft_putstr_fd(": command not found\n", 2);
+		ft_putstr_fd(": !!!!command not found\n", 2);
+		shell->exit_status = 127;
 	}
 	return (NULL);
 }

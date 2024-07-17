@@ -20,7 +20,7 @@ static void signal_handler(int signal)
         rl_on_new_line();
         rl_replace_line("", 0);
         rl_redisplay();
-        signal_status = 1;
+        g_signal_status = 1;
     }
 }
 
@@ -30,7 +30,7 @@ static void hd_handler(int signal)
     {
         write(1, "\n", 1);
         close(STDIN_FILENO);
-        signal_status = 1;
+        g_signal_status = 1;
     }
 }
 

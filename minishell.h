@@ -28,12 +28,13 @@
 # include <signal.h>
 # include <errno.h>
 
+extern int	g_signal_status;
 
-extern int signal_status;
 ///////// input validation /////////
 
-int		input_validation_redir(t_data *shell, char *input);
-int		input_validation_pipes(t_data *shell, char *input);
+int		in_redir(t_data *shell, char *input);
+int		in_pipes(t_data *shell, char *input);
+bool	empty_line(t_data *shell, char *line);
 
 bool	check_space(char ch);
 char	*change_to_space(char *line);
@@ -43,10 +44,10 @@ bool	has_unclosed_quotes(char *line);
 int		skip_quotes(char *line, int i);
 void	remove_quotes(char *str);
 int		skip_quotes(char *line, int i);
-int		check_input_quotes_pipe(t_data *shell, char *line);
+int		q_pipe(t_data *shell, char *line);
 int		is_in_quotes(char c, int *in_single_quote, int *in_double_quote);
 void	error_message(t_data *shell, char *msg, int status);
-
+void	msg_status(t_data *shell, char *msg, int status);
 void	init_t_data(t_data *data);
 void	init_cmd(t_cmd *cmd);
 
@@ -68,7 +69,7 @@ int		ft_strcmp(char *s1, char *s2);
 
 //////////////exit and free//////////////
 
-void    get_signal(t_data *shell, t_signal mode);
+void	get_signal(t_data *shell, t_signal mode);
 
 void	exit_free(t_data *shell, int status);
 void	free_all(t_data *shell);
@@ -77,6 +78,4 @@ void	free_t_data(t_data *shell);
 void	ft_exit(t_data *shell, char **args);
 void	f_free_array(char **r);
 
-//static char	*get_expand(t_data *shell, char *line);
-//static int	end_character(char c);
-# endif
+#endif

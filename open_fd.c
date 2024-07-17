@@ -37,15 +37,17 @@ int	open_fd_in(t_data *shell, t_pipex *pipex, int filetype, char *filename)
 		if (access(filename, F_OK | R_OK) == -1)
 		{
 			//perror("No access for input");
-			shell->exit_status = 1;
+			//shell->exit_status = 1;
+			write_msg_status(shell, "sashel: permission denied: file is not readable", 1);
 			exit (1);//return (1);
 		}
 		pipex->fd_in = open(filename, O_RDONLY);
 		if (pipex->fd_in == -1)
 		{
-			perror("Error in infile");
-			shell->exit_status = 1;
-			return (1);
+			//perror("Error in infile");
+			//shell->exit_status = 1;
+			write_msg_status(shell, "sashel: permission denied: file is not readable", 1);
+			exit(1);//return (1);
 		}
 		if (dup2(pipex->fd_in, STDIN_FILENO) < 0)
 			printf("dup2 \n");

@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:52:26 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/17 14:20:13 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/17 18:02:43 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ void	shell_loop(t_data *sh)
 	t_pipex	pipex;
 	while (1)
 	{
+		sh->exit_status = 0;
 		l = read_line(sh);
 		if (empty_line(l))
 		{

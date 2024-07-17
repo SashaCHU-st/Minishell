@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:46:25 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/16 20:09:31 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/17 13:50:49 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	check_filetype(t_data *shell, t_pipex *pipex, t_cmd *cmd)
 		if (cmd->filetype[i] == OUT)
 			open_fd_out(shell, pipex, cmd->filetype[i], cmd->filenames[i]);
 		if (cmd->filetype[i] == APPEND)
-			open_fd_out(shell, pipex, cmd->filetype[i], cmd->filenames[i]);
+			open_fd_out_app(shell, pipex, cmd->filetype[i], cmd->filenames[i]);
 		i++;
 	}
 }
@@ -76,7 +76,11 @@ void	open_fd_out(t_data *shell, t_pipex *pipex, int filetype, char *filename)
 			printf("dup2 \n");
 		close(pipex->fd_out);
 	}
-	else if (filetype == APPEND)
+}
+
+void	open_fd_out_app(t_data *shell, t_pipex *pipex, int type, char *filename)
+{
+	if (type == APPEND)
 	{
 		pipex->fd_out = open(filename, O_CREAT | O_APPEND | O_RDWR, 0644);
 		if (pipex->fd_out == -1)

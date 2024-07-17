@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 13:32:50 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/16 19:59:40 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/17 17:07:58 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,12 @@ void	input_checker(t_data *shell, char *input_copy);
 void	if_added_var(char *added_var, char **new_envp, t_data *data);
 void	new_envp_size(t_data *data, int new, int i, char **new_envp);
 void	write_msg_status(t_data *shell, char *msg, int status);
-void	final_path(t_data *shell, int k, char *final, t_pipex pipex);
+void	exeve_for_commands(t_data *shell, t_pipex pipex, char *final, int k);
+void	open_fd_out_app(t_data *shell, t_pipex *pipex, int filetype, char *filename);
+void	free_for_path(t_data *shell, t_pipex *pipex);
+char	*ft_getenv(t_data *shell, char *env);
+char	*expand_var(t_data *shell, char *line);
+void	creating_filename (int j, char *line, int i,  t_data *sh);
+void	removing( t_data *sh, int j, int k, int i);
 
 #endif

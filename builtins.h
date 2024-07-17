@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 13:32:50 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/16 11:09:06 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/16 19:59:40 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int		open_fd_in(t_data *shell, t_pipex *pipex, int filetype, char *filenames);
 void	open_fd_out(t_data *shell, t_pipex *pipex, int filetype, char *filename);
 void	free_array(char **array);
 void	ft_error(void);
-char	*path_for_commands(t_data *shell, t_pipex *pipex, char **child_command);
+char	*path_commands(t_data *shell, t_pipex *pipex, char **child_command);
 void	builtins(t_data *data, t_cmd *cmd, int k);
 int		if_it_is_builtins( t_cmd *cmd);
 void	child(t_pipex pipex, t_data *shell, int k);
@@ -68,14 +68,14 @@ void	redirection_in_builtin(t_data *shell, t_pipex *pipex, int i);
 void	redirection_with_builtins(t_data *shell, t_pipex *pipex, int i);
 void	checking_home(int found_home, t_data *data, int home, char *original);
 void	running_commands(t_data *shell, int i, t_pipex *pipex );
-int		check_permissions(t_data *shell, int k);
 void	old_pwd_k(char *old_pwd, char *pwd_value, char *original, t_data *data);
 void	new_pwd_k(char *new_pwd, char *pwd_value, t_data *data);
-void	dup_close (int k, t_data *shell);
+void	dup_close(int k, t_data *shell);
 void	found_var(t_data *shell, int var_index, char *added_var, char *input_copy);
 void	input_checker(t_data *shell, char *input_copy);
-void	if_added_var (char *added_var, char **new_envp, t_data *data);
+void	if_added_var(char *added_var, char **new_envp, t_data *data);
 void	new_envp_size(t_data *data, int new, int i, char **new_envp);
-void 	write_msg_status(t_data *shell, char *msg, int status);
+void	write_msg_status(t_data *shell, char *msg, int status);
+void	final_path(t_data *shell, int k, char *final, t_pipex pipex);
 
 #endif

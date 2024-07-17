@@ -6,12 +6,18 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:47:03 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/17 11:41:42 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/17 13:53:30 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "builtins.h"
+
+void	free_for_path(t_data *shell, t_pipex *pipex)
+{
+	shell->exit_status = 1;
+	free_fun(pipex);
+}
 
 char	*path_commands(t_data *shell, t_pipex *pipex, char **child)
 {
@@ -24,17 +30,11 @@ char	*path_commands(t_data *shell, t_pipex *pipex, char **child)
 	{
 		command_temp = ft_strjoin(*current_path, "/");
 		if (command_temp == 0)
-		{
-			shell->exit_status = 1;
-			free_fun(pipex);
-		}
+			free_for_path(shell, pipex);
 		command = ft_strjoin(command_temp, *child);
 		free(command_temp);
 		if (command == 0)
-		{
-			shell->exit_status = 1;
-			free_fun(pipex);
-		}
+			free_for_path(shell, pipex);
 		if (access(command, F_OK | X_OK) == 0)
 			return (command);
 		free(command);
@@ -59,17 +59,12 @@ char	*mine_path(t_data *shell, int i)
 		shell->envp++;
 	if (*shell->envp == NULL)
 	{
-		i = 0;
-		while (i < shell->cmds_count)
+		if (shell->cmds[i].word_tok[0][0] != '/')
 		{
-			if(shell->cmds[i].word_tok[0][0] != '/')
-			{
-				ft_putstr_fd("bash: ", 2);
-				ft_putstr_fd(shell->cmds[i].word_tok[0], 2);
-				ft_putstr_fd(": No such file or directory\n", 2);
-				shell->exit_status = 127;
-			}
-			i++;
+			ft_putstr_fd("bash: ", 2);
+			ft_putstr_fd(shell->cmds[i].word_tok[0], 2);
+			ft_putstr_fd(": No such file or directory\n", 2);
+			shell->exit_status = 127;
 		}
 		return (NULL);
 	}

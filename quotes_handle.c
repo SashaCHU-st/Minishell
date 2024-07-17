@@ -26,20 +26,22 @@ int	skip_quotes(char *line, int i)
 
 bool	has_unclosed_quotes(char *line)
 {
-	int	count;
-	int	i;
+	int		i;
+	bool	single_quote_open;
+	bool	double_quote_open;
 
+	single_quote_open = false;
+	double_quote_open = false;
 	i = 0;
-	count = 0;
 	while (line[i])
 	{
-		if (line[i] == '\'' || line[i] == '\"')
-			count++;
+		if (line[i] == '\'')
+			single_quote_open = !single_quote_open;
+		else if (line[i] == '\"')
+			double_quote_open = !double_quote_open;
 		i++;
 	}
-	if (count % 2 == 0)
-		return (false);
-	return (true);
+	return (single_quote_open || double_quote_open);
 }
 
 void	remove_quotes(char *str)
@@ -63,26 +65,26 @@ void	remove_quotes(char *str)
 	str[j] = '\0';
 }
 
-int	check_input_quotes_pipe(t_data *shell, char *line)
+int	q_pipe(t_data *shell, char *line)
 {
 	int	i;
-	int	in_quote;
+	int	in_sq;
+	int	in_dq;
 
 	i = 0;
-	in_quote = 0;
+	in_sq = 0;
+	in_dq = 0;
 	while (line[i])
 	{
-		if (line[i] == '\"' || line[i] == '\'')
-		{
-			in_quote = !in_quote;
-			i++;
-			continue ;
-		}
-		if (line[i] == '|' && !in_quote)
+		if (line[i] == '\"')
+			in_dq = !in_dq;
+		else if (line[i] == '\'')
+			in_sq = !in_sq;
+		if (line[i] == '|' && !in_sq && !in_dq)
 			line[i] = 31;
 		i++;
 	}
-	if ((in_quote || has_unclosed_quotes(line)))
+	if (has_unclosed_quotes(line))
 	{
 		ft_putendl_fd("Syntax error: unclosed quotes", 2);
 		shell->exit_status = 2;

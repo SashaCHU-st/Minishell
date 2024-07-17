@@ -13,7 +13,7 @@
 #include "minishell.h"
 #include "builtins.h"
 
-int	input_validation_pipes(t_data *shell, char *input)
+int	in_pipes(t_data *shell, char *input)
 {
 	int	i;
 
@@ -24,8 +24,7 @@ int	input_validation_pipes(t_data *shell, char *input)
 		{
 			if (input[i + 1] == '|')
 			{
-				ft_putendl_fd("Syntax error: multiple pipes", 2);
-				shell->exit_status = 2;
+				msg_status(shell, "Syntax error: multiple pipes", 2);
 				return (1);
 			}
 			i++;
@@ -33,8 +32,8 @@ int	input_validation_pipes(t_data *shell, char *input)
 				i++;
 			if (input[i] == '|' || input[i] == '\0')
 			{
-				ft_putendl_fd("Syntax error: no input after pipe or unexpected token", 2);
-				shell->exit_status = 2;
+				msg_status(shell, "Syntax error: no input \
+				after unexpected token", 2);
 				return (1);
 			}
 		}
@@ -43,27 +42,27 @@ int	input_validation_pipes(t_data *shell, char *input)
 	return (0);
 }
 
-int	input_validation_redir(t_data *shell, char *input)
+int	in_redir(t_data *shell, char *in)
 {
 	int	i;
 
 	i = 0;
-	while (input[i])
+	while (in[i])
 	{
-		if (input[i] == '<' || input[i] == '>' || \
-			(input[i] == '>' && input[i + 1] == '>') || \
-			(input[i] == '<' && input[i + 1] == '<'))
+		if (in[i] == '<' || in[i] == '>' || \
+			(in[i] == '>' && in[i + 1] == '>') || \
+			(in[i] == '<' && in[i + 1] == '<'))
 		{
-			if (input[i + 1] == '>' || input[i + 1] == '<')
+			if (in[i + 1] == '>' || in[i + 1] == '<')
 				i += 2;
 			else
 				i++;
-			while (check_space(input[i]))
+			while (check_space(in[i]))
 				i++;
-			if (input[i] == '|' || input[i] == '\0' || input[i] == '<' || input[i] == '>')
+			if (in[i] == '|' || in[i] == '\0' || in[i] == '<' || in[i] == '>')
 			{
-				ft_putendl_fd("Syntax error: no input after redirection or unexpected token", 2);
-				shell->exit_status = 2;
+				msg_status(shell, "Syntax error: no input after \
+				unexpected token", 2);
 				return (1);
 			}
 		}
@@ -79,4 +78,10 @@ void	error_message(t_data *shell, char *msg, int status)
 	perror(msg);
 	shell->exit_status = status;
 	exit (status);
+}
+
+void	msg_status(t_data *shell, char *msg, int status)
+{
+	ft_putendl_fd(msg, 2);
+	shell->exit_status = status;
 }

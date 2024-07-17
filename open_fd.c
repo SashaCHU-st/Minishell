@@ -13,11 +13,11 @@
 #include "minishell.h"
 #include "builtins.h"
 
-void	write_msg_status(t_data *shell, char *msg, int status)
-{
-	ft_putendl_fd(msg, 2);
-	shell->exit_status = status;
-}
+// void	write_msg_status(t_data *shell, char *msg, int status)
+// {
+// 	ft_putendl_fd(msg, 2);
+// 	shell->exit_status = status;
+// }
 
 void	check_filetype(t_data *shell, t_pipex *pipex, t_cmd *cmd)
 {
@@ -42,7 +42,7 @@ int	open_fd_in(t_data *shell, t_pipex *pipex, int filetype, char *filename)
 	{
 		if (access(filename, F_OK | R_OK) == -1)
 		{
-			write_msg_status(shell, "sashel: permission denied", 1);
+			msg_status(shell, "sashel: permission denied", 1);
 			shell->exit_status = 1;
 			exit(1);
 		}
@@ -69,7 +69,7 @@ void	open_fd_out(t_data *shell, t_pipex *pipex, int filetype, char *filename)
 		{
 			close(pipex->fd_in);
 			shell->exit_status = 1;
-			write_msg_status(shell, "sashel: permission denied", 1);
+			msg_status(shell, "sashel: permission denied", 1);
 			exit(1);
 		}
 		if (dup2(pipex->fd_out, STDOUT_FILENO) < 0)
@@ -83,7 +83,7 @@ void	open_fd_out(t_data *shell, t_pipex *pipex, int filetype, char *filename)
 		{
 			shell->exit_status = 1;
 			close(pipex->fd_in);
-			write_msg_status(shell, "sashel: permission denied", 1);
+			msg_status(shell, "sashel: permission denied", 1);
 			exit(1);
 		}
 		if (dup2(pipex->fd_out, STDOUT_FILENO) < 0)

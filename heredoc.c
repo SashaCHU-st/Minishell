@@ -37,7 +37,7 @@ static int	hd_readline(char *line, t_data *tokens, char *delimeter, int fd)
 		return (-1);
 	while (1)
 	{		
-		if (signal_status)
+		if (g_signal_status)
 		{
 			free(line);
 			dup2(stdin, STDIN_FILENO);
@@ -99,8 +99,8 @@ void	*is_heredoc(char *line, t_data *tokens)
 	i = 0;
 	in_quote = 0;
 	tokens->hd_count = 0;
-	signal_status = 0;
-	while (line[i] && !signal_status)
+	g_signal_status = 0;
+	while (line[i] && !g_signal_status)
 	{
 		if (line[i] == '\"' || line[i] == '\'')
 		{

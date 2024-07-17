@@ -72,7 +72,7 @@ int	process_hd(t_data *tokens, const char *file, char *delimeter)
 	char	*line;
 
 	line = NULL;
-	get_signal(tokens, HEREDOC);
+	get_signal(HEREDOC);
 	unlink(file);
 	fd = open(file, O_RDWR | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
@@ -85,7 +85,7 @@ int	process_hd(t_data *tokens, const char *file, char *delimeter)
 	}
 	if (close(fd) == -1)
 		error_message(tokens, "Failed to close fd for heredoc", 1);
-	get_signal(tokens, DEFAULT);
+	get_signal(DEFAULT);
 	return (0);
 }
 

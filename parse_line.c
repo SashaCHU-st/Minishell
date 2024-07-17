@@ -82,4 +82,8 @@ void	split_line(char *line, t_data *shell)
 	i = -1;
 	while (++i < shell->cmds_count)
 		shell->cmds[i] = split_into_wtok(shell->pipe_tok[i], shell->cmds[i]);
+	// for (int j = 0; j < shell->cmds_count; j++)
+	// {
+	// 	printf("Command %d; %s\n", j, shell->cmds[j].word_tok[j]);
+	// }
 }

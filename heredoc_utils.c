@@ -78,6 +78,7 @@ int	process_hd(t_data *tokens, const char *file, char *delimeter)
 	{
 		close (fd);
 		unlink(file);
+		get_signal(HANDLER);
 		return (-1);
 	}
 	if (close(fd) == -1)

@@ -32,8 +32,8 @@ int	in_pipes(t_data *shell, char *input)
 				i++;
 			if (input[i] == '|' || input[i] == '\0')
 			{
-				msg_status(shell, "Syntax error: no input \
-				after unexpected token", 2);
+				msg_status(shell, \
+				"Syntax error: no input after unexpected token", 2);
 				return (1);
 			}
 		}
@@ -61,8 +61,8 @@ int	in_redir(t_data *shell, char *in)
 				i++;
 			if (in[i] == '|' || in[i] == '\0' || in[i] == '<' || in[i] == '>')
 			{
-				msg_status(shell, "Syntax error: no input after \
-				unexpected token", 2);
+				msg_status(shell, \
+				"Syntax error: no input after unexpected token", 2);
 				return (1);
 			}
 		}

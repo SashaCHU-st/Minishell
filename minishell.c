@@ -78,7 +78,7 @@ void	shell_loop(t_data *sh)
 				sh->exit_status = 130;
 				continue ;
 			}
-			//sh->exit_status = 0;
+			sh->exit_status = 0;
 			running_commands(sh, 0, &pipex);
 			//printf("exit status shell loop: %d\n", sh->exit_status);
 		}

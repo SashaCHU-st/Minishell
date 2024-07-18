@@ -43,8 +43,8 @@ static void	cmd_and_expand(t_data *shell)
 			shell->cmds[i].filenames[j] = expand_var(shell, \
 								shell->cmds[i].filenames[j]);
 			if (!shell->cmds[i].filenames[j])
-				error_message(shell, "Variable expansion \
-								failed in filenames", 1);
+				error_message(shell, 
+				"Variable expansion failed in filenames", 1);
 			j++;
 		}
 		i++;

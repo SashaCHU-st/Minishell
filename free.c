@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:46:00 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/15 15:44:29 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/18 18:56:52 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	free_array(char **array)
 		return ;
 	while (array[i])
 	{
+	//	dprintf(2,"free_array will clean ->%s<- at %p\n", array[i], array[i]);
 		free(array[i]);
 		i++;
 	}

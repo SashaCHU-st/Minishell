@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:52:26 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/18 14:03:45 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/18 18:55:36 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,22 @@ void	shell_loop(t_data *sh)
 			}
 			sh->exit_status = 0;
 			running_commands(sh, 0, &pipex);
+		}
+		if(sh->pipe_tok)
+		{
+			free_array(sh->pipe_tok);
+			sh->pipe_tok = NULL;
+		}
+		/*if (sh->filename)
+		{
+			free(sh->filename);
+			sh->filename = NULL;
+		}
+		*/
+		if (sh->cmds)
+		{
+			f_free_cmds(sh->cmds, sh->cmds_count);
+			sh->cmds = NULL;
 		}
 		free(l);
 	}

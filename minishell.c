@@ -61,6 +61,7 @@ void	shell_loop(t_data *sh)
 	t_pipex	pipex;
 	while (1)
 	{
+			//g_signal_status = 0;
 		//sh->exit_status = 0;
 		l = read_line(sh);
 		if (empty_line(l))
@@ -76,8 +77,10 @@ void	shell_loop(t_data *sh)
 			{
 				free(l);
 				sh->exit_status = 130;
+				printf("signal hd: %d\n", g_signal_status);
 				continue ;
 			}
+			printf("signal: %d\n", g_signal_status);
 			sh->exit_status = 0;
 			running_commands(sh, 0, &pipex);
 			//printf("exit status shell loop: %d\n", sh->exit_status);

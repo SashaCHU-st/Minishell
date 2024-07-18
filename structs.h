@@ -10,38 +10,33 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef STRUCT_H
-# define STRUCT_H
+#ifndef STRUCTS_H
+# define STRUCTS_H
 
 # include "minishell.h"
 # include "structs.h"
 
-typedef enum {
+typedef enum e_signal{
 	DEFAULT,
 	HANDLER,
 	HEREDOC,
 	NO_SIGNALS
 }	t_signal;
 
-typedef enum {
+typedef enum t_filetype{
 	NONE,
 	IN,
 	OUT,
 	HERE,
 	APPEND
-} e_filetype;
-
+}	t_filetype;
 
 typedef struct s_pipex{
 	int		fd[2];
 	int		fd_in;
 	int		fd_out;
 	char	**commands_path;
-	char	**com_fir_child;
-	char	**com_sec_child;
-	int		second_child;
-	
-} t_pipex;
+}	t_pipex;
 
 typedef struct s_cmd
 {
@@ -50,10 +45,8 @@ typedef struct s_cmd
 	char		**filenames;
 	int			*filetype;
 	int			number_of_redir;
-	e_filetype	type;
+	t_filetype	type;
 }	t_cmd;
-
-typedef struct s_built t_built;
 
 typedef struct s_data
 {

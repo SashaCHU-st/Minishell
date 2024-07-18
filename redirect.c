@@ -13,7 +13,7 @@
 #include "minishell.h"
 #include "builtins.h"
 
-static e_filetype	peek(char *line, int index)
+static t_filetype	peek(char *line, int index)
 {
 	if (line[index] == '<' && line[index + 1] == '<')
 		return (HERE);

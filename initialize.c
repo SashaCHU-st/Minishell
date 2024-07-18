@@ -37,7 +37,6 @@ void	init_t_data(t_data *data)
 	data->hd_count = 0;
 	data->tempfile_hd = NULL;
 	data->exit_status = 0;
-	data->hd_interrupt = 0;
 	data->pipe_count = 0;
 	data->var_name_len = 0;
 	data->envp_size = 0;
@@ -50,4 +49,12 @@ void	init_t_data(t_data *data)
 	data->new_line = NULL;
 	data->line = NULL;
 	data->hd_index = 0;
+	memset(data->pwd, 0, sizeof(data->pwd));
+	data->redir_count = 0;
+	data->pipe = NULL;
+	data->parent_out = 0;
+	data->parent_in = 0;
+	data->pid = NULL;
+	data->path = NULL;
+	data->expanded_line = NULL;
 }

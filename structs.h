@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 10:32:47 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/17 17:06:00 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/18 12:36:27 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,6 @@ typedef struct s_cmd
 	int			number_of_redir;
 	e_filetype	type;
 }	t_cmd;
-
-typedef struct s_built t_built;
 
 typedef struct s_data
 {

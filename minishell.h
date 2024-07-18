@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:53:11 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/18 11:22:34 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/18 13:57:26 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void			remove_quotes(char *str);
 int				skip_quotes(char *line, int i);
 int				q_pipe(t_data *shell, char *line);
 int				is_in_quotes(char c, int *in_single_quote,
-						int *in_double_quote);
+					int *in_double_quote);
 void			error_message(t_data *shell, char *msg, int status);
 void			msg_status(t_data *shell, char *msg, int status);
 void			init_t_data(t_data *data);
@@ -58,8 +58,8 @@ char			**do_split(char const *s, char c);
 void			split_line(char *line, t_data *shell);
 void			*is_heredoc(char *line, t_data *tokens);
 char			*hd_filename(t_data *shell, int count);
-int				process_hd(t_data *tokens, const char *file, 
-						char *delimeter);
+int				process_hd(t_data *tokens, const char *file,
+					char *delimeter);
 char			*expand_var(t_data *shell, char *line);
 void			make_redirs(t_data *tokens);
 void			remove_redir_from_input(t_data *tokens);
@@ -71,7 +71,6 @@ char			*ft_strndup(const char *str, size_t n);
 int				ft_strcmp(char *s1, char *s2);
 
 //////////////exit and free//////////////
-
 
 void			get_signal(t_signal mode);
 void			exit_free(t_data *shell, int status);

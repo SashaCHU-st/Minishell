@@ -27,25 +27,24 @@ char	*read_line(t_data *line)
 		exit (EXIT_SUCCESS);
 	}
 	add_history(input);
-	printf("input: %s\n", input);
 	return (input);
 }
 
 void	running_commands(t_data *shell, int i, t_pipex *pipex )
 {
-	if ((shell->cmds->filetype[i] == HERE || shell->cmds->filetype[i] == OUT
-			|| shell->cmds->filetype[i] == IN
-			|| shell->cmds->filetype[i] == APPEND)
-		&& shell->cmds->word_tok[0] == NULL)
-		return ;
-	else if (shell->cmds_count == 1 && if_it_is_builtins(&shell->cmds[i]) == 1)
+	if (shell->cmds_count == 1 && if_it_is_builtins(&shell->cmds[i]) == 1)
 	{
-		if (shell->cmds->filetype[i] == NONE)
+		if (shell->cmds->filetype == NULL || shell->cmds->filetype[i] == NONE)
 			builtins(shell, &shell->cmds[i], i);
 		if (shell->cmds[i].number_of_redir > 0)
 			redirection_with_builtins(shell, pipex, i);
 		i++;
 	}
+	else if ((shell->cmds->filetype[i] == HERE || shell->cmds->filetype[i] == OUT
+			|| shell->cmds->filetype[i] == IN
+			|| shell->cmds->filetype[i] == APPEND)
+		&& shell->cmds->word_tok[0] == NULL)
+		return ;
 	else
 	{
 		piping(shell);
@@ -61,8 +60,6 @@ void	shell_loop(t_data *sh)
 	t_pipex	pipex;
 	while (1)
 	{
-			//g_signal_status = 0;
-		//sh->exit_status = 0;
 		l = read_line(sh);
 		if (empty_line(l))
 		{
@@ -76,13 +73,10 @@ void	shell_loop(t_data *sh)
 			{
 				free(l);
 				sh->exit_status = 130;
-				printf("signal hd: %d\n", g_signal_status);
 				continue ;
 			}
-			printf("signal: %d\n", g_signal_status);
 			sh->exit_status = 0;
 			running_commands(sh, 0, &pipex);
-			//printf("exit status shell loop: %d\n", sh->exit_status);
 		}
 		if(sh->pipe_tok)
 		{

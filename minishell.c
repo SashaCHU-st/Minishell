@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:52:26 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/17 18:02:43 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/18 12:06:00 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	shell_loop(t_data *sh)
 		l = read_line(sh);
 		if (empty_line(l))
 		{
-			sh->exit_status = 2;
+			//sh->exit_status = 2;
 			continue ;
 		}
 		if (in_pipes(sh, l) == 0 && in_redir(sh, l) == 0 && q_pipe(sh, l) == 0)

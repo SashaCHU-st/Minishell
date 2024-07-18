@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:53:11 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/17 19:22:27 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/18 11:22:34 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,4 +81,5 @@ void			free_t_data(t_data *shell);
 void			ft_exit(t_data *shell, char **args);
 void			f_free_array(char **r);
 unsigned int	num_of_str(const char *s, char c);
+
 #endif

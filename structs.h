@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 10:32:47 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/18 12:36:27 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/18 18:27:54 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,13 +76,13 @@ typedef struct s_data
 	int		var_len;
 	int		in_dquotes;
 	char	*expanded_line;
-	char	*filename;
 	int		in_single_quote;
 	int		in_double_quote;
 	int		in_quotes;
 	char	*new_line;
 	char	*line;
 	int		hd_index;
+	char	*filename;
 }	t_data;
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 15:49:10 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/17 19:17:25 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/18 18:26:10 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static t_filetype	peek(char *line, int index)
 	return (NONE);
 }
 
-static char	*take_filename(char *line, int *index)
+static char	*take_filename( char *line, int *index)
 {
 	int		start;
 	char	*filename;

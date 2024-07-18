@@ -22,13 +22,14 @@ static int	end_character(char c)
 static char	*receive_exit_status(t_data *shell)
 {
 	char	*status;
-
+	printf("exit status %d\n", shell->exit_status);
 	if (shell->exit_status > 255)
 		status = ft_itoa(WEXITSTATUS(shell->exit_status));
 	else
 		status = ft_itoa(shell->exit_status);
 	if (!status)
 		error_message(shell, "Malloc failed", 1);
+	printf("exit status %s\n", status);
 	return (status);
 }
 
@@ -47,7 +48,7 @@ static char	*get_expand(t_data *shell, char *line)
 		return (ft_strdup(""));
 	env = (char *)malloc(sizeof(char) * len + 1);
 	if (!env)
-		error_message(shell, "Malloc filed", 1);
+		error_message(shell, "Malloc failed", 1);
 	ft_strncpy(env, line, len);
 	env[len] = '\0';
 	value = ft_getenv(shell, env);

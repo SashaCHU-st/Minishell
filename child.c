@@ -39,6 +39,7 @@ void	forking(t_data *shell, t_pipex pipex)
 	if (!shell->pid)
 	{
 		perror("Error in malloc");
+		free(shell->pid);
 		exit(1);
 	}
 	while (k < shell->cmds_count)
@@ -68,8 +69,7 @@ void	exeve_for_commands(t_data *shell, t_pipex pipex, char *final, int k)
 	{
 		printf("%s: yyyyy command not found\n", shell->cmds[k].word_tok[0]);
 		free(final);
-		shell->exit_status = 127;
-		exit(1);
+		exit(127);
 	}
 	if (execve(final, shell->cmds[k].word_tok, shell->envp) == -1)
 	{

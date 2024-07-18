@@ -42,7 +42,7 @@ void	piping(t_data *shell)
 		shell->exit_status = 1;
 		exit(1);
 	}
-	dprintf(2, "pipes num %d\n", shell->pipe_count);
+	//dprintf(2, "pipes num %d\n", shell->pipe_count);
 	while (j < shell->pipe_count)
 	{
 		shell->pipe[j] = (int *)malloc(sizeof(int ) * 2);

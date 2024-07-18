@@ -36,6 +36,7 @@ SRCS = minishell.c \
 		unset_var.c \
 		expand_utils.c \
 		redirect_utils.c \
+		heredoc_utils.c \
 		
 OBJS = $(SRCS:.c=.o)
 

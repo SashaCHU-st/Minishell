@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:53:11 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/17 19:22:27 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/18 11:22:34 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ extern int	g_signal_status;
 
 int				in_redir(t_data *shell, char *input);
 int				in_pipes(t_data *shell, char *input);
-bool			empty_line(t_data *shell, char *line);
+bool			empty_line(char *line);
 
 bool			check_space(char ch);
 char			*change_to_space(char *line);
@@ -72,7 +72,7 @@ int				ft_strcmp(char *s1, char *s2);
 //////////////exit and free//////////////
 
 
-void			get_signal(t_data *shell, t_signal mode);
+void			get_signal(t_signal mode);
 void			exit_free(t_data *shell, int status);
 void			free_all(t_data *shell);
 void			f_free_cmds(t_cmd *cmds, int cmds_count);
@@ -80,4 +80,5 @@ void			free_t_data(t_data *shell);
 void			ft_exit(t_data *shell, char **args);
 void			f_free_array(char **r);
 unsigned int	num_of_str(const char *s, char c);
+
 #endif

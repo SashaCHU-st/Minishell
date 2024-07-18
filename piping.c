@@ -40,6 +40,9 @@ void	piping(t_data *shell)
 	{
 		perror("Error in malloc");
 		shell->exit_status = 1;
+        for (int i = 0; i < shell->pipe_count; i++)
+            free(shell->pipe[i]);
+    	free(shell->pipe);
 		exit(1);
 	}
 	//dprintf(2, "pipes num %d\n", shell->pipe_count);
@@ -50,6 +53,11 @@ void	piping(t_data *shell)
 		{
 			perror("Error in malloc");
 			shell->exit_status = 1;
+			//free_array(shell->pipe);
+			
+        	for (int i = 0; i < shell->pipe_count; i++)
+            	free(shell->pipe[i]);
+    		free(shell->pipe);
 			exit(1);
 		}
 		pipe(shell->pipe[j]);
@@ -61,9 +69,11 @@ void	closing(t_data *shell)
 {
 	int	m;
 	int	x;
+	int	status;
 
 	m = 0;
 	x = 0;
+	
 	while (m < (shell->cmds_count - 1))
 	{
 		close(shell->pipe[m][0]);
@@ -72,7 +82,8 @@ void	closing(t_data *shell)
 	}
 	while (x < shell->cmds_count)
 	{
-		waitpid(shell->pid[x], NULL, 0);
+		waitpid(shell->pid[x], &status, 0);
+		shell->exit_status = status;
 		x++;
 	}
 }

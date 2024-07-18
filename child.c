@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 16:22:11 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/17 13:40:48 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/18 19:49:05 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,6 @@ void	child(t_pipex pipex, t_data *shell, int k)
 
 	final = NULL;
 	i = 0;
-	//dprintf(2, "line %s\n", shell->cmds[0].word_tok[0]);
 	dup_close(k, shell);
 	check_filetype(shell, &pipex, &shell->cmds[k]);
 	if (if_it_is_builtins(&shell->cmds[k]) == 1)

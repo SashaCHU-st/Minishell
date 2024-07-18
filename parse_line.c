@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 11:12:53 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/18 13:49:20 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/18 19:48:00 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ static void	cmd_and_expand(t_data *shell)
 			shell->cmds[i].filenames[j] = expand_var(shell, \
 								shell->cmds[i].filenames[j]);
 			if (!shell->cmds[i].filenames[j])
-				error_message(shell, 
-				"Variable expansion failed in filenames", 1);
+				error_message(shell,
+					"Variable expansion failed in filenames", 1);
 			j++;
 		}
 		i++;

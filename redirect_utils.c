@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 16:44:41 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/17 19:20:56 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/18 18:55:04 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,12 @@ void	make_redirs(t_data *sh)
 void	if_exist_filename(t_data *sh, int i)
 {
 	if (sh->cmds[i].type == HERE)
+	{
 		sh->cmds[i].filenames[sh->redir_count] = hd_filename(sh,
 				sh->hd_index++);
+		free(sh->filename);
+		sh->filename = NULL;
+	}
 	else
 		sh->cmds[i].filenames[sh->redir_count] = sh->filename;
 	sh->cmds[i].filetype[sh->redir_count] = sh->cmds[i].type;

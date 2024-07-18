@@ -22,6 +22,7 @@ static int	end_character(char c)
 static char	*receive_exit_status(t_data *shell)
 {
 	char	*status;
+
 	printf("exit status %d\n", shell->exit_status);
 	if (shell->exit_status > 255)
 		status = ft_itoa(WEXITSTATUS(shell->exit_status));

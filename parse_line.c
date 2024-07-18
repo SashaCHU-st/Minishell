@@ -43,8 +43,8 @@ static void	cmd_and_expand(t_data *shell)
 			shell->cmds[i].filenames[j] = expand_var(shell, \
 								shell->cmds[i].filenames[j]);
 			if (!shell->cmds[i].filenames[j])
-				error_message(shell, "Variable expansion \
-								failed in filenames", 1);
+				error_message(shell, 
+				"Variable expansion failed in filenames", 1);
 			j++;
 		}
 		i++;
@@ -82,8 +82,4 @@ void	split_line(char *line, t_data *shell)
 	i = -1;
 	while (++i < shell->cmds_count)
 		shell->cmds[i] = split_into_wtok(shell->pipe_tok[i], shell->cmds[i]);
-	// for (int j = 0; j < shell->cmds_count; j++)
-	// {
-	// 	printf("Command %d; %s\n", j, shell->cmds[j].word_tok[j]);
-	// }
 }

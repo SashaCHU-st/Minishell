@@ -32,17 +32,19 @@ char	*read_line(t_data *line)
 
 void	running_commands(t_data *shell, int i, t_pipex *pipex )
 {
-	if ((shell->cmds->filetype[i] == HERE || shell->cmds->filetype[i] == OUT
-			|| shell->cmds->filetype[i] == IN
-			|| shell->cmds->filetype[i] == APPEND))
-		return ;
-	else if (shell->cmds_count == 1 && if_it_is_builtins(&shell->cmds[i]) == 1)
+	// if ((shell->cmds->filetype == NULL || shell->cmds->filetype[i] == HERE || shell->cmds->filetype[i] == OUT
+	// 		|| shell->cmds->filetype[i] == IN
+	// 		|| shell->cmds->filetype[i] == APPEND))
+	// 	return ;
+	if (shell->cmds_count == 1 && if_it_is_builtins(&shell->cmds[i]) == 1)
 	{
-		if (shell->cmds->filetype[i] == NONE)
+		if (shell->cmds->filetype == NULL)
+			builtins(shell, &shell->cmds[i], i);
+		else if (shell->cmds->filetype[i] == NONE)
 			builtins(shell, &shell->cmds[i], i);
 		if (shell->cmds[i].number_of_redir > 0)
 			redirection_with_builtins(shell, pipex, i);
-		i++;
+		//i++;
 	}
 	else
 	{
@@ -61,9 +63,7 @@ void	shell_loop(t_data *sh)
 	{
 		l = read_line(sh);
 		if (empty_line(l))
-		{
 			continue ;
-		}
 		if (in_pipes(sh, l) == 0 && in_redir(sh, l) == 0 && q_pipe(sh, l) == 0)
 		{
 			l = change_to_space(l);
@@ -75,7 +75,10 @@ void	shell_loop(t_data *sh)
 				continue ;
 			}
 			sh->exit_status = 0;
-			running_commands(sh, 0, &pipex);
+			if (sh->cmds->word_tok[0] == NULL)
+				continue ;
+			if(sh->cmds->word_tok[0] != NULL)
+				running_commands(sh, 0, &pipex);
 		}
 		if(sh->pipe_tok)
 		{

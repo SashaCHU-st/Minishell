@@ -77,8 +77,6 @@ void	updating_variables(t_data *sh, int j, int k, int i)
 		error_message(sh, "Failed to malloc for newline", 1);
 	j = 0;
 	k = 0;
-	sh->in_single_quote = 0;
-	sh->in_double_quote = 0;
 }
 
 void	removing(t_data *sh, int j, int k, int i)
@@ -86,9 +84,7 @@ void	removing(t_data *sh, int j, int k, int i)
 	updating_variables(sh, j, k, i);
 	while (sh->line[j])
 	{
-		sh->in_quotes = is_in_quotes(sh->line[j], &sh->in_single_quote,
-				&sh->in_double_quote);
-		if ((sh->line[j] == '<' || sh->line[j] == '>') && !sh->in_quotes)
+		if ((sh->line[j] == '<' || sh->line[j] == '>'))
 		{
 			if ((sh->line[j] == '<' && sh->line[j + 1] == '<' )
 				|| (sh->line[j] == '>' && sh->line[j + 1] == '>'))

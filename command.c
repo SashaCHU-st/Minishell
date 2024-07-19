@@ -6,16 +6,16 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 13:43:44 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/16 11:10:24 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/19 11:50:37 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 #include "minishell.h"
 
-void	ft_pwd(void)
+void	ft_pwd(t_data *shell)
 {
-	printf("%s\n", getcwd(NULL, 0));
+	printf("%s\n", getcwd(shell->pwd, sizeof(shell->pwd)));
 }
 
 void	if_quotes(char *str)

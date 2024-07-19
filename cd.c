@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 13:39:27 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/15 15:10:44 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/19 14:34:15 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ void	update_pwd(t_data *data, char *original)
 	old_pwd = NULL;
 	if (data->envp[data->pwd_index] != NULL)
 	{
-		free(data->envp[data->pwd_index]);
 		pwd_value = getcwd(NULL, 0);
 		if (pwd_value != NULL)
 		{

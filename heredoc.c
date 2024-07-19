@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 10:05:10 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/17 17:11:42 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/19 14:22:43 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,17 @@
 
 char	*hd_filename(t_data *shell, int count)
 {
-	char	*file;
+	//char	*file;
 	char	*temp;
 
 	temp = ft_itoa(count);
 	if (!temp)
 		error_message(shell, "Failed to create file for heredoc", 1);
-	file = ft_strjoin(".heredoc", temp);
+	shell->file = ft_strjoin(".heredoc", temp);
 	free (temp);
-	if (!file)
+	if (!shell->file)
 		error_message(shell, "Failed to create file for heredoc", 1);
-	return (file);
+	return (shell->file);
 }
 
 static char	*extract_delimiter(char *line, int *i)
@@ -51,6 +51,13 @@ static char	*extract_delimiter(char *line, int *i)
 	delimiter[len] = '\0';
 	return (delimiter);
 }
+void freeing (t_data *tokens)
+{
+	free(tokens->hd_delimeter);
+	tokens->hd_delimeter = NULL;
+	free(tokens->tempfile_hd);
+	tokens->tempfile_hd = NULL;
+}
 
 static int	handle_heredoc(char *line, int *i, t_data *tokens)
 {
@@ -66,18 +73,16 @@ static int	handle_heredoc(char *line, int *i, t_data *tokens)
 	if (!tokens->tempfile_hd)
 	{
 		error_message(tokens, "Failed to assign filename for heredoc", 1);
-		free(tokens->hd_delimeter);
-		tokens->hd_delimeter = NULL;
+		free(tokens->tempfile_hd);
+		tokens->tempfile_hd = NULL;
 		return (-1);
 	}
 	if (process_hd(tokens, tokens->tempfile_hd, tokens->hd_delimeter) == -1)
 	{
-		free(tokens->hd_delimeter);
-		tokens->hd_delimeter = NULL;
+		freeing(tokens);
 		return (-1);
 	}
-	free(tokens->hd_delimeter);
-	tokens->hd_delimeter = NULL;
+	freeing(tokens);
 	return (0);
 }
 

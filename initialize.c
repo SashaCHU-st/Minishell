@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 12:30:19 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/18 18:20:01 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/19 13:26:54 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	init_t_data(t_data *data)
 	data->new_line = NULL;
 	data->line = NULL;
 	data->hd_index = 0;
-	memset(data->pwd, 0, sizeof(data->pwd));
+	//memset(data->pwd, 0, sizeof(data->pwd));
 	data->redir_count = 0;
 	data->pipe = NULL;
 	data->parent_out = 0;
@@ -57,4 +57,5 @@ void	init_t_data(t_data *data)
 	data->pid = NULL;
 	data->path = NULL;
 	data->expanded_line = NULL;
+	data->file = NULL;
 }

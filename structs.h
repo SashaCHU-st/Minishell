@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 10:32:47 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/18 18:27:54 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/19 13:01:56 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ typedef struct s_data
 	char	*line;
 	int		hd_index;
 	char	*filename;
+	char	*file;
 }	t_data;
 
 #endif

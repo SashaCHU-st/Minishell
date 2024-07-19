@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:52:26 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/18 18:55:36 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/19 13:29:02 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,19 +32,18 @@ char	*read_line(t_data *line)
 
 void	running_commands(t_data *shell, int i, t_pipex *pipex )
 {
-	if (shell->cmds_count == 1 && if_it_is_builtins(&shell->cmds[i]) == 1)
+	if ((shell->cmds->filetype[i] == HERE || shell->cmds->filetype[i] == OUT
+			|| shell->cmds->filetype[i] == IN
+			|| shell->cmds->filetype[i] == APPEND))
+		return ;
+	else if (shell->cmds_count == 1 && if_it_is_builtins(&shell->cmds[i]) == 1)
 	{
-		if (shell->cmds->filetype == NULL || shell->cmds->filetype[i] == NONE)
+		if (shell->cmds->filetype[i] == NONE)
 			builtins(shell, &shell->cmds[i], i);
 		if (shell->cmds[i].number_of_redir > 0)
 			redirection_with_builtins(shell, pipex, i);
 		i++;
 	}
-	else if ((shell->cmds->filetype[i] == HERE || shell->cmds->filetype[i] == OUT
-			|| shell->cmds->filetype[i] == IN
-			|| shell->cmds->filetype[i] == APPEND)
-		&& shell->cmds->word_tok[0] == NULL)
-		return ;
 	else
 	{
 		piping(shell);
@@ -83,17 +82,17 @@ void	shell_loop(t_data *sh)
 			free_array(sh->pipe_tok);
 			sh->pipe_tok = NULL;
 		}
-		/*if (sh->filename)
-		{
-			free(sh->filename);
-			sh->filename = NULL;
-		}
-		*/
 		if (sh->cmds)
 		{
 			f_free_cmds(sh->cmds, sh->cmds_count);
 			sh->cmds = NULL;
 		}
+		// if(sh->new_envp)
+		// {
+		// 	printf("here\n");
+		// 	free_array(sh->new_envp);
+		// 	sh->new_envp = NULL;
+		// }
 		free(l);
 	}
 }
@@ -115,7 +114,12 @@ static char	**copy_envp(t_data *shell, char *envp[])
 	{
 		new_envp[i] = ft_strdup(envp[i]);
 		if (new_envp[i] == NULL)
+		{
 			error_message(shell, "Failed to duplicate string", 1);
+			while (i > 0)
+				free(new_envp[--i]);
+			return (NULL);
+		}
 		i++;
 	}
 	new_envp[count] = NULL;
@@ -129,6 +133,7 @@ int	main(int argc, char **argv, char *envp[])
 	init_t_data(&data);
 	(void)argv;
 	data.envp = copy_envp(&data, envp);
+	
 	if (!data.envp)
 		error_message(&data, "Failed to copy environment", 1);
 	if (argc < 2)

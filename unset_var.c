@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 19:56:28 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/16 20:10:41 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/19 14:06:07 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,19 @@ void	unset_var(t_data *data, char *arg)
 			break ;
 		i++;
 	}
+	printf("data -> envp[i] %s \n",data->envp[i]);
 	if (data->envp[i] == NULL)
 	{
 		printf(" ");
 		return ;
 	}
+	free(data->envp[i]);
+	data->envp[i] = NULL;
 	j = i;
 	while (data->envp[j] != NULL)
 	{
 		data->envp[j] = data->envp[j + 1];
 		j++;
 	}
+	
 }

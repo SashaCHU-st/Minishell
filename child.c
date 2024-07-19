@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 16:22:11 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/18 19:49:05 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/19 11:34:27 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	exeve_for_commands(t_data *shell, t_pipex pipex, char *final, int k)
 		final = path_commands(shell, &pipex, &shell->cmds[k].word_tok[0]);
 	if (!final)
 	{
-		printf("%s: yyyyy command not found\n", shell->cmds[k].word_tok[0]);
+		printf("%s: command not found\n", shell->cmds[k].word_tok[0]);
 		free(final);
 		exit(127);
 	}

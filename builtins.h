@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 13:32:50 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/17 19:19:16 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/19 11:50:55 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	ft_export(t_data *data, int number_of_inputs);
 void	ft_env(t_data *data);
 void	ft_unset(t_data *data, int number_of_inputs);
 void	ft_cd(t_data *data, int number_of_inputs);
-void	ft_pwd(void);
+void	ft_pwd(t_data *shell);
 int		is_var_in_envp(char *arg, t_data *data);
 void	if_quotes(char *str);
 void	cd_without_arg(t_data *data, char *original);

@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 15:44:20 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/18 17:14:40 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/19 14:20:40 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ void	free_t_data(t_data *shell)
 
 void	free_all(t_data *shell)
 {
-	//dprintf(2, "free_all\n");
 	if (shell == NULL)
 		return ;
 	if (shell->cmds)
@@ -71,16 +70,10 @@ void	free_all(t_data *shell)
 		free (shell->hd_delimeter);
 		shell->hd_delimeter = NULL;
 	}
-	if (shell->tempfile_hd)
-	{
-		free (shell->tempfile_hd);
-		shell->tempfile_hd = NULL;
-	}
 }
 
 void	exit_free(t_data *shell, int status)
 {
-	//dprintf(2, "exit_free\n");
 	if (shell)
 		free_all(shell);
 	exit (status);

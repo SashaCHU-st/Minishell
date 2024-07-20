@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 10:08:33 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/20 10:03:12 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/20 15:11:37 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	piping(t_data *shell)
 			perror("Error in malloc");
 			shell->exit_status = 1;
 			//free_array(shell->pipe);
-			free(shell->pipe);
+			//free(shell->pipe);
 			exit(1);
 		}
 		pipe(shell->pipe[j]);

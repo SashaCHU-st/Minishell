@@ -117,11 +117,11 @@ void	split_line(char *line, t_data *shell)
 	i = -1;
 	while (++i < shell->cmds_count)
 		shell->cmds[i] = split_into_wtok(shell->pipe_tok[i], shell->cmds[i]);
-	for (i = 0; i < shell->cmds_count; i++) {
-        printf("Command %d:\n", i);
-        for (int j = 0; j < shell->cmds[i].w_count; j++) {
-            printf("  Token %d: %s\n", j, shell->cmds[i].word_tok[j]);
-        }
-    }
+	// for (i = 0; i < shell->cmds_count; i++) {
+    //     printf("Command %d:\n", i);
+    //     for (int j = 0; j < shell->cmds[i].w_count; j++) {
+    //         printf("  Token %d: %s\n", j, shell->cmds[i].word_tok[j]);
+    //     }
+    //}
 }
 

@@ -56,6 +56,9 @@ static t_cmd	split_into_wtok(char *pipe_token, t_cmd cmd)
 	change_space_to_31(pipe_token);
 	remove_quotes(pipe_token);
 	cmd.word_tok = do_split(pipe_token, 31);
+	printf("Number of tokens: %d\n", cmd.w_count);
+    
+
 	if (!cmd.word_tok)
 		return (cmd);
 	while (cmd.word_tok[cmd.w_count])
@@ -63,25 +66,22 @@ static t_cmd	split_into_wtok(char *pipe_token, t_cmd cmd)
 	return (cmd);
 }
 
-static bool	if_args_in_quote(char *line)
+int quotes_redir(char *line)
 {
-	char	*cmds[] = {"echo", "cd", "ls", "pwd", NULL};
-	int		i;
-
-	i = 0;
-	while (cmds[i])
-	{
-		if (ft_strncmp(line, cmds[i], ft_strlen(cmds[i])) == 0)
-		{
-			line += ft_strlen(cmds[i]);
-			while (*line && *line == ' ')
-				line++;
-			if (*line == '\"' || *line == '\'')
-				return (true);
-		}
-		i++;
-	}
-	return (false);
+    int i = 0;
+    int in_single_quote = 0;
+    int in_double_quote = 0;
+    while (line[i])
+    {
+        if (line[i] == '\'' && !in_double_quote)
+            in_single_quote = !in_single_quote;
+        else if (line[i] == '\"' && !in_single_quote)
+            in_double_quote = !in_double_quote;
+        else if ((line[i] == '<' || line[i] == '>') && (in_single_quote || in_double_quote))
+            return (1);
+        i++;
+    }
+    return (0);
 }
 
 void	split_line(char *line, t_data *shell)
@@ -90,7 +90,7 @@ void	split_line(char *line, t_data *shell)
 
 	shell->cmds_count = 0;
 	
-	if (!if_args_in_quote(line))
+	if (quotes_redir(line) == 0)
 		is_heredoc(line, shell);
 	shell->pipe_tok = do_split(line, 31);
 	if (!shell->pipe_tok)
@@ -109,13 +109,19 @@ void	split_line(char *line, t_data *shell)
 	i = -1;
 	while (++i < shell->cmds_count)
 		init_cmd(&shell->cmds[i]);
-	if (!if_args_in_quote(shell->pipe_tok[0]))
+	if (quotes_redir(shell->pipe_tok[0]) == 0)
 	{
-		cmd_and_redir(shell);
-		cmd_and_expand(shell);
+			cmd_and_redir(shell);
+			cmd_and_expand(shell);
 	}
 	i = -1;
 	while (++i < shell->cmds_count)
 		shell->cmds[i] = split_into_wtok(shell->pipe_tok[i], shell->cmds[i]);
+	// for (i = 0; i < shell->cmds_count; i++) {
+    //     printf("Command %d:\n", i);
+    //     for (int j = 0; j < shell->cmds[i].w_count; j++) {
+    //         printf("  Token %d: %s\n", j, shell->cmds[i].word_tok[j]);
+    //     }
+    //}
 }
 

@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:52:26 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/19 13:29:02 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/20 09:29:47 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,12 +117,17 @@ void	shell_loop(t_data *sh)
 			f_free_cmds(sh->cmds, sh->cmds_count);
 			sh->cmds = NULL;
 		}
-		// if(sh->new_envp)
-		// {
-		// 	printf("here\n");
-		// 	free_array(sh->new_envp);
-		// 	sh->new_envp = NULL;
-		// }
+	if (sh->pid)
+	{
+		free(sh->pid);
+		sh->pid = NULL;
+	}
+	if (sh->pipe) {
+        for (int i = 0; i < sh->pipe_count; i++) {
+            free(sh->pipe[i]);
+        }
+    	free(sh->pipe);
+    }
 		free(l);
 	}
 }

@@ -98,12 +98,12 @@ int	is_in_quotes(char c, int *in_single_quote, int *in_double_quote)
 	if (c == '\'' && !(*in_double_quote))
 	{
 		*in_single_quote = !(*in_single_quote);
-		return (*in_single_quote);
+		//return (*in_single_quote);
 	}
 	else if (c == '\"' && !(*in_single_quote))
 	{
 		*in_double_quote = !(*in_double_quote);
-		return (*in_double_quote);
+		//return (*in_double_quote);
 	}
-	return (0);
+	return (*in_single_quote || *in_double_quote);
 }

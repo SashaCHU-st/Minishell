@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 16:22:11 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/19 11:34:27 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/20 18:13:11 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,18 +51,42 @@ void	forking(t_data *shell, t_pipex pipex)
 			exit(EXIT_FAILURE);
 		}
 		else if (shell->pid[k] == 0)
-		{
 			child(pipex, shell, k);
-		}
 		k++;
 	}
 }
+int find_slash(t_cmd *cmd)
+{
+	int i = 0;
+	while (cmd->word_tok[i] != NULL)
+	{
+		if (strchr(cmd->word_tok[i], '/') != NULL)
+			return 1;
+		i++;
+	}
+	return 0;
+}
 
+void remove_dots(char *str)
+{
+	if (!str) return;
+
+	char *src = str, *dst = str;
+	while (*src)
+	{
+		if (*src != '.')
+		{
+			*dst++ = *src;
+		}
+		src++;
+	}
+	*dst = '\0';
+}
 void	exeve_for_commands(t_data *shell, t_pipex pipex, char *final, int k)
 {
 	checking_path(shell, &pipex, k);
-	if (shell->cmds[k].word_tok[0][0] == '/')
-		final = &shell->cmds[k].word_tok[0][0];
+	if (find_slash(&shell->cmds[k]) == 1)
+		final = shell->cmds[k].word_tok[0];
 	else
 		final = path_commands(shell, &pipex, &shell->cmds[k].word_tok[0]);
 	if (!final)
@@ -75,6 +99,17 @@ void	exeve_for_commands(t_data *shell, t_pipex pipex, char *final, int k)
 	{
 		shell->exit_status = 127;
 		free_fun(&pipex);
+		if (shell->envp)
+		{
+			free_array(shell->envp);
+			shell->envp = NULL;
+		}
+		if (shell->new_envp)
+		{
+			free_array(shell->new_envp);
+			shell->new_envp = NULL;
+		}
+		exit(127);
 	}
 }
 

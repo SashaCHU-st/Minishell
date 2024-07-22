@@ -125,6 +125,7 @@ char	*expand_var(t_data *shell, char *line)
 		else
 			j++;
 	}
+
 	//printf("uuuu\n");
 	printf("LINE in expand: %s\n", line);
 	return (line);

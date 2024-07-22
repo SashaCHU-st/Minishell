@@ -40,9 +40,17 @@ int	open_fd_in(t_data *shell, t_pipex *pipex, int filetype, char *filename)
 {
 	if (filetype == IN || filetype == HERE)
 	{
-		if (access(filename, F_OK | R_OK) == -1)
+		if (access(filename, F_OK) == -1)
 		{
-			msg_status(shell, "sashel: permission denied", 1);
+			msg_status(shell, "sashel: No such file or directory", 1);
+			shell->exit_status = 1;
+			exit(1);
+		}
+		if (access(filename, R_OK) == -1)
+		{
+			ft_putstr_fd("sashel: ", 2);
+			ft_putstr_fd(filename, 2);
+			msg_status(shell, ": Permission denied", 1);
 			shell->exit_status = 1;
 			exit(1);
 		}

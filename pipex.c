@@ -64,7 +64,7 @@ char	*mine_path(t_data *shell, int i)
 		{
 			ft_putstr_fd("bash: ", 2);
 			ft_putstr_fd(shell->cmds[i].word_tok[0], 2);
-			ft_putstr_fd(": No such file or directory\n", 2);
+			ft_putstr_fd(": command not found\n", 2);
 			shell->exit_status = 127;
 		}
 		return (NULL);

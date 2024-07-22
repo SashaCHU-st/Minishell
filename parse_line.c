@@ -25,7 +25,15 @@ static void	cmd_and_expand(t_data *shell)
 
 	i = -1;
 	while (shell->pipe_tok[++i] && i < shell->cmds_count)
+	{
+		// printf("im an in expand\n");
+		// printf("index: %d\n", i);
+		// printf("index: %d\n", shell->cmds_count);
+		
 		shell->pipe_tok[i] = expand_var(shell, shell->pipe_tok[i]);
+		if (!shell->pipe_tok[i])
+			error_message(shell, "Failed to expand", 1);
+	}
 	i = 0;
 	while (i < shell->cmds_count)
 	{
@@ -45,9 +53,10 @@ static void	cmd_and_expand(t_data *shell)
 
 static t_cmd	split_into_wtok(char *pipe_token, t_cmd cmd, t_data *shell)
 {
+	//printf("gooo\n");
 	change_space_to_31(pipe_token);
 	remove_quotes(pipe_token);
-	cmd.word_tok = do_split(pipe_token, 31, shell);
+	cmd.word_tok = do_split(pipe_token, 31);
 	if (!cmd.word_tok)
 		return (cmd);
 	while (cmd.word_tok[cmd.w_count])
@@ -57,11 +66,23 @@ static t_cmd	split_into_wtok(char *pipe_token, t_cmd cmd, t_data *shell)
 
 void	if_quores_redir(t_data *shell)
 {
-	if (quotes_redir(shell->pipe_tok[0]) == 0)
-	{
-		cmd_and_redir(shell);
-		cmd_and_expand(shell);
-	}
+
+    int i = 0;
+    int in_single_quote = 0;
+    int in_double_quote = 0;
+    while (line[i])
+    {
+        if (line[i] == '\'' && !in_double_quote)
+            in_single_quote = !in_single_quote;
+        else if (line[i] == '\"' && !in_single_quote)
+            in_double_quote = !in_double_quote;
+        else if ((line[i] == '<' || line[i] == '>') && 
+		(in_single_quote || in_double_quote))
+            return (1);
+        i++;
+    }
+    return (0);
+
 }
 
 void	split_line(char *line, t_data *shell)
@@ -84,8 +105,29 @@ void	split_line(char *line, t_data *shell)
 	i = -1;
 	while (++i < shell->cmds_count)
 		init_cmd(&shell->cmds[i]);
-	if_quores_redir(shell);
+  if (quotes_redir(shell->pipe_tok[0]) == 0)
+	{
+		cmd_and_redir(shell);
+		cmd_and_expand(shell);
+	}
 	i = -1;
 	while (++i < shell->cmds_count)
-		shell->cmds[i] = split_into_wtok(shell->pipe_tok[i], shell->cmds[i], shell);
+	{
+		shell->cmds[i] = split_into_wtok(shell->pipe_tok[i], shell->cmds[i]);
+		if (!shell->cmds[i].word_tok)
+		{
+			error_message(shell, "Failed to split to tokens", 1);
+			return ;
+		}
+	}
+	for (i = 0; i < shell->cmds_count; i++) {
+        printf("Command %d:\n", i);
+        for (int j = 0; j < shell->cmds[i].w_count; j++) {
+            printf("  Token %d: %s\n", j, shell->cmds[i].word_tok[j]);
+        }
+    }
+	//free_array(shell->pipe_tok);
+	//free_array(shell->pipe_tok);
+    //f_free_cmds(shell->cmds, shell->cmds_count);
+
 }

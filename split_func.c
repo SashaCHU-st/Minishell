@@ -71,14 +71,21 @@ static char	**f_fill_array(char const *s, char c, unsigned int nb, t_data *shell
 	shell->array = allocate_array(nb);
 	if (!shell->array)
 		return (NULL);
-	shell->new_array = split_array(nb, c, s, shell->array);
-		if (shell->array)
+	new_array = split_array(nb, c, s, array);
+	if (!new_array)
 	{
-		printf("HERE\n");
-		//free_array(shell->array);
-		shell->array = NULL;
+		free(array);
+		return (NULL);
 	}
-	return (shell->new_array);
+	return (new_array);
+// 	shell->new_array = split_array(nb, c, s, shell->array);
+// 		if (shell->array)
+// 	{
+// 		printf("HERE\n");
+// 		//free_array(shell->array);
+// 		shell->array = NULL;
+// 	}
+// 	return (shell->new_array);
 }
 
 char	**do_split(char const *s, char c, t_data *shell)

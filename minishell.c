@@ -125,10 +125,6 @@ void	shell_loop(t_data *sh)
 				continue ;
 			}
 			sh->exit_status = 0;
-			// if (sh->cmds->word_tok[0] == NULL)
-			// 	continue ;
-			//if(sh->cmds->word_tok[0] != NULL)
-			printf("byyyy\n");
 			running_commands(sh, 0, &pipex);
 		}
 		if(sh->pipe_tok)

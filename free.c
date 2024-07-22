@@ -32,7 +32,7 @@ void	free_array(char **array)
 		return ;
 	while (array[i])
 	{
-		dprintf(2,"free_array will clean ->%s<- at %p\n", array[i], array[i]);
+		//dprintf(2,"free_array will clean ->%s<- at %p\n", array[i], array[i]);
 		free(array[i]);
 		i++;
 	}
@@ -53,6 +53,7 @@ void	f_free_array(char **str)
 		ptr++;
 	}
 	free(str);
+	str = NULL;
 }
 
 void	ft_error(void)

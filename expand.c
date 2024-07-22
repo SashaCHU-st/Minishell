@@ -29,13 +29,6 @@ static char	*receive_exit_status(t_data *shell)
 		status = ft_itoa(shell->exit_status);
 	if (!status)
 		error_message(shell, "Malloc failed", 1);
-	
-	// if (shell->envp)
-	// {
-	// 	printf("her1");
-	// 	free_array(shell->envp);
-	// 	shell->envp = NULL;
-	// }
 	return (status);
 }
 
@@ -73,11 +66,11 @@ static char	*expand_env(t_data *shell, char **line, int *i)
 	int		st;
 	char	*value;
 	char	*new_line;
-	int		new_line_len = 0;
-	
+	int		new_line_len;
+
+	new_line_len = 0;
 	st = (*i) + 1;
 	printf("value before expand: %s\n", *line);
-	printf("value before expand: %c\n", (*line)[st]);
 	value = get_expand(shell, &(*line)[st]);
 	printf("value: %s\n", value);
 	if (!value)
@@ -103,6 +96,7 @@ static char	*expand_env(t_data *shell, char **line, int *i)
 	return (new_line);
 }
 
+
 char	*expand_var(t_data *shell, char *line)
 {
 	int	j;
@@ -115,7 +109,8 @@ char	*expand_var(t_data *shell, char *line)
 		if (line[j + 1] && line[j] == '\'' && !shell->in_dquotes)
 			j = skip_quotes(line, j);
 		if (line[j] == '$' && line[j + 1] && line[j + 1] != ' '
-			&& line[j + 1] != '$' && (ft_isdigit(line[j + 1]) || ft_isalpha(line[j + 1]) || line[j + 1] == '?'))
+			&& line[j + 1] != '$' && (ft_isdigit(line[j + 1]) || \
+			ft_isalpha(line[j + 1]) || line[j + 1] == '?' || line[j + 1] == '\"'))
 		{
 			shell->expanded_line = expand_env(shell, &line, &j);
 			if (!shell->expanded_line)
@@ -130,11 +125,7 @@ char	*expand_var(t_data *shell, char *line)
 		else
 			j++;
 	}
-	// if (shell->envp)
-	// {
-	// 	printf("her1");
-	// 	free_array(shell->envp);
-	// 	shell->envp = NULL;
-	// }
+	//printf("uuuu\n");
+	printf("LINE in expand: %s\n", line);
 	return (line);
 }

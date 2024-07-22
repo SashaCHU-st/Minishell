@@ -32,21 +32,25 @@ char	*read_line(t_data *line)
 
 void	running_commands(t_data *shell, int i, t_pipex *pipex )
 {
+	if (!shell || !pipex || !shell->cmds) {
+        printf("Error: NULL pointer passed to running_commands\n");
+        return;
+    }
 	if (shell->cmds_count == 1)
 	{
 		//esli odna commanda ls here is no rediresr
-		if (shell->cmds->filetype[i] == 0 && if_it_is_builtins(&shell->cmds[0]) == 0)
+		if (shell->cmds->filetype && shell->cmds->filetype[i] == 0 && if_it_is_builtins(&shell->cmds[0]) == 0)
 		{
-			printf("1\n");
+			//printf("1\n");
 			forking(shell, *pipex);
 			closing(shell);
 		}
 		//esli est reditect i commanda cat << ll or <1.txt >33.txt rhis one has redir
-		if(shell->cmds->filetype[i] > 0)
+		else if(shell->cmds->filetype && shell->cmds->filetype[i] > 0)
 		{
 			while (shell->cmds->filetype[i] && if_it_is_builtins(&shell->cmds[0]) == 0)
 			{
-			printf("2\n");
+			//printf("2\n");
 				if (shell->cmds->word_tok == NULL &&(shell->cmds->filetype[i] == HERE || 
 					shell->cmds->filetype[i] == OUT || shell->cmds->filetype[i] == IN
 					|| shell->cmds->filetype[i] == APPEND))
@@ -62,11 +66,11 @@ void	running_commands(t_data *shell, int i, t_pipex *pipex )
 			}
 		}
 		//esli builtin i redirect echo hi >88.txt
-		if (shell->cmds->word_tok[0] != NULL )
+		else if (shell->cmds->word_tok && shell->cmds->word_tok[0] != NULL )
 		{
 			if(if_it_is_builtins(&shell->cmds[0]) == 1) //not bbuilt in, IT IS BUILTIN HERE
 			{
-			printf("3\n");
+			//printf("3\n");
 				if (shell->cmds->filetype == NULL)
 					builtins(shell, &shell->cmds[0], 0);
 				else if (shell->cmds->filetype[i] == NONE)
@@ -139,22 +143,16 @@ void	shell_loop(t_data *sh)
 			f_free_cmds(sh->cmds, sh->cmds_count);
 			sh->cmds = NULL;
 		}
-	if (sh->pid)
-	{
-		free(sh->pid);
-		sh->pid = NULL;
-	}
-	if (sh->new_envp)
-	{
-		free_array(sh->new_envp);
-		sh->new_envp = NULL;
-	}
-	// 	if (sh->envp)
-	// {
-	// 	printf("her1");
-	// 	free_array(sh->envp);
-	// 	sh->envp = NULL;
-	// }
+		if (sh->pid)
+		{
+			free(sh->pid);
+			sh->pid = NULL;
+		}
+		if (sh->new_envp)
+		{
+			free_array(sh->new_envp);
+			sh->new_envp = NULL;
+		}
 		free(l);
 	}
 }

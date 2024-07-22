@@ -18,15 +18,19 @@ void	dup_close(int k, t_data *shell)
 	int	i;
 
 	i = 0;
-	if (k != 0)
-		dup2(shell->pipe[k - 1][0], STDIN_FILENO);
-	if (k != shell->cmds_count - 1)
-		dup2(shell->pipe[k][1], STDOUT_FILENO);
-	while (i < (shell->pipe_count))
+	if(shell->pipe)
 	{
-		close(shell->pipe[i][0]);
-		close(shell->pipe[i][1]);
-		i++;
+		if (k != 0)
+			dup2(shell->pipe[k - 1][0], STDIN_FILENO);
+		if (k != shell->cmds_count - 1)
+			dup2(shell->pipe[k][1], STDOUT_FILENO);
+		while (i < (shell->pipe_count))
+		{
+			close(shell->pipe[i][0]);
+			close(shell->pipe[i][1]);
+			i++;
+		}
+
 	}
 }
 
@@ -90,26 +94,29 @@ void	exeve_for_commands(t_data *shell, t_pipex pipex, char *final, int k)
 		final = shell->cmds[k].word_tok[0];
 	else
 		final = path_commands(shell, &pipex, &shell->cmds[k].word_tok[0]);
-	if (!final)
+	if (!final) //final = NULL i f it will fails
 	{
 		printf("%s: command not found\n", shell->cmds[k].word_tok[0]);
-		free(final);
 		exit(127);
 	}
 	if (execve(final, shell->cmds[k].word_tok, shell->envp) == -1)
 	{
-		shell->exit_status = 127;
-		free_fun(&pipex);
+		//free(final);
+		if (shell->envp)
+		{
+			printf("here4444");
+			free_array(shell->envp);
+			shell->envp = NULL;
+		}
+		//printf("%p\n", shell->envp);
 		if (shell->envp)
 		{
 			free_array(shell->envp);
 			shell->envp = NULL;
 		}
-		if (shell->new_envp)
-		{
-			free_array(shell->new_envp);
-			shell->new_envp = NULL;
-		}
+		//printf("%p\n", shell->envp);
+		shell->exit_status = 127;
+		free_fun(&pipex);
 		exit(127);
 	}
 }
@@ -122,6 +129,13 @@ void	child(t_pipex pipex, t_data *shell, int k)
 	final = NULL;
 	i = 0;
 	dup_close(k, shell);
+	// 	if (shell->pipe) {
+    //     for (int i = 0; i < shell->pipe_count; i++) {
+    //         free(shell->pipe[i]);
+    //     }
+    // 	free(shell->pipe);
+    // }
+	// shell->pipe = NULL;
 	check_filetype(shell, &pipex, &shell->cmds[k]);
 	if (if_it_is_builtins(&shell->cmds[k]) == 1)
 	{

@@ -74,7 +74,7 @@ int	in_redir(t_data *shell, char *in)
 void	error_message(t_data *shell, char *msg, int status)
 {
 	if (shell)
-		free_all(shell);
+		free_all_sh(shell);
 	perror(msg);
 	shell->exit_status = status;
 	exit (status);

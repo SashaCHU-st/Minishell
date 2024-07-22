@@ -75,7 +75,7 @@ char 			*ft_strcpy(char *dest, const char *src);
 
 void			get_signal(t_signal mode);
 void			exit_free(t_data *shell, int status);
-void			free_all(t_data *shell);
+void			free_all_sh(t_data *shell);
 void			f_free_cmds(t_cmd *cmds, int cmds_count);
 void			free_t_data(t_data *shell);
 void			ft_exit(t_data *shell, char **args);

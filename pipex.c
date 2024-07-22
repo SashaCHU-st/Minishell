@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:47:03 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/18 12:38:59 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/22 14:33:41 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,16 +49,17 @@ char	*path_commands(t_data *shell, t_pipex *pipex, char **child)
 	return (NULL);
 }
 
-char	*mine_path(t_data *shell, int i)
+char *mine_path(t_data *shell, int i)
 {
-	if (shell->envp == NULL)
+	char **envp_copy = shell->envp;
+	if (envp_copy == NULL)
 	{
 		ft_putstr_fd("Environment variables not found.\n", 2);
 		return (NULL);
 	}
-	while (*shell->envp != NULL && ft_strncmp("PATH=", *shell->envp, 5) != 0)
-		shell->envp++;
-	if (*shell->envp == NULL)
+	while (*envp_copy != NULL && ft_strncmp("PATH=", *envp_copy, 5) != 0)
+		envp_copy++;
+	if (*envp_copy == NULL)
 	{
 		if (shell->cmds[i].word_tok[0][0] != '/')
 		{
@@ -69,5 +70,6 @@ char	*mine_path(t_data *shell, int i)
 		}
 		return (NULL);
 	}
-	return (*shell->envp + 5);
+	return (*envp_copy + 5);
 }
+

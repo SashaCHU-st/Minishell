@@ -32,11 +32,74 @@ char	*read_line(t_data *line)
 
 void	running_commands(t_data *shell, int i, t_pipex *pipex )
 {
+	if (!shell || !pipex || !shell->cmds) {
+        printf("Error: NULL pointer passed to running_commands\n");
+        return;
+    }
 	if (shell->cmds_count == 1)
 	{
-		if_not_buil_and_no_redir(shell, pipex, i);
-		if_redir_but_no_buil(shell, pipex, i);
-		if_only_built(shell, pipex, i);
+
+		//esli odna commanda ls here is no rediresr
+		if (shell->cmds->filetype && shell->cmds->filetype[i] == 0 && if_it_is_builtins(&shell->cmds[0]) == 0)
+		{
+			//printf("1\n");
+			forking(shell, *pipex);
+			closing(shell);
+		}
+		//esli est reditect i commanda cat << ll or <1.txt >33.txt rhis one has redir
+		else if(shell->cmds->filetype && shell->cmds->filetype[i] > 0)
+		{
+			while (shell->cmds->filetype[i] && if_it_is_builtins(&shell->cmds[0]) == 0)
+			{
+			//printf("2\n");
+				if (shell->cmds->word_tok == NULL &&(shell->cmds->filetype[i] == HERE || 
+					shell->cmds->filetype[i] == OUT || shell->cmds->filetype[i] == IN
+					|| shell->cmds->filetype[i] == APPEND))
+					check_filetype(shell, pipex, shell->cmds);
+				else if (shell->cmds->word_tok != NULL && (shell->cmds->filetype[i] == HERE || 
+					shell->cmds->filetype[i] == OUT || shell->cmds->filetype[i] == IN
+					|| shell->cmds->filetype[i] == APPEND))
+				{
+					forking(shell, *pipex);
+					closing(shell);
+				}
+				i++;
+			}
+		}
+		//esli builtin i redirect echo hi >88.txt
+		else if (shell->cmds->word_tok && shell->cmds->word_tok[0] != NULL )
+		{
+			if(if_it_is_builtins(&shell->cmds[0]) == 1) //not bbuilt in, IT IS BUILTIN HERE
+			{
+			//printf("3\n");
+				if (shell->cmds->filetype == NULL)
+					builtins(shell, &shell->cmds[0], 0);
+				else if (shell->cmds->filetype[i] == NONE)
+					builtins(shell, &shell->cmds[0], 0);
+				if (shell->cmds[0].number_of_redir > 0)
+					redirection_with_builtins(shell, pipex, i);
+
+			}
+			// if (shell->cmds->filetype[i] > 0)
+			// {
+			// 	printf("4\n");
+			// 	while (shell->cmds->filetype[i])
+			// 	{
+			// 		if (shell->cmds->word_tok == NULL &&(shell->cmds->filetype[i] == HERE || 
+			// 			shell->cmds->filetype[i] == OUT || shell->cmds->filetype[i] == IN
+			// 			|| shell->cmds->filetype[i] == APPEND))
+			// 			check_filetype(shell, pipex, shell->cmds);
+			// 		else if (shell->cmds->word_tok != NULL && (shell->cmds->filetype[i] == HERE || 
+			// 			shell->cmds->filetype[i] == OUT || shell->cmds->filetype[i] == IN
+			// 			|| shell->cmds->filetype[i] == APPEND))
+			// 		{
+			// 			forking(shell, *pipex);
+			// 			closing(shell);
+			// 		}
+			// 		i++;
+			// 	}
+			// }
+		}
 	}
 	else if (shell->cmds_count > 1)
 	{
@@ -70,6 +133,7 @@ void	shell_loop(t_data *sh)
 			sh->exit_status = 0;
 			running_commands(sh, 0, &pipex);
 		}
+
 		freeing_at_end_shell_loop(sh);
 		free(l);
 	}

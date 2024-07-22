@@ -44,6 +44,7 @@ bool			has_unclosed_quotes(char *line);
 int				skip_quotes(char *line, int i);
 void			remove_quotes(char *str);
 int				skip_quotes(char *line, int i);
+int 			quotes_redir(char *line);
 int				q_pipe(t_data *shell, char *line);
 int				is_in_quotes(char c, int *in_single_quote,
 					int *in_double_quote);

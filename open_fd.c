@@ -6,12 +6,18 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:46:25 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/22 14:52:57 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/20 18:12:18 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "builtins.h"
+
+// void	write_msg_status(t_data *shell, char *msg, int status)
+// {
+// 	ft_putendl_fd(msg, 2);
+// 	shell->exit_status = status;
+// }
 
 void	check_filetype(t_data *shell, t_pipex *pipex, t_cmd *cmd)
 {
@@ -30,18 +36,6 @@ void	check_filetype(t_data *shell, t_pipex *pipex, t_cmd *cmd)
 	}
 }
 
-void	if_file_readable(char *filename, t_data *shell)
-{
-	if (access(filename, R_OK) == -1)
-	{
-		ft_putstr_fd("sashel: ", 2);
-		ft_putstr_fd(filename, 2);
-		msg_status(shell, ": Permission denied", 1);
-		shell->exit_status = 1;
-		exit(1);
-	}
-}
-
 int	open_fd_in(t_data *shell, t_pipex *pipex, int filetype, char *filename)
 {
 	if (filetype == IN || filetype == HERE)
@@ -52,7 +46,14 @@ int	open_fd_in(t_data *shell, t_pipex *pipex, int filetype, char *filename)
 			shell->exit_status = 1;
 			exit(1);
 		}
-		if_file_readable(filename, shell);
+		if (access(filename, R_OK) == -1)
+		{
+			ft_putstr_fd("sashel: ", 2);
+			ft_putstr_fd(filename, 2);
+			msg_status(shell, ": Permission denied", 1);
+			shell->exit_status = 1;
+			exit(1);
+		}
 		pipex->fd_in = open(filename, O_RDONLY);
 		if (pipex->fd_in == -1)
 		{

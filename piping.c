@@ -53,9 +53,16 @@ void	piping(t_data *shell)
 			//free(shell->pipe);
 			exit(1);
 		}
+
 		pipe(shell->pipe[j]);
 		j++;
 	}
+	// if (shell->pipe) {
+    //     for (int i = 0; i < shell->pipe_count; i++) {
+    //         free(shell->pipe[i]);
+    //     }
+    // 	free(shell->pipe);
+    // }
 }
 
 void	closing(t_data *shell)
@@ -79,4 +86,12 @@ void	closing(t_data *shell)
 		shell->exit_status = status;
 		x++;
 	}
+	if (shell->pipe) {
+        for (int i = 0; i < shell->pipe_count; i++) {
+            free(shell->pipe[i]);
+			shell->pipe[i] = NULL;
+        }
+    	free(shell->pipe);
+    }
+	shell->pipe = NULL;
 }

@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 15:44:20 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/19 14:20:40 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/22 17:33:16 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,6 @@ void	free_t_data(t_data *shell)
 		free_array(shell->pipe_tok);
 		shell->pipe_tok = NULL;
 	}
-	// if (shell->pipe) {
-    //     for (int i = 0; i < shell->pipe_count; i++) {
-    //         free(shell->pipe[i]);
-    //     }
-    // 	free(shell->pipe);
-    // }
 	if (shell->input_copy)
 	{
 		free(shell->input_copy);
@@ -38,17 +32,6 @@ void	free_t_data(t_data *shell)
 		free(shell->path);
 		shell->path = NULL;
 	}
-	if (shell->pid)
-	{
-		free(shell->pid);
-		shell->pid = NULL;
-	}
-	// if (shell->envp)
-	// {
-	// 	printf("her1");
-	// 	free_array(shell->envp);
-	// 	shell->envp = NULL;
-	// }
 	if (shell->new_envp)
 	{
 		printf("her2");
@@ -63,10 +46,34 @@ void	free_all_sh(t_data *shell)
 		return ;
 	if (shell->cmds)
 	{
-		f_free_cmds(shell->cmds, shell->cmds_count);
+		printf("HERE2\n");
+		f_free_cmds(&shell->cmds, shell->cmds_count);
 		shell->cmds = NULL;
 	}
+		if (shell->kuku)
+	{
+		printf("HERE7\n");
+		free_array(shell->kuku);
+		shell->kuku = NULL;
+	}
 	free_t_data(shell);
+	if (shell->pid)
+	{
+		free(shell->pid);
+		shell->pid = NULL;
+	}
+	if (shell->array)
+	{
+		printf("HERE\n");
+		free_array(shell->array);
+		shell->array = NULL;
+	}
+		if (shell->new_array)
+	{
+		printf("HERE\n");
+		free_array(shell->array);
+		shell->array = NULL;
+	}
 	if (shell->hd_delimeter)
 	{
 		free (shell->hd_delimeter);

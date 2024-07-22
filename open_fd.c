@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:46:25 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/17 13:50:49 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/20 18:12:18 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ void	check_filetype(t_data *shell, t_pipex *pipex, t_cmd *cmd)
 
 int	open_fd_in(t_data *shell, t_pipex *pipex, int filetype, char *filename)
 {
-	printf ("i am in INfile\n");
 	if (filetype == IN || filetype == HERE)
 	{
 		if (access(filename, F_OK | R_OK) == -1)
@@ -56,7 +55,6 @@ int	open_fd_in(t_data *shell, t_pipex *pipex, int filetype, char *filename)
 		}
 		if (dup2(pipex->fd_in, STDIN_FILENO) < 0)
 			printf("dup2 \n");
-		//printf("ququuquq\n");
 		close(pipex->fd_in);
 	}
 	return (0);
@@ -64,11 +62,9 @@ int	open_fd_in(t_data *shell, t_pipex *pipex, int filetype, char *filename)
 
 void	open_fd_out(t_data *shell, t_pipex *pipex, int filetype, char *filename)
 {
-	printf ("i am in OUTfile\n");
 	if (filetype == OUT)
 	{
 		pipex->fd_out = open(filename, O_CREAT | O_RDWR | O_TRUNC, 0644);
-		//printf("wwwweeeee\n");
 		if (pipex->fd_out == -1)
 		{
 			close(pipex->fd_in);
@@ -76,12 +72,9 @@ void	open_fd_out(t_data *shell, t_pipex *pipex, int filetype, char *filename)
 			msg_status(shell, "sashel: permission denied", 1);
 			exit(1);
 		}
-		//printf("poooo\n");
 		if (dup2(pipex->fd_out, STDOUT_FILENO) < 0)
 			printf("dup2 \n");
-		//printf("fuck\n");
 		close(pipex->fd_out);
-		//printf("gooo\n");
 	}
 }
 

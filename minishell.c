@@ -34,7 +34,6 @@ void	running_commands(t_data *shell, int i, t_pipex *pipex )
 {
 	if (shell->cmds_count == 1)
 	{
-		//printf ("dumai\n");
 		if (shell->cmds->word_tok[0] != NULL)
 		{
 			if(if_it_is_builtins(&shell->cmds[0]) == 1)
@@ -101,10 +100,6 @@ void	shell_loop(t_data *sh)
 				continue ;
 			}
 			sh->exit_status = 0;
-			// if (sh->cmds->word_tok[0] == NULL)
-			// 	continue ;
-			//if(sh->cmds->word_tok[0] != NULL)
-			//printf("byyyy\n");
 			running_commands(sh, 0, &pipex);
 		}
 		if(sh->pipe_tok)

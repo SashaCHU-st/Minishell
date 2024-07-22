@@ -39,7 +39,7 @@ void	forking(t_data *shell, t_pipex pipex)
 	if (!shell->pid)
 	{
 		perror("Error in malloc");
-		free(shell->pid);
+		//free(shell->pid);
 		exit(1);
 	}
 	while (k < shell->cmds_count)
@@ -48,6 +48,7 @@ void	forking(t_data *shell, t_pipex pipex)
 		if (shell->pid[k] < 0)
 		{
 			shell->exit_status = 1;
+			free(shell->pid);
 			exit(EXIT_FAILURE);
 		}
 		else if (shell->pid[k] == 0)

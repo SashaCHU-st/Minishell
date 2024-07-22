@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 20:25:40 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/22 17:35:08 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/22 18:01:40 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,13 +71,13 @@ static char	**f_fill_array(char const *s, char c, unsigned int nb, t_data *shell
 	shell->array = allocate_array(nb);
 	if (!shell->array)
 		return (NULL);
-	new_array = split_array(nb, c, s, array);
-	if (!new_array)
+	shell->new_array = split_array(nb, c, s, shell->array);
+	if (!shell->new_array)
 	{
-		free(array);
+		free(shell->array);
 		return (NULL);
 	}
-	return (new_array);
+	return (shell->new_array);
 // 	shell->new_array = split_array(nb, c, s, shell->array);
 // 		if (shell->array)
 // 	{
@@ -95,6 +95,7 @@ char	**do_split(char const *s, char c, t_data *shell)
 	if (!s)
 		return (NULL);
 	n_of_substr = num_of_str(s, c);
-	shell->kuku = f_fill_array(s, c, n_of_substr, shell);
-	return (shell->kuku);
+	// shell->kuku = f_fill_array(s, c, n_of_substr, shell);
+	// return (shell->kuku);
+	return (f_fill_array(s, c, n_of_substr, shell));
 }

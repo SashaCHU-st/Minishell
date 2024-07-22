@@ -29,6 +29,13 @@ static char	*receive_exit_status(t_data *shell)
 		status = ft_itoa(shell->exit_status);
 	if (!status)
 		error_message(shell, "Malloc failed", 1);
+	
+	// if (shell->envp)
+	// {
+	// 	printf("her1");
+	// 	free_array(shell->envp);
+	// 	shell->envp = NULL;
+	// }
 	return (status);
 }
 
@@ -123,5 +130,11 @@ char	*expand_var(t_data *shell, char *line)
 		else
 			j++;
 	}
+	// if (shell->envp)
+	// {
+	// 	printf("her1");
+	// 	free_array(shell->envp);
+	// 	shell->envp = NULL;
+	// }
 	return (line);
 }

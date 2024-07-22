@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 16:22:11 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/20 18:13:11 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/22 21:53:42 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,48 +18,18 @@ void	dup_close(int k, t_data *shell)
 	int	i;
 
 	i = 0;
-	if(shell->pipe)
+	if (k != 0)
+		dup2(shell->pipe[k - 1][0], STDIN_FILENO);
+	if (k != shell->cmds_count - 1)
+		dup2(shell->pipe[k][1], STDOUT_FILENO);
+	while (i < (shell->pipe_count))
 	{
-		if (k != 0)
-			dup2(shell->pipe[k - 1][0], STDIN_FILENO);
-		if (k != shell->cmds_count - 1)
-			dup2(shell->pipe[k][1], STDOUT_FILENO);
-		while (i < (shell->pipe_count))
-		{
-			close(shell->pipe[i][0]);
-			close(shell->pipe[i][1]);
-			i++;
-		}
-
+		close(shell->pipe[i][0]);
+		close(shell->pipe[i][1]);
+		i++;
 	}
 }
 
-void	forking(t_data *shell, t_pipex pipex)
-{
-	int	k;
-
-	k = 0;
-	shell->pid = (int *)malloc(sizeof(int) * (shell->cmds_count));
-	if (!shell->pid)
-	{
-		perror("Error in malloc");
-		//free(shell->pid);
-		exit(1);
-	}
-	while (k < shell->cmds_count)
-	{
-		shell->pid[k] = fork();
-		if (shell->pid[k] < 0)
-		{
-			shell->exit_status = 1;
-			free(shell->pid);
-			exit(EXIT_FAILURE);
-		}
-		else if (shell->pid[k] == 0)
-			child(pipex, shell, k);
-		k++;
-	}
-}
 int find_slash(t_cmd *cmd)
 {
 	int i = 0;
@@ -91,32 +61,35 @@ void	exeve_for_commands(t_data *shell, t_pipex pipex, char *final, int k)
 {
 	checking_path(shell, &pipex, k);
 	if (find_slash(&shell->cmds[k]) == 1)
+	{
 		final = shell->cmds[k].word_tok[0];
+		printf("here1\n");
+	}
 	else
+	{
+		printf("here2\n");
 		final = path_commands(shell, &pipex, &shell->cmds[k].word_tok[0]);
-	if (!final) //final = NULL i f it will fails
+	}
+	if (!final)
 	{
 		printf("%s: command not found\n", shell->cmds[k].word_tok[0]);
+		free(final);
 		exit(127);
 	}
 	if (execve(final, shell->cmds[k].word_tok, shell->envp) == -1)
 	{
-		//free(final);
-		if (shell->envp)
-		{
-			printf("here4444");
-			free_array(shell->envp);
-			shell->envp = NULL;
-		}
-		//printf("%p\n", shell->envp);
-		if (shell->envp)
-		{
-			free_array(shell->envp);
-			shell->envp = NULL;
-		}
-		//printf("%p\n", shell->envp);
 		shell->exit_status = 127;
 		free_fun(&pipex);
+		if (shell->envp)
+		{
+			free_array(shell->envp);
+			shell->envp = NULL;
+		}
+		if (shell->new_envp)
+		{
+			free_array(shell->new_envp);
+			shell->new_envp = NULL;
+		}
 		exit(127);
 	}
 }
@@ -126,16 +99,10 @@ void	child(t_pipex pipex, t_data *shell, int k)
 	char	*final;
 	int		i;
 
+printf("$$$$\n");
 	final = NULL;
 	i = 0;
 	dup_close(k, shell);
-	// 	if (shell->pipe) {
-    //     for (int i = 0; i < shell->pipe_count; i++) {
-    //         free(shell->pipe[i]);
-    //     }
-    // 	free(shell->pipe);
-    // }
-	// shell->pipe = NULL;
 	check_filetype(shell, &pipex, &shell->cmds[k]);
 	if (if_it_is_builtins(&shell->cmds[k]) == 1)
 	{

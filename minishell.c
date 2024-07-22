@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:52:26 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/22 19:37:53 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/22 21:59:59 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,25 +32,21 @@ char	*read_line(t_data *line)
 
 void	running_commands(t_data *shell, int i, t_pipex *pipex )
 {
-	if (!shell || !pipex || !shell->cmds) {
-        printf("Error: NULL pointer passed to running_commands\n");
-        return;
-    }
 	if (shell->cmds_count == 1)
 	{
-		//esli odna commanda ls here is no rediresr
-		if (shell->cmds->filetype[i] == 0 && if_it_is_builtins(&shell->cmds[0]) == 0)
+		//esli odna commanda ls
+		if (shell->cmds_count == 1 && shell->cmds->filetype[i] == 0 && if_it_is_builtins(&shell->cmds[0]) == 0)
 		{
-			//printf("1\n");
+			printf("1\n");
 			forking(shell, *pipex);
 			closing(shell);
 		}
-		//esli est reditect i commanda cat << ll or <1.txt >33.txt rhis one has redir
-		if(shell->cmds->filetype && shell->cmds->filetype[i] > 0)
+		//esli est reditect i commanda cat << ll or <1.txt >33.txt
+		if(shell->cmds->filetype[i] > 0 && if_it_is_builtins(&shell->cmds[0]) == 0)
 		{
-			while (shell->cmds->filetype[i] && if_it_is_builtins(&shell->cmds[0]) == 0)
+			while (shell->cmds->filetype[i])
 			{
-			//printf("2\n");
+			printf("2\n");
 				if (shell->cmds->word_tok == NULL &&(shell->cmds->filetype[i] == HERE || 
 					shell->cmds->filetype[i] == OUT || shell->cmds->filetype[i] == IN
 					|| shell->cmds->filetype[i] == APPEND))
@@ -64,13 +60,19 @@ void	running_commands(t_data *shell, int i, t_pipex *pipex )
 				}
 				i++;
 			}
+		if (shell->pid)
+			{
+				printf("YYYY\n");
+				free(shell->pid);
+				shell->pid = NULL;
+			}
 		}
 		//esli builtin i redirect echo hi >88.txt
 		if (shell->cmds->word_tok[0] != NULL )
 		{
-			if(if_it_is_builtins(&shell->cmds[0]) == 1) //not bbuilt in, IT IS BUILTIN HERE
+			if(if_it_is_builtins(&shell->cmds[0]) == 1)
 			{
-			//printf("3\n");
+			printf("3\n");
 				if (shell->cmds->filetype == NULL)
 					builtins(shell, &shell->cmds[0], 0);
 				else if (shell->cmds->filetype[i] == NONE)
@@ -79,25 +81,25 @@ void	running_commands(t_data *shell, int i, t_pipex *pipex )
 					redirection_with_builtins(shell, pipex, i);
 
 			}
-			if (shell->cmds->filetype[i] > 0)
-			{
-				printf("4\n");
-				while (shell->cmds->filetype[i])
-				{
-					if (shell->cmds->word_tok == NULL &&(shell->cmds->filetype[i] == HERE || 
-						shell->cmds->filetype[i] == OUT || shell->cmds->filetype[i] == IN
-						|| shell->cmds->filetype[i] == APPEND))
-						check_filetype(shell, pipex, shell->cmds);
-					else if (shell->cmds->word_tok != NULL && (shell->cmds->filetype[i] == HERE || 
-						shell->cmds->filetype[i] == OUT || shell->cmds->filetype[i] == IN
-						|| shell->cmds->filetype[i] == APPEND))
-					{
-						forking(shell, *pipex);
-						closing(shell);
-					}
-					i++;
-				}
-			}
+			// if (shell->cmds->filetype[i] > 0)
+			// {
+			// 	printf("4\n");
+			// 	while (shell->cmds->filetype[i])
+			// 	{
+			// 		if (shell->cmds->word_tok == NULL &&(shell->cmds->filetype[i] == HERE || 
+			// 			shell->cmds->filetype[i] == OUT || shell->cmds->filetype[i] == IN
+			// 			|| shell->cmds->filetype[i] == APPEND))
+			// 			check_filetype(shell, pipex, shell->cmds);
+			// 		else if (shell->cmds->word_tok != NULL && (shell->cmds->filetype[i] == HERE || 
+			// 			shell->cmds->filetype[i] == OUT || shell->cmds->filetype[i] == IN
+			// 			|| shell->cmds->filetype[i] == APPEND))
+			// 		{
+			// 			forking(shell, *pipex);
+			// 			closing(shell);
+			// 		}
+			// 		i++;
+			// 	}
+			// }
 		}
 	}
 	else if (shell->cmds_count >1)
@@ -106,7 +108,11 @@ void	running_commands(t_data *shell, int i, t_pipex *pipex )
 		forking(shell, *pipex);
 		closing(shell);
 	}
-	
+		if (shell->pid)
+			{
+				free(shell->pid);
+				shell->pid = NULL;
+			}
 	return ;
 }
 
@@ -114,7 +120,6 @@ void	shell_loop(t_data *sh)
 {
 	char	*l;
 	t_pipex	pipex;
-	
 	while (1)
 	{
 		l = read_line(sh);
@@ -131,9 +136,13 @@ void	shell_loop(t_data *sh)
 				continue ;
 			}
 			sh->exit_status = 0;
+			// if (sh->cmds->word_tok[0] == NULL)
+			// 	continue ;
+			//if(sh->cmds->word_tok[0] != NULL)
+			printf("byyyy\n");
 			running_commands(sh, 0, &pipex);
 		}
-		if(sh->pipe_tok)
+if(sh->pipe_tok)
 		{
 			free_array(sh->pipe_tok);
 			sh->pipe_tok = NULL;
@@ -176,6 +185,8 @@ static char	**copy_envp(t_data *shell, char *envp[])
 		if (new_envp[i] == NULL)
 		{
 			error_message(shell, "Failed to duplicate string", 1);
+			while (i > 0)
+				free(new_envp[--i]);
 			return (NULL);
 		}
 		i++;
@@ -191,11 +202,7 @@ int	main(int argc, char **argv, char *envp[])
 	init_t_data(&data);
 	(void)argv;
 	data.envp = copy_envp(&data, envp);
-	// 	if (data.new_envp)
-	// {
-	// 	free_array(data.new_envp);
-	// 	data.new_envp = NULL;
-	// }
+	
 	if (!data.envp)
 		error_message(&data, "Failed to copy environment", 1);
 	if (argc < 2)

@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 19:56:28 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/20 16:45:12 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/22 21:03:45 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,3 @@ void unset_var(t_data *data, char *arg)
 	}
 	data->envp[j] = NULL;
 }
-

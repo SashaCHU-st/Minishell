@@ -6,7 +6,11 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 20:25:40 by epolkhov          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/07/22 18:01:40 by aheinane         ###   ########.fr       */
+=======
+/*   Updated: 2024/07/17 17:37:10 by aheinane         ###   ########.fr       */
+>>>>>>> 6500cdf27b4a8692550d7123ed1a313c48acb161
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,13 +67,13 @@ static char	**split_array(unsigned int nb, char c, char const *s, char **array)
 	return (array);
 }
 
-static char	**f_fill_array(char const *s, char c, unsigned int nb, t_data *shell)
+static char	**f_fill_array(char const *s, char c, unsigned int nb)
 {
-	//char	**array;
-	//char	**new_array;
+	char	**array;
+	char	**new_array;
 
-	shell->array = allocate_array(nb);
-	if (!shell->array)
+	array = allocate_array(nb);
+	if (!array)
 		return (NULL);
 	shell->new_array = split_array(nb, c, s, shell->array);
 	if (!shell->new_array)
@@ -77,25 +81,16 @@ static char	**f_fill_array(char const *s, char c, unsigned int nb, t_data *shell
 		free(shell->array);
 		return (NULL);
 	}
-	return (shell->new_array);
-// 	shell->new_array = split_array(nb, c, s, shell->array);
-// 		if (shell->array)
-// 	{
-// 		printf("HERE\n");
-// 		//free_array(shell->array);
-// 		shell->array = NULL;
-// 	}
-// 	return (shell->new_array);
+	return (new_array);
 }
 
-char	**do_split(char const *s, char c, t_data *shell)
+char	**do_split(char const *s, char c)
 {
 	unsigned int	n_of_substr;
 
 	if (!s)
 		return (NULL);
 	n_of_substr = num_of_str(s, c);
-	// shell->kuku = f_fill_array(s, c, n_of_substr, shell);
-	// return (shell->kuku);
-	return (f_fill_array(s, c, n_of_substr, shell));
+
+	return (f_fill_array(s, c, n_of_substr));
 }

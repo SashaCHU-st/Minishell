@@ -84,6 +84,7 @@ void	shell_loop(t_data *sh)
 {
 	char	*l;
 	t_pipex	pipex;
+	
 	while (1)
 	{
 		l = read_line(sh);

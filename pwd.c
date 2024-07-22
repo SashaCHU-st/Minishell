@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 15:08:54 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/22 14:46:36 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/19 14:06:41 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	old_pwd_k(char *old_pwd, char *pwd_value, char *original, t_data *data)
 	old_pwd = ft_strjoin("OLDPWD=", original);
 	if (old_pwd != NULL)
 	{
-		if (data->envp)
+		if(data->envp)
 		{
 			printf("here\n");
 			free(data->envp[data->oldpwd_index]);
@@ -53,7 +53,7 @@ void	new_pwd_k(char *new_pwd, char *pwd_value, t_data *data)
 	new_pwd = ft_strjoin("PWD=", pwd_value);
 	if (new_pwd != NULL)
 	{
-		if (data->envp)
+		if(data->envp)
 		{
 			free(data->envp[data->pwd_index]);
 			data->envp[data->pwd_index] = NULL;

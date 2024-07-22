@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:52:26 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/22 16:30:05 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/20 18:45:12 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ void	running_commands(t_data *shell, int i, t_pipex *pipex )
     }
 	if (shell->cmds_count == 1)
 	{
-
 		//esli odna commanda ls here is no rediresr
 		if (shell->cmds->filetype && shell->cmds->filetype[i] == 0 && if_it_is_builtins(&shell->cmds[0]) == 0)
 		{
@@ -101,12 +100,13 @@ void	running_commands(t_data *shell, int i, t_pipex *pipex )
 			// }
 		}
 	}
-	else if (shell->cmds_count > 1)
+	else if (shell->cmds_count >1)
 	{
 		piping(shell);
 		forking(shell, *pipex);
 		closing(shell);
 	}
+	
 	return ;
 }
 
@@ -114,7 +114,7 @@ void	shell_loop(t_data *sh)
 {
 	char	*l;
 	t_pipex	pipex;
-
+	
 	while (1)
 	{
 		l = read_line(sh);
@@ -133,8 +133,26 @@ void	shell_loop(t_data *sh)
 			sh->exit_status = 0;
 			running_commands(sh, 0, &pipex);
 		}
-
-		freeing_at_end_shell_loop(sh);
+		if(sh->pipe_tok)
+		{
+			free_array(sh->pipe_tok);
+			sh->pipe_tok = NULL;
+		}
+		if (sh->cmds)
+		{
+			f_free_cmds(sh->cmds, sh->cmds_count);
+			sh->cmds = NULL;
+		}
+		if (sh->pid)
+		{
+			free(sh->pid);
+			sh->pid = NULL;
+		}
+		if (sh->new_envp)
+		{
+			free_array(sh->new_envp);
+			sh->new_envp = NULL;
+		}
 		free(l);
 	}
 }
@@ -171,9 +189,13 @@ int	main(int argc, char **argv, char *envp[])
 	t_data	data;
 
 	init_t_data(&data);
-	init_t_data_part2(&data);
 	(void)argv;
 	data.envp = copy_envp(&data, envp);
+	// 	if (data.new_envp)
+	// {
+	// 	free_array(data.new_envp);
+	// 	data.new_envp = NULL;
+	// }
 	if (!data.envp)
 		error_message(&data, "Failed to copy environment", 1);
 	if (argc < 2)

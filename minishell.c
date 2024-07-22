@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:52:26 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/20 18:45:12 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/22 19:37:53 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,14 @@ void	running_commands(t_data *shell, int i, t_pipex *pipex )
 	if (shell->cmds_count == 1)
 	{
 		//esli odna commanda ls here is no rediresr
-		if (shell->cmds->filetype && shell->cmds->filetype[i] == 0 && if_it_is_builtins(&shell->cmds[0]) == 0)
+		if (shell->cmds->filetype[i] == 0 && if_it_is_builtins(&shell->cmds[0]) == 0)
 		{
 			//printf("1\n");
 			forking(shell, *pipex);
 			closing(shell);
 		}
 		//esli est reditect i commanda cat << ll or <1.txt >33.txt rhis one has redir
-		else if(shell->cmds->filetype && shell->cmds->filetype[i] > 0)
+		if(shell->cmds->filetype && shell->cmds->filetype[i] > 0)
 		{
 			while (shell->cmds->filetype[i] && if_it_is_builtins(&shell->cmds[0]) == 0)
 			{
@@ -66,7 +66,7 @@ void	running_commands(t_data *shell, int i, t_pipex *pipex )
 			}
 		}
 		//esli builtin i redirect echo hi >88.txt
-		else if (shell->cmds->word_tok && shell->cmds->word_tok[0] != NULL )
+		if (shell->cmds->word_tok[0] != NULL )
 		{
 			if(if_it_is_builtins(&shell->cmds[0]) == 1) //not bbuilt in, IT IS BUILTIN HERE
 			{
@@ -79,25 +79,25 @@ void	running_commands(t_data *shell, int i, t_pipex *pipex )
 					redirection_with_builtins(shell, pipex, i);
 
 			}
-			// if (shell->cmds->filetype[i] > 0)
-			// {
-			// 	printf("4\n");
-			// 	while (shell->cmds->filetype[i])
-			// 	{
-			// 		if (shell->cmds->word_tok == NULL &&(shell->cmds->filetype[i] == HERE || 
-			// 			shell->cmds->filetype[i] == OUT || shell->cmds->filetype[i] == IN
-			// 			|| shell->cmds->filetype[i] == APPEND))
-			// 			check_filetype(shell, pipex, shell->cmds);
-			// 		else if (shell->cmds->word_tok != NULL && (shell->cmds->filetype[i] == HERE || 
-			// 			shell->cmds->filetype[i] == OUT || shell->cmds->filetype[i] == IN
-			// 			|| shell->cmds->filetype[i] == APPEND))
-			// 		{
-			// 			forking(shell, *pipex);
-			// 			closing(shell);
-			// 		}
-			// 		i++;
-			// 	}
-			// }
+			if (shell->cmds->filetype[i] > 0)
+			{
+				printf("4\n");
+				while (shell->cmds->filetype[i])
+				{
+					if (shell->cmds->word_tok == NULL &&(shell->cmds->filetype[i] == HERE || 
+						shell->cmds->filetype[i] == OUT || shell->cmds->filetype[i] == IN
+						|| shell->cmds->filetype[i] == APPEND))
+						check_filetype(shell, pipex, shell->cmds);
+					else if (shell->cmds->word_tok != NULL && (shell->cmds->filetype[i] == HERE || 
+						shell->cmds->filetype[i] == OUT || shell->cmds->filetype[i] == IN
+						|| shell->cmds->filetype[i] == APPEND))
+					{
+						forking(shell, *pipex);
+						closing(shell);
+					}
+					i++;
+				}
+			}
 		}
 	}
 	else if (shell->cmds_count >1)

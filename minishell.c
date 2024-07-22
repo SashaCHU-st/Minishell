@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:52:26 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/20 18:45:12 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/22 16:30:05 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,75 +34,16 @@ void	running_commands(t_data *shell, int i, t_pipex *pipex )
 {
 	if (shell->cmds_count == 1)
 	{
-		//esli odna commanda ls here is no rediresr
-		if (shell->cmds->filetype[i] == 0 && if_it_is_builtins(&shell->cmds[0]) == 0)
-		{
-			printf("1\n");
-			forking(shell, *pipex);
-			closing(shell);
-		}
-		//esli est reditect i commanda cat << ll or <1.txt >33.txt rhis one has redir
-		if(shell->cmds->filetype[i] > 0)
-		{
-			while (shell->cmds->filetype[i] && if_it_is_builtins(&shell->cmds[0]) == 0)
-			{
-			printf("2\n");
-				if (shell->cmds->word_tok == NULL &&(shell->cmds->filetype[i] == HERE || 
-					shell->cmds->filetype[i] == OUT || shell->cmds->filetype[i] == IN
-					|| shell->cmds->filetype[i] == APPEND))
-					check_filetype(shell, pipex, shell->cmds);
-				else if (shell->cmds->word_tok != NULL && (shell->cmds->filetype[i] == HERE || 
-					shell->cmds->filetype[i] == OUT || shell->cmds->filetype[i] == IN
-					|| shell->cmds->filetype[i] == APPEND))
-				{
-					forking(shell, *pipex);
-					closing(shell);
-				}
-				i++;
-			}
-		}
-		//esli builtin i redirect echo hi >88.txt
-		if (shell->cmds->word_tok[0] != NULL )
-		{
-			if(if_it_is_builtins(&shell->cmds[0]) == 1) //not bbuilt in, IT IS BUILTIN HERE
-			{
-			printf("3\n");
-				if (shell->cmds->filetype == NULL)
-					builtins(shell, &shell->cmds[0], 0);
-				else if (shell->cmds->filetype[i] == NONE)
-					builtins(shell, &shell->cmds[0], 0);
-				if (shell->cmds[0].number_of_redir > 0)
-					redirection_with_builtins(shell, pipex, i);
-
-			}
-			// if (shell->cmds->filetype[i] > 0)
-			// {
-			// 	printf("4\n");
-			// 	while (shell->cmds->filetype[i])
-			// 	{
-			// 		if (shell->cmds->word_tok == NULL &&(shell->cmds->filetype[i] == HERE || 
-			// 			shell->cmds->filetype[i] == OUT || shell->cmds->filetype[i] == IN
-			// 			|| shell->cmds->filetype[i] == APPEND))
-			// 			check_filetype(shell, pipex, shell->cmds);
-			// 		else if (shell->cmds->word_tok != NULL && (shell->cmds->filetype[i] == HERE || 
-			// 			shell->cmds->filetype[i] == OUT || shell->cmds->filetype[i] == IN
-			// 			|| shell->cmds->filetype[i] == APPEND))
-			// 		{
-			// 			forking(shell, *pipex);
-			// 			closing(shell);
-			// 		}
-			// 		i++;
-			// 	}
-			// }
-		}
+		if_not_buil_and_no_redir(shell, pipex, i);
+		if_redir_but_no_buil(shell, pipex, i);
+		if_only_built(shell, pipex, i);
 	}
-	else if (shell->cmds_count >1)
+	else if (shell->cmds_count > 1)
 	{
 		piping(shell);
 		forking(shell, *pipex);
 		closing(shell);
 	}
-	
 	return ;
 }
 
@@ -110,7 +51,7 @@ void	shell_loop(t_data *sh)
 {
 	char	*l;
 	t_pipex	pipex;
-	
+
 	while (1)
 	{
 		l = read_line(sh);
@@ -129,32 +70,7 @@ void	shell_loop(t_data *sh)
 			sh->exit_status = 0;
 			running_commands(sh, 0, &pipex);
 		}
-		if(sh->pipe_tok)
-		{
-			free_array(sh->pipe_tok);
-			sh->pipe_tok = NULL;
-		}
-		if (sh->cmds)
-		{
-			f_free_cmds(sh->cmds, sh->cmds_count);
-			sh->cmds = NULL;
-		}
-	if (sh->pid)
-	{
-		free(sh->pid);
-		sh->pid = NULL;
-	}
-	if (sh->new_envp)
-	{
-		free_array(sh->new_envp);
-		sh->new_envp = NULL;
-	}
-	// 	if (sh->envp)
-	// {
-	// 	printf("her1");
-	// 	free_array(sh->envp);
-	// 	sh->envp = NULL;
-	// }
+		freeing_at_end_shell_loop(sh);
 		free(l);
 	}
 }
@@ -191,13 +107,9 @@ int	main(int argc, char **argv, char *envp[])
 	t_data	data;
 
 	init_t_data(&data);
+	init_t_data_part2(&data);
 	(void)argv;
 	data.envp = copy_envp(&data, envp);
-	// 	if (data.new_envp)
-	// {
-	// 	free_array(data.new_envp);
-	// 	data.new_envp = NULL;
-	// }
 	if (!data.envp)
 		error_message(&data, "Failed to copy environment", 1);
 	if (argc < 2)

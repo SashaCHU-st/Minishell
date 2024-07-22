@@ -90,7 +90,7 @@ static char	*expand_env(t_data *shell, char **line, int *i)
 	ft_strncpy(new_line, *line, (*i));
 	new_line[(*i)] = '\0';
 	strcpy(new_line + (*i), value);
-    strcpy(new_line + (*i) + ft_strlen(value), *line + st + shell->var_len);
+	strcpy(new_line + (*i) + ft_strlen(value), *line + st + shell->var_len);
 	new_line[new_line_len] = '\0';
 	free(value);
 	return (new_line);

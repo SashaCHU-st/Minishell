@@ -34,17 +34,17 @@ void	running_commands(t_data *shell, int i, t_pipex *pipex )
 {
 	if (shell->cmds_count == 1)
 	{
-		//esli odna commanda ls
-		if (shell->cmds_count == 1 && shell->cmds->filetype[i] == 0)
+		//esli odna commanda ls here is no rediresr
+		if (shell->cmds->filetype[i] == 0 && if_it_is_builtins(&shell->cmds[0]) == 0)
 		{
 			printf("1\n");
 			forking(shell, *pipex);
 			closing(shell);
 		}
-		//esli est reditect i commanda cat << ll or <1.txt >33.txt
-		if(shell->cmds->filetype[i] > 0 && if_it_is_builtins(&shell->cmds[0]) == 0)
+		//esli est reditect i commanda cat << ll or <1.txt >33.txt rhis one has redir
+		if(shell->cmds->filetype[i] > 0)
 		{
-			while (shell->cmds->filetype[i])
+			while (shell->cmds->filetype[i] && if_it_is_builtins(&shell->cmds[0]) == 0)
 			{
 			printf("2\n");
 				if (shell->cmds->word_tok == NULL &&(shell->cmds->filetype[i] == HERE || 
@@ -64,7 +64,7 @@ void	running_commands(t_data *shell, int i, t_pipex *pipex )
 		//esli builtin i redirect echo hi >88.txt
 		if (shell->cmds->word_tok[0] != NULL )
 		{
-			if(if_it_is_builtins(&shell->cmds[0]) == 1)
+			if(if_it_is_builtins(&shell->cmds[0]) == 1) //not bbuilt in, IT IS BUILTIN HERE
 			{
 			printf("3\n");
 				if (shell->cmds->filetype == NULL)
@@ -102,6 +102,7 @@ void	running_commands(t_data *shell, int i, t_pipex *pipex )
 		forking(shell, *pipex);
 		closing(shell);
 	}
+	
 	return ;
 }
 
@@ -109,6 +110,7 @@ void	shell_loop(t_data *sh)
 {
 	char	*l;
 	t_pipex	pipex;
+	
 	while (1)
 	{
 		l = read_line(sh);
@@ -142,12 +144,17 @@ void	shell_loop(t_data *sh)
 		free(sh->pid);
 		sh->pid = NULL;
 	}
-	if (sh->pipe) {
-        for (int i = 0; i < sh->pipe_count; i++) {
-            free(sh->pipe[i]);
-        }
-    	free(sh->pipe);
-    }
+	if (sh->new_envp)
+	{
+		free_array(sh->new_envp);
+		sh->new_envp = NULL;
+	}
+	// 	if (sh->envp)
+	// {
+	// 	printf("her1");
+	// 	free_array(sh->envp);
+	// 	sh->envp = NULL;
+	// }
 		free(l);
 	}
 }
@@ -171,8 +178,6 @@ static char	**copy_envp(t_data *shell, char *envp[])
 		if (new_envp[i] == NULL)
 		{
 			error_message(shell, "Failed to duplicate string", 1);
-			while (i > 0)
-				free(new_envp[--i]);
 			return (NULL);
 		}
 		i++;
@@ -188,7 +193,11 @@ int	main(int argc, char **argv, char *envp[])
 	init_t_data(&data);
 	(void)argv;
 	data.envp = copy_envp(&data, envp);
-	
+	// 	if (data.new_envp)
+	// {
+	// 	free_array(data.new_envp);
+	// 	data.new_envp = NULL;
+	// }
 	if (!data.envp)
 		error_message(&data, "Failed to copy environment", 1);
 	if (argc < 2)

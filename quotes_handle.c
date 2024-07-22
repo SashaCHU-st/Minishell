@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quotes_handle.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: epolkhov <epolkhov@student.42.fr>          #+#  +:+       +#+        */
+/*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024-06-26 10:45:47 by epolkhov          #+#    #+#             */
-/*   Updated: 2024-06-26 10:45:47 by epolkhov         ###   ########.fr       */
+/*   Created: 2024/06/26 10:45:47 by epolkhov          #+#    #+#             */
+/*   Updated: 2024/07/22 15:43:36 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,14 +96,8 @@ int	q_pipe(t_data *shell, char *line)
 int	is_in_quotes(char c, int *in_single_quote, int *in_double_quote)
 {
 	if (c == '\'' && !(*in_double_quote))
-	{
 		*in_single_quote = !(*in_single_quote);
-		//return (*in_single_quote);
-	}
 	else if (c == '\"' && !(*in_single_quote))
-	{
 		*in_double_quote = !(*in_double_quote);
-		//return (*in_double_quote);
-	}
 	return (*in_single_quote || *in_double_quote);
 }

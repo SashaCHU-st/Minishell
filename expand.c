@@ -130,11 +130,5 @@ char	*expand_var(t_data *shell, char *line)
 		else
 			j++;
 	}
-	// if (shell->envp)
-	// {
-	// 	printf("her1");
-	// 	free_array(shell->envp);
-	// 	shell->envp = NULL;
-	// }
 	return (line);
 }

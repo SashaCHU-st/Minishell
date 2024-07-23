@@ -188,10 +188,11 @@ void	running_commands(t_data *shell, int i, t_pipex *pipex )
 	{
 	printf("beginning\n");
 	printf("count: %d\n", shell->cmds_count);
+	printf("number of redir: %d\n", shell->cmds[0].number_of_redir);
 	// dprintf(2,"filetype: %d\n", shell->cmds[0].filetype[0]);
 	printf("builin: %d\n", if_it_is_builtins(&shell->cmds[0]));
 		//esli odna commanda ls
-		if (if_it_is_builtins(&shell->cmds[0]) == 0)
+		if (if_it_is_builtins(&shell->cmds[0]) == 0 && shell->cmds[0].number_of_redir == 0)
 		{
 			printf("1\n");
 			forking(shell, *pipex);
@@ -200,7 +201,7 @@ void	running_commands(t_data *shell, int i, t_pipex *pipex )
 		//esli est reditect i commanda cat << ll or <1.txt >33.txt
 		printf("wtok: %s \n", shell->cmds->word_tok[0]);
 		printf("wtok: %s \n", shell->cmds->word_tok[1]);
-		if(shell->cmds->filetype[i] && shell->cmds->filetype[i] > 0 && if_it_is_builtins(&shell->cmds[0]) == 0)
+		if(/*shell->cmds->filetype[i] && shell->cmds->filetype[i] > 0*/ shell->cmds[0].number_of_redir > 0 && if_it_is_builtins(&shell->cmds[0]) == 0)
 		{
 			while (shell->cmds->filetype[i])
 			{
@@ -231,9 +232,11 @@ void	running_commands(t_data *shell, int i, t_pipex *pipex )
 			printf("3\n");
 			if(if_it_is_builtins(&shell->cmds[0]) == 1)
 			{
-				if (shell->cmds->filetype == NULL)
-					builtins(shell, &shell->cmds[0], 0);
-				else if (shell->cmds->filetype[i] == NONE)
+				// if (shell->cmds->filetype == NULL)
+				// 	builtins(shell, &shell->cmds[0], 0);
+				// else if (shell->cmds->filetype[i] == NONE)
+				// 	builtins(shell, &shell->cmds[0], 0);
+				if (shell->cmds[0].number_of_redir == 0)
 					builtins(shell, &shell->cmds[0], 0);
 				if (shell->cmds[0].number_of_redir > 0)
 					redirection_with_builtins(shell, pipex, i);

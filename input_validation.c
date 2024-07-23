@@ -67,7 +67,6 @@ int	in_redir(t_data *shell, char *in)
 				i++;
 			while (check_space(in[i]))
 				i++;
-
 			if ((!in_single_quote && !in_double_quote) && \
 				(in[i] == '|' || in[i] == '\0' || in[i] == '<' || in[i] == '>'))
 			{

@@ -45,13 +45,21 @@ int	in_pipes(t_data *shell, char *input)
 int	in_redir(t_data *shell, char *in)
 {
 	int	i;
+	int	in_single_quote;
+	int	in_double_quote;
 
 	i = 0;
+	in_single_quote = 0;
+	in_double_quote = 0;
 	while (in[i])
 	{
-		if (in[i] == '<' || in[i] == '>' || \
+		if (in[i] == '\'' && !in_double_quote)
+			in_single_quote = !in_single_quote;
+		if (in[i] == '\"' && !in_single_quote)
+			in_double_quote = !in_double_quote;
+		if ((in[i] == '<' || in[i] == '>' || \
 			(in[i] == '>' && in[i + 1] == '>') || \
-			(in[i] == '<' && in[i + 1] == '<'))
+			(in[i] == '<' && in[i + 1] == '<')))
 		{
 			if (in[i + 1] == '>' || in[i + 1] == '<')
 				i += 2;
@@ -59,7 +67,8 @@ int	in_redir(t_data *shell, char *in)
 				i++;
 			while (check_space(in[i]))
 				i++;
-			if (in[i] == '|' || in[i] == '\0' || in[i] == '<' || in[i] == '>')
+			if ((!in_single_quote && !in_double_quote) && \
+				(in[i] == '|' || in[i] == '\0' || in[i] == '<' || in[i] == '>'))
 			{
 				msg_status(shell, \
 				"Syntax error: no input after unexpected token", 2);

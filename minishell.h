@@ -39,6 +39,7 @@ bool			empty_line(char *line);
 bool			check_space(char ch);
 char			*change_to_space(char *line);
 void			change_space_to_31(char *p_token);
+void			msg_status(t_data *shell, char *msg, int status);
 
 bool			has_unclosed_quotes(char *line);
 int				skip_quotes(char *line, int i);

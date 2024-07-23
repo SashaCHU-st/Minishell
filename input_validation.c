@@ -42,6 +42,24 @@ int	in_pipes(t_data *shell, char *input)
 	return (0);
 }
 
+static int	is_redirection(char c, char next_c)
+{
+	return (c == '<' || c == '>' || \
+			(c == '>' && next_c == '>') || (c == '<' && next_c == '<'));
+}
+
+static int	validate_redirection(t_data *shell, char *in, int i, \
+				int in_single_quote, int in_double_quote)
+{
+	if ((in[i] == '|' || in[i] == '\0' || in[i] == '<' || in[i] == '>') && \
+			!in_single_quote && !in_double_quote)
+	{
+		msg_status(shell, "Syntax error: no input after unexpected token", 2);
+		return (1);
+	}
+	return (0);
+}
+
 int	in_redir(t_data *shell, char *in)
 {
 	int	i;
@@ -53,13 +71,8 @@ int	in_redir(t_data *shell, char *in)
 	in_double_quote = 0;
 	while (in[i])
 	{
-		if (in[i] == '\'' && !in_double_quote)
-			in_single_quote = !in_single_quote;
-		if (in[i] == '\"' && !in_single_quote)
-			in_double_quote = !in_double_quote;
-		if ((in[i] == '<' || in[i] == '>' || \
-			(in[i] == '>' && in[i + 1] == '>') || \
-			(in[i] == '<' && in[i + 1] == '<')))
+		is_in_quotes(in[i], &in_single_quote, &in_double_quote);
+		if (is_redirection(in[i], in[i + 1]) && !(in_single_quote || in_double_quote))
 		{
 			if (in[i + 1] == '>' || in[i + 1] == '<')
 				i += 2;
@@ -67,15 +80,11 @@ int	in_redir(t_data *shell, char *in)
 				i++;
 			while (check_space(in[i]))
 				i++;
-			if ((!in_single_quote && !in_double_quote) && \
-				(in[i] == '|' || in[i] == '\0' || in[i] == '<' || in[i] == '>'))
-			{
-				msg_status(shell, \
-				"Syntax error: no input after unexpected token", 2);
+			if (validate_redirection(shell, in, i, in_single_quote, in_double_quote))
 				return (1);
-			}
 		}
-		i++;
+		else
+			i++;
 	}
 	return (0);
 }
@@ -87,10 +96,4 @@ void	error_message(t_data *shell, char *msg, int status)
 	perror(msg);
 	shell->exit_status = status;
 	exit (status);
-}
-
-void	msg_status(t_data *shell, char *msg, int status)
-{
-	ft_putendl_fd(msg, 2);
-	shell->exit_status = status;
 }

@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:52:26 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/23 14:55:16 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/23 15:56:16 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,15 +146,6 @@ void	shell_loop(t_data *sh)
 			sh->exit_status = 0;
 			running_commands(sh, 0, &pipex);
 		}
-	// 	if(sh->pipe_tok)
-	// 	{
-	// 			for (int i = 0; i < sh->cmds_count; i++) {
-    //     free(sh->pipe_tok[i]);
-    // }
-    // free(sh->pipe_tok);
-	// 	}
-		// if(sh->pipe)
-		// 	free_pipes(sh, sh->pipe_count);
 		if (sh->cmds->word_tok)
 	{
 		for (int i = 0; i < sh->cmds->w_count; i++) {
@@ -164,25 +155,7 @@ void	shell_loop(t_data *sh)
 		}
 		free(sh->cmds->word_tok);
 	}
-	// if (sh->cmds->filenames)
-	// {
-	// 	for (int i = 0; i < sh->cmds->number_of_redir; i++) {
-	// 		if (sh->cmds->filenames[i]) {
-	// 			free(sh->cmds->filenames[i]);
-	// 		}
-	// 	}
-	// 	free(sh->cmds->filenames);
-	// }
-	// if (sh->cmds->filetype)
-	// 	free(sh->cmds->filetype);
-	// if (sh->cmds)
-	// 	{
-	// 		printf("hello\n");
-	// 		for (int i = 0; i < sh->cmds_count; i++) {
-	// 	f_free_cmds(&sh->cmds[i]);
-    // }
-    // free(sh->cmds);
-	// 	}
+
 	if (sh->pid)
 		{
 			printf("hello2\n");

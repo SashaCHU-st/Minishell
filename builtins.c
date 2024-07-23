@@ -15,28 +15,33 @@
 
 int	if_it_is_builtins( t_cmd *cmd)
 {
-	//printf("aaaaaaa\n");
-	if (ft_strncmp(cmd->word_tok[0], "pwd", 4) == 0)
-		return (1);
-	else if (ft_strncmp(cmd->word_tok[0], "echo", 5) == 0)
-		return (1);
-	else if (ft_strncmp(cmd->word_tok[0], "env", 4) == 0)
-		return (1);
-	else if (ft_strncmp(cmd->word_tok[0], "export", 7) == 0)
-		return (1);
-	else if (ft_strncmp(cmd->word_tok[0], "cd", 3) == 0)
-		return (1);
-	else if (ft_strncmp(cmd->word_tok[0], "unset", 6) == 0)
-		return (1);
-	else if (ft_strncmp(cmd->word_tok[0], "exit", 5) == 0)
-		return (1);
+	if(cmd->word_tok[0] != NULL)
+	{
+		if (ft_strncmp(cmd->word_tok[0], "pwd", 4) == 0)
+			return (1);
+		else if (ft_strncmp(cmd->word_tok[0], "echo", 5) == 0)
+			return (1);
+		else if (ft_strncmp(cmd->word_tok[0], "env", 4) == 0)
+			return (1);
+		else if (ft_strncmp(cmd->word_tok[0], "export", 7) == 0)
+			return (1);
+		else if (ft_strncmp(cmd->word_tok[0], "cd", 3) == 0)
+			return (1);
+		else if (ft_strncmp(cmd->word_tok[0], "unset", 6) == 0)
+			return (1);
+		else if (ft_strncmp(cmd->word_tok[0], "exit", 5) == 0)
+			return (1);
+		else
+			return (0);
+	}
 	else
 		return (0);
+
 }
 
 void	builtins(t_data *data, t_cmd *cmd, int k)
 {
-	//printf("suka\n");
+	printf("suka\n");
 	if (ft_strncmp(cmd->word_tok[0], "pwd", 4) == 0)
 		ft_pwd(data);
 	else if (ft_strncmp(cmd->word_tok[0], "echo", 5) == 0)

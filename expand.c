@@ -65,13 +65,17 @@ static char	*expand_env(t_data *shell, char **line, int *i)
 	st = (*i) + 1;
 	value = get_expand(shell, &(*line)[st]);
 	if (!value)
+	{
 		error_message(shell, "Expansion of env failed", 1);
+		return (NULL);
+	}
 	new_line_len = cal_new_line_len(shell, *line, value, *i);
 	new_line = (char *)malloc(sizeof(char) * (new_line_len + 1));
 	if (!new_line)
 	{
 		free(value);
 		error_message(shell, "Failed to malloc", 1);
+		return (NULL);
 	}
 	ft_strncpy(new_line, *line, (*i));
 	new_line[(*i)] = '\0';
@@ -119,10 +123,3 @@ char	*expand_var(t_data *shell, char *line)
 	}
 	return (line);
 }
-
-// if (!shell->expanded_line)
-			// {
-			// 	ft_putendl_fd("Failed to expand", 2);
-			// 	free(line);
-			// 	return (NULL);
-			// }

@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 11:12:53 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/23 16:13:25 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/23 17:34:00 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ static void	process_commands(t_data *shell)
 			return ;
 		}
 	}
-
 	if (shell->pipe_tok)
 	{
 		free_array(shell->pipe_tok);
@@ -91,3 +90,4 @@ void	split_line(char *line, t_data *shell)
 	}
 	process_commands(shell);
 }
+

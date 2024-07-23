@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: epolkhov <epolkhov@student.42.fr>          #+#  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/18 09:17:33 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/23 20:05:55 by aheinane         ###   ########.fr       */
+/*   Created: 2024-07-18 09:17:33 by epolkhov          #+#    #+#             */
+/*   Updated: 2024-07-18 09:17:33 by epolkhov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

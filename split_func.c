@@ -72,11 +72,6 @@ static char	**f_fill_array(char const *s, char c, unsigned int nb)
 	if (!array)
 		return (NULL);
 	new_array = split_array(nb, c, s, array);
-	if (!new_array)
-	{
-		free(array);
-		return (NULL);
-	}
 	return (new_array);
 }
 

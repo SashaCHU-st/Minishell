@@ -13,7 +13,6 @@
 #include "minishell.h"
 #include "builtins.h"
 
-
 void	check_filetype(t_data *shell, t_pipex *pipex, t_cmd *cmd)
 {
 	int	i;

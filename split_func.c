@@ -63,7 +63,8 @@ static char	**split_array(unsigned int nb, char c, char const *s, char **array)
 	return (array);
 }
 
-static char	**f_fill_array(char const *s, char c, unsigned int nb, t_data *shell)
+static char	**f_fill_array(char const *s, char c, unsigned int nb, \
+						t_data *shell)
 {
 	char	**array;
 	char	**new_array;

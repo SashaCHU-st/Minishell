@@ -30,33 +30,20 @@ void	dup_close(int k, t_data *shell)
 	}
 }
 
-int find_slash(t_cmd *cmd)
+int	find_slash(t_cmd *cmd)
 {
-	int i = 0;
+	int	i;
+
+	i = 0;
 	while (cmd->word_tok[i] != NULL)
 	{
 		if (strchr(cmd->word_tok[i], '/') != NULL)
-			return 1;
+			return (1);
 		i++;
 	}
-	return 0;
+	return (0);
 }
 
-void remove_dots(char *str)
-{
-	if (!str) return;
-
-	char *src = str, *dst = str;
-	while (*src)
-	{
-		if (*src != '.')
-		{
-			*dst++ = *src;
-		}
-		src++;
-	}
-	*dst = '\0';
-}
 void	exeve_for_commands(t_data *shell, t_pipex pipex, char *final, int k)
 {
 	checking_path(shell, &pipex, k);
@@ -66,14 +53,11 @@ void	exeve_for_commands(t_data *shell, t_pipex pipex, char *final, int k)
 		final = path_commands(shell, &pipex, &shell->cmds[k].word_tok[0]);
 	if (!final)
 	{
-		printf("%s: command not found\n", shell->cmds[k].word_tok[0]);
 		free(final);
 		exit(127);
 	}
 	if (execve(final, shell->cmds[k].word_tok, shell->envp) == -1)
 	{
-		printf("LS\n");
-		shell->exit_status = 127;
 		free_fun(&pipex);
 		if (shell->envp)
 		{
@@ -93,7 +77,7 @@ void	child(t_pipex pipex, t_data *shell, int k)
 {
 	char	*final;
 	int		i;
-	
+  
 	final = NULL;
 	if (!final)
 	{

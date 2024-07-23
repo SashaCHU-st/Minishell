@@ -55,29 +55,36 @@ void	f_free_array(char **str)
 	free(str);
 }
 
-void	ft_error(void)
+static void	free_wtok(t_cmd *cmd)
 {
-	perror("Error fork()");
-	exit(1);
+	int	i;
+
+	if (cmd->word_tok)
+	{
+		i = 0;
+		while (i < cmd->w_count)
+		{
+			if (cmd->word_tok[i])
+				free(cmd->word_tok[i]);
+			i++;
+		}
+		free(cmd->word_tok);
+	}
 }
 
 void	f_free_cmds(t_cmd *cmd)
 {
-	if (cmd->word_tok)
-	{
-		for (int i = 0; i < cmd->w_count; i++) {
-			if (cmd->word_tok[i]) {
-				free(cmd->word_tok[i]);
-			}
-		}
-		free(cmd->word_tok);
-	}
+	int	i;
+
+	free_wtok(cmd);
 	if (cmd->filenames)
 	{
-		for (int i = 0; i < cmd->number_of_redir; i++) {
-			if (cmd->filenames[i]) {
+		i = 0;
+		while (i < cmd->number_of_redir)
+		{
+			if (cmd->filenames[i])
 				free(cmd->filenames[i]);
-			}
+			i++;
 		}
 		free(cmd->filenames);
 	}

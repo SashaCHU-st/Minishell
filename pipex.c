@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:47:03 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/22 21:38:26 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/23 21:09:13 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	free_for_path(t_data *shell, t_pipex *pipex)
 char	*path_commands(t_data *shell, t_pipex *pipex, char **child)
 {
 	char	*command;
-	char	*command_temp;
+	char	*command_temp = malloc(sizeof(char *));
 	char	**current_path;
 
 	current_path = pipex->commands_path;
@@ -40,18 +40,30 @@ char	*path_commands(t_data *shell, t_pipex *pipex, char **child)
 		free(command);
 		current_path++;
 	}
-	if (!current_path)
-	{
+	// if (!current_path)
+	// {
 		ft_putstr_fd(*child, 2);
 		ft_putstr_fd(": command not found\n", 2);
+		if (shell->envp)
+		{
+			free_array(shell->envp);
+			shell->envp = NULL;
+		}
+		if (shell->new_envp)
+		{
+			free_array(shell->new_envp);
+			shell->new_envp = NULL;
+		}
 		shell->exit_status = 127;
-	}
+	//}
 	return (NULL);
 }
 
-char *mine_path(t_data *shell, int i)
+char	*mine_path(t_data *shell, int i)
 {
-	char **envp_copy = shell->envp;
+	char	**envp_copy;
+
+	envp_copy = shell->envp;
 	if (envp_copy == NULL)
 	{
 		ft_putstr_fd("Environment variables not found.\n", 2);

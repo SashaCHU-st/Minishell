@@ -63,6 +63,7 @@ char			*hd_filename(t_data *shell, int count);
 int				process_hd(t_data *tokens, const char *file,
 					char *delimeter);
 char			*expand_var(t_data *shell, char *line);
+char			*get_expand(t_data *shell, char *line);
 void			cmd_and_expand(t_data *shell);
 int				end_character(char c);
 char			*receive_exit_status(t_data *shell);
@@ -74,7 +75,7 @@ void			remove_redir_from_input(t_data *tokens);
 char			*ft_strncpy(char *dest, const char *src, size_t n);
 char			*ft_strndup(const char *str, size_t n);
 int				ft_strcmp(char *s1, char *s2);
-char 			*ft_strcpy(char *dest, const char *src);
+char			*ft_strcpy(char *dest, const char *src);
 
 //////////////exit and free//////////////
 

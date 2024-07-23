@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 10:08:33 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/23 20:22:59 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/22 21:53:45 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ void	checking_path(t_data *shell, t_pipex *pipex, int i)
 		free_fun(pipex);
 	}
 }
-
 void	forking(t_data *shell, t_pipex pipex)
 {
 	int	k;
@@ -54,7 +53,6 @@ void	forking(t_data *shell, t_pipex pipex)
 		k++;
 	}
 }
-
 void	piping(t_data *shell)
 {
 	int	j;
@@ -75,6 +73,8 @@ void	piping(t_data *shell)
 		{
 			perror("Error in malloc");
 			shell->exit_status = 1;
+			//free_array(shell->pipe);
+			//free(shell->pipe);
 			exit(1);
 		}
 		pipe(shell->pipe[j]);
@@ -90,6 +90,7 @@ void	closing(t_data *shell)
 
 	m = 0;
 	x = 0;
+	
 	while (m < (shell->cmds_count - 1))
 	{
 		close(shell->pipe[m][0]);
@@ -102,17 +103,4 @@ void	closing(t_data *shell)
 		shell->exit_status = status;
 		x++;
 	}
-
-	if (shell->pid)
-	{
-		free(shell->pid);
-		shell->pid = NULL;
-	}
-	if (shell->pipe) {
-        for (int i = 0; i < shell->pipe_count; i++) {
-            free(shell->pipe[i]);
-        }
-    	free(shell->pipe);
-		shell->pipe= NULL;
-    }
 }

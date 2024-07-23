@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 12:30:19 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/19 13:26:54 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/23 13:21:16 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,5 +58,5 @@ void	init_t_data(t_data *data)
 	data->path = NULL;
 	data->expanded_line = NULL;
 	data->file = NULL;
-	
+	data->array = NULL;
 }

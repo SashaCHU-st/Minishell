@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:52:26 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/20 18:45:12 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/22 21:59:59 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,7 +201,7 @@ void	running_commands(t_data *shell, int i, t_pipex *pipex )
 		//esli est reditect i commanda cat << ll or <1.txt >33.txt
 		printf("wtok: %s \n", shell->cmds->word_tok[0]);
 		printf("wtok: %s \n", shell->cmds->word_tok[1]);
-		if(/*shell->cmds->filetype[i] && shell->cmds->filetype[i] > 0*/ shell->cmds[0].number_of_redir > 0 && if_it_is_builtins(&shell->cmds[0]) == 0)
+		if(shell->cmds[0].number_of_redir > 0 && if_it_is_builtins(&shell->cmds[0]) == 0)
 		{
 			while (shell->cmds->filetype[i])
 			{
@@ -281,7 +281,6 @@ void	shell_loop(t_data *sh)
 {
 	char	*l;
 	t_pipex	pipex;
-	
 	while (1)
 	{
 		l = read_line(sh);
@@ -298,9 +297,13 @@ void	shell_loop(t_data *sh)
 				continue ;
 			}
 			sh->exit_status = 0;
+			// if (sh->cmds->word_tok[0] == NULL)
+			// 	continue ;
+			//if(sh->cmds->word_tok[0] != NULL)
+			printf("byyyy\n");
 			running_commands(sh, 0, &pipex);
 		}
-		if(sh->pipe_tok)
+if(sh->pipe_tok)
 		{
 			free_array(sh->pipe_tok);
 			sh->pipe_tok = NULL;
@@ -346,6 +349,8 @@ static char	**copy_envp(t_data *shell, char *envp[])
 		if (new_envp[i] == NULL)
 		{
 			error_message(shell, "Failed to duplicate string", 1);
+			while (i > 0)
+				free(new_envp[--i]);
 			return (NULL);
 		}
 		i++;
@@ -361,11 +366,7 @@ int	main(int argc, char **argv, char *envp[])
 	init_t_data(&data);
 	(void)argv;
 	data.envp = copy_envp(&data, envp);
-	// 	if (data.new_envp)
-	// {
-	// 	free_array(data.new_envp);
-	// 	data.new_envp = NULL;
-	// }
+	
 	if (!data.envp)
 		error_message(&data, "Failed to copy environment", 1);
 	if (argc < 2)

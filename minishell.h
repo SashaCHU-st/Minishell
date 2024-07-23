@@ -44,7 +44,6 @@ bool			has_unclosed_quotes(char *line);
 int				skip_quotes(char *line, int i);
 void			remove_quotes(char *str);
 int				skip_quotes(char *line, int i);
-int 			quotes_redir(char *line);
 int				q_pipe(t_data *shell, char *line);
 int				is_in_quotes(char c, int *in_single_quote,
 					int *in_double_quote);
@@ -70,13 +69,12 @@ void			remove_redir_from_input(t_data *tokens);
 char			*ft_strncpy(char *dest, const char *src, size_t n);
 char			*ft_strndup(const char *str, size_t n);
 int				ft_strcmp(char *s1, char *s2);
-char 			*ft_strcpy(char *dest, const char *src);
 
 //////////////exit and free//////////////
 
 void			get_signal(t_signal mode);
 void			exit_free(t_data *shell, int status);
-void			free_all_sh(t_data *shell);
+void			free_all(t_data *shell);
 void			f_free_cmds(t_cmd *cmds, int cmds_count);
 void			free_t_data(t_data *shell);
 void			ft_exit(t_data *shell, char **args);

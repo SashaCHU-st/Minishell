@@ -30,19 +30,178 @@ char	*read_line(t_data *line)
 	return (input);
 }
 
+// void	running_commands(t_data *shell, int i, t_pipex *pipex )
+// {
+// 	if (!shell || !pipex || !shell->cmds) {
+//         printf("Error: NULL pointer passed to running_commands\n");
+//         return;
+//     }
+// 	if (shell->cmds_count == 1)
+// 	{
+// 		printf("111\n");
+// 		//esli odna commanda ls here is no rediresr
+// 		if (shell->cmds->filetype[i] == 0 && if_it_is_builtins(&shell->cmds[0]) == 0)
+// 		{
+// 			printf("1\n");
+// 			forking(shell, *pipex);
+// 			closing(shell);
+// 		}
+// 		//esli est reditect i commanda cat << ll or <1.txt >33.txt rhis one has redir
+// 		if(shell->cmds->filetype[i] > 0)
+// 		{
+// 			printf("22222\n");
+// 			while (shell->cmds->filetype[i] /*&& if_it_is_builtins(&shell->cmds[0]) == 0*/)
+// 			{
+// 				printf("2\n");
+// 				printf("wordtok: %s\n", shell->cmds->word_tok[0]);
+// 				printf("filetype: %d\n", shell->cmds->filetype[i]);
+// 				if (shell->cmds->word_tok[0] == NULL && (shell->cmds->filetype[i] == HERE ||
+// 					shell->cmds->filetype[i] == OUT || shell->cmds->filetype[i] == IN
+// 					|| shell->cmds->filetype[i] == APPEND))
+// 				{
+// 					printf("show me\n");
+// 					check_filetype(shell, pipex, shell->cmds);
+// 				}
+// 				else if (shell->cmds->word_tok[0] != NULL && (shell->cmds->filetype[i] == HERE || 
+// 					shell->cmds->filetype[i] == OUT || shell->cmds->filetype[i] == IN
+// 					|| shell->cmds->filetype[i] == APPEND))
+// 				{
+// 					printf("kutut\n");
+// 					forking(shell, *pipex);
+// 					closing(shell);
+// 				}
+// 				i++;
+// 			}
+// 		}
+// 		//esli builtin i redirect echo hi >88.txt
+// 		if (shell->cmds->word_tok[0] != NULL )
+// 		{
+// 			if(if_it_is_builtins(&shell->cmds[0]) == 1)
+// 			{
+// 				printf("3\n");
+// 				if (shell->cmds->filetype == NULL)
+// 					builtins(shell, &shell->cmds[0], 0);
+// 				else if (shell->cmds->filetype[i] == NONE)
+// 					builtins(shell, &shell->cmds[0], 0);
+// 				if (shell->cmds[0].number_of_redir > 0)
+// 					redirection_with_builtins(shell, pipex, i);
+
+// 			}
+// 			// if (shell->cmds->filetype[i] > 0)
+// 			// {
+// 			// 	printf("4\n");
+// 			// 	while (shell->cmds->filetype[i])
+// 			// 	{
+// 			// 		if (shell->cmds->word_tok == NULL &&(shell->cmds->filetype[i] == HERE || 
+// 			// 			shell->cmds->filetype[i] == OUT || shell->cmds->filetype[i] == IN
+// 			// 			|| shell->cmds->filetype[i] == APPEND))
+// 			// 			check_filetype(shell, pipex, shell->cmds);
+// 			// 		else if (shell->cmds->word_tok != NULL && (shell->cmds->filetype[i] == HERE || 
+// 			// 			shell->cmds->filetype[i] == OUT || shell->cmds->filetype[i] == IN
+// 			// 			|| shell->cmds->filetype[i] == APPEND))
+// 			// 		{
+// 			// 			forking(shell, *pipex);
+// 			// 			closing(shell);
+// 			// 		}
+// 			// 		i++;
+// 			// 	}
+// 			// }
+// 		}
+// 	}
+// 	else if (shell->cmds_count >1)
+// 	{
+// 		piping(shell);
+// 		forking(shell, *pipex);
+// 		closing(shell);
+// 	}
+	
+// 	return ;
+// }
+
+// void	running_commands(t_data *shell, int i, t_pipex *pipex )
+// {
+// 		if (!shell || !pipex || !shell->cmds) {
+//         printf("Error: NULL pointer passed to running_commands\n");
+//         return;
+//     }
+// 	if (shell->cmds_count == 1)
+// 	{
+// 		printf ("dumai\n");
+		
+// 		while (++i < shell->cmds_count)
+// 			init_cmd(&shell->cmds[i]);
+// 		printf("filetype: %p\n", shell->cmds[0].filetype);
+// 		//if (shell->cmds->word_tok[0] != NULL)
+// 		//{
+// 			if(shell->cmds[0].word_tok[0] != NULL && if_it_is_builtins(&shell->cmds[0]) == 1 )
+// 			{
+// 				if (shell->cmds->filetype == NULL)
+// 					builtins(shell, &shell->cmds[0], 0);
+// 				else if (shell->cmds->filetype[i] == NONE)
+// 					builtins(shell, &shell->cmds[0], 0);
+// 				if (shell->cmds[0].number_of_redir > 0)
+// 					redirection_with_builtins(shell, pipex, i);
+// 			}
+// 			else if (shell->cmds->filetype[i] > 0 && if_it_is_builtins(&shell->cmds[0]) == 0)
+// 			{
+// 				while (shell->cmds->filetype[i])
+// 				{
+// 					if (shell->cmds->word_tok[0] == NULL &&(shell->cmds->filetype[i] == HERE || 
+// 						shell->cmds->filetype[i] == OUT || shell->cmds->filetype[i] == IN
+// 						|| shell->cmds->filetype[i] == APPEND))
+// 						{
+// 							printf("no prompt\n");
+// 							check_filetype(shell, pipex, shell->cmds);
+// 							if (!shell->cmds->filetype[i])
+// 								return ;
+// 						}
+// 					else if (shell->cmds->word_tok[0] != NULL && (shell->cmds->filetype[i] == HERE || 
+// 						shell->cmds->filetype[i] == OUT || shell->cmds->filetype[i] == IN
+// 						|| shell->cmds->filetype[i] == APPEND))
+// 					{
+// 						printf("doooooo prompt\n");
+// 						forking(shell, *pipex);
+// 						closing(shell);
+// 					}
+// 					i++;
+// 				}
+// 				// if(shell->cmds->word_tok[0] != NULL)
+// 				// {
+// 				// 	forking(shell, *pipex);
+// 				// 	closing(shell);
+// 				// }
+// 			//}
+// 			}
+// 	}
+// 	else
+// 	{
+// 		piping(shell);
+// 		forking(shell, *pipex);
+// 		closing(shell);
+// 	}
+// 	return ;
+// }
+
 void	running_commands(t_data *shell, int i, t_pipex *pipex )
 {
 	if (shell->cmds_count == 1)
 	{
+	printf("beginning\n");
+	printf("count: %d\n", shell->cmds_count);
+	printf("number of redir: %d\n", shell->cmds[0].number_of_redir);
+	// dprintf(2,"filetype: %d\n", shell->cmds[0].filetype[0]);
+	printf("builin: %d\n", if_it_is_builtins(&shell->cmds[0]));
 		//esli odna commanda ls
-		if (shell->cmds_count == 1 && shell->cmds->filetype[i] == 0 && if_it_is_builtins(&shell->cmds[0]) == 0)
+		if (if_it_is_builtins(&shell->cmds[0]) == 0 && shell->cmds[0].number_of_redir == 0)
 		{
 			printf("1\n");
 			forking(shell, *pipex);
 			closing(shell);
 		}
 		//esli est reditect i commanda cat << ll or <1.txt >33.txt
-		if(shell->cmds->filetype[i] > 0 && if_it_is_builtins(&shell->cmds[0]) == 0)
+		printf("wtok: %s \n", shell->cmds->word_tok[0]);
+		printf("wtok: %s \n", shell->cmds->word_tok[1]);
+		if(shell->cmds[0].number_of_redir > 0 && if_it_is_builtins(&shell->cmds[0]) == 0)
 		{
 			while (shell->cmds->filetype[i])
 			{
@@ -68,14 +227,16 @@ void	running_commands(t_data *shell, int i, t_pipex *pipex )
 			}
 		}
 		//esli builtin i redirect echo hi >88.txt
-		if (shell->cmds->word_tok[0] != NULL )
+		if ( if_it_is_builtins(&shell->cmds[0]) == 1)
 		{
+			printf("3\n");
 			if(if_it_is_builtins(&shell->cmds[0]) == 1)
 			{
-			printf("3\n");
-				if (shell->cmds->filetype == NULL)
-					builtins(shell, &shell->cmds[0], 0);
-				else if (shell->cmds->filetype[i] == NONE)
+				// if (shell->cmds->filetype == NULL)
+				// 	builtins(shell, &shell->cmds[0], 0);
+				// else if (shell->cmds->filetype[i] == NONE)
+				// 	builtins(shell, &shell->cmds[0], 0);
+				if (shell->cmds[0].number_of_redir == 0)
 					builtins(shell, &shell->cmds[0], 0);
 				if (shell->cmds[0].number_of_redir > 0)
 					redirection_with_builtins(shell, pipex, i);
@@ -165,6 +326,9 @@ if(sh->pipe_tok)
 		free(l);
 	}
 }
+
+
+
 
 static char	**copy_envp(t_data *shell, char *envp[])
 {

@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 12:30:19 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/23 13:21:16 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/23 15:55:16 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,14 +43,14 @@ void	init_t_data(t_data *data)
 	data->var_len = 0;
 	data->in_dquotes = 0;
 	data->filename = NULL;
-	data->in_single_quote = 0;
-	data->in_double_quote = 0;
-	data->in_quotes = 0;
 	data->new_line = NULL;
 	data->line = NULL;
 	data->hd_index = 0;
-	//memset(data->pwd, 0, sizeof(data->pwd));
 	data->redir_count = 0;
+}
+
+void	init_t_data2(t_data *data)
+{
 	data->pipe = NULL;
 	data->parent_out = 0;
 	data->parent_in = 0;

@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 11:12:53 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/23 14:57:31 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/23 16:13:25 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,9 @@ static t_cmd	split_into_wtok(char *pipe_token, t_cmd cmd, t_data *shell)
 	change_space_to_31(pipe_token);
 	remove_quotes(pipe_token);
 	cmd.word_tok = do_split(pipe_token, 31, shell);
+	printf("Number of tokens: %d\n", cmd.w_count);
+    
+
 	if (!cmd.word_tok)
 		return (cmd);
 	while (cmd.word_tok[cmd.w_count])
@@ -44,20 +47,20 @@ static void	process_commands(t_data *shell)
 	i = -1;
 	while (++i < shell->cmds_count)
 	{
-		shell->cmds[i] = split_into_wtok(shell->pipe_tok[i], shell->cmds[i]);
+		shell->cmds[i] = split_into_wtok(shell->pipe_tok[i], shell->cmds[i], shell);
 		if (!shell->cmds[i].word_tok)
 		{
 			error_message(shell, "Failed to split to tokens", 1);
 			return ;
 		}
 	}
-  	if(shell->pipe_tok)
-		{
-		for (int i = 0; i < shell->cmds_count; i++) {
-        	free(shell->pipe_tok[i]);
-   		 }
-   		 free(shell->pipe_tok);
-		}
+
+	if (shell->pipe_tok)
+	{
+		free_array(shell->pipe_tok);
+		shell->pipe_tok = NULL;
+	}
+
 }
 
 void	split_line(char *line, t_data *shell)
@@ -68,7 +71,7 @@ void	split_line(char *line, t_data *shell)
 	
 	if (quotes_redir(line) == 0)
 		is_heredoc(line, shell);
-	shell->pipe_tok = do_split(line, 31, shell);
+	shell->pipe_tok = do_split(line, 31,shell);
 	if (!shell->pipe_tok)
 	{
 		error_message(shell, "Failed to malloc", 1);
@@ -87,5 +90,4 @@ void	split_line(char *line, t_data *shell)
 		cmd_and_expand(shell);
 	}
 	process_commands(shell);
-
 }

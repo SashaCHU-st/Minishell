@@ -54,11 +54,13 @@ static void	process_commands(t_data *shell)
 			return ;
 		}
 	}
+
 	if (shell->pipe_tok)
 	{
 		free_array(shell->pipe_tok);
 		shell->pipe_tok = NULL;
 	}
+
 }
 
 void	split_line(char *line, t_data *shell)
@@ -84,8 +86,8 @@ void	split_line(char *line, t_data *shell)
 		init_cmd(&shell->cmds[i]);
 	if (quotes_redir(shell->pipe_tok[0]) == 0)
 	{
-			cmd_and_redir(shell);
-			cmd_and_expand(shell);
+		cmd_and_redir(shell);
+		cmd_and_expand(shell);
 	}
 	process_commands(shell);
 }

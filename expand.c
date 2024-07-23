@@ -119,3 +119,10 @@ char	*expand_var(t_data *shell, char *line)
 	}
 	return (line);
 }
+
+// if (!shell->expanded_line)
+			// {
+			// 	ft_putendl_fd("Failed to expand", 2);
+			// 	free(line);
+			// 	return (NULL);
+			// }

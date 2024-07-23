@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:52:26 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/23 14:55:16 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/23 15:56:16 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ void	running_commands(t_data *shell, int i, t_pipex *pipex )
 {
 	if (shell->cmds_count == 1)
 	{
-	printf("beginning\n");
 	printf("count: %d\n", shell->cmds_count);
 	printf("number of redir: %d\n", shell->cmds[0].number_of_redir);
 	// dprintf(2,"filetype: %d\n", shell->cmds[0].filetype[0]);
@@ -147,15 +146,6 @@ void	shell_loop(t_data *sh)
 			sh->exit_status = 0;
 			running_commands(sh, 0, &pipex);
 		}
-	// 	if(sh->pipe_tok)
-	// 	{
-	// 			for (int i = 0; i < sh->cmds_count; i++) {
-    //     free(sh->pipe_tok[i]);
-    // }
-    // free(sh->pipe_tok);
-	// 	}
-		// if(sh->pipe)
-		// 	free_pipes(sh, sh->pipe_count);
 		if (sh->cmds->word_tok)
 	{
 		for (int i = 0; i < sh->cmds->w_count; i++) {
@@ -165,25 +155,7 @@ void	shell_loop(t_data *sh)
 		}
 		free(sh->cmds->word_tok);
 	}
-	// if (sh->cmds->filenames)
-	// {
-	// 	for (int i = 0; i < sh->cmds->number_of_redir; i++) {
-	// 		if (sh->cmds->filenames[i]) {
-	// 			free(sh->cmds->filenames[i]);
-	// 		}
-	// 	}
-	// 	free(sh->cmds->filenames);
-	// }
-	// if (sh->cmds->filetype)
-	// 	free(sh->cmds->filetype);
-	// if (sh->cmds)
-	// 	{
-	// 		printf("hello\n");
-	// 		for (int i = 0; i < sh->cmds_count; i++) {
-	// 	f_free_cmds(&sh->cmds[i]);
-    // }
-    // free(sh->cmds);
-	// 	}
+
 	if (sh->pid)
 		{
 			printf("hello2\n");
@@ -198,9 +170,6 @@ void	shell_loop(t_data *sh)
 		free(l);
 	}
 }
-
-
-
 
 static char	**copy_envp(t_data *shell, char *envp[])
 {
@@ -236,9 +205,9 @@ int	main(int argc, char **argv, char *envp[])
 	t_data	data;
 
 	init_t_data(&data);
+	init_t_data2(&data);
 	(void)argv;
 	data.envp = copy_envp(&data, envp);
-	
 	if (!data.envp)
 		error_message(&data, "Failed to copy environment", 1);
 	if (argc < 2)

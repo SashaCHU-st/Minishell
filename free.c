@@ -17,7 +17,6 @@ void	free_fun(t_pipex *pipex)
 {
 	if (pipex->commands_path != NULL)
 		free_array(pipex->commands_path);
-
 	close(STDIN_FILENO);
 	close(STDOUT_FILENO);
 	exit(1);
@@ -32,7 +31,6 @@ void	free_array(char **array)
 		return ;
 	while (array[i])
 	{
-	//	dprintf(2,"free_array will clean ->%s<- at %p\n", array[i], array[i]);
 		free(array[i]);
 		i++;
 	}

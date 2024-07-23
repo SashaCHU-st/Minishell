@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 20:25:40 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/23 20:27:42 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/17 17:37:10 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,12 +63,11 @@ static char	**split_array(unsigned int nb, char c, char const *s, char **array)
 	return (array);
 }
 
-static char	**f_fill_array(char const *s, char c, unsigned int nb, \
-						t_data *shell)
+static char	**f_fill_array(char const *s, char c, unsigned int nb)
 {
 	char	**array;
 	char	**new_array;
-	(void)shell;
+
 	array = allocate_array(nb);
 	if (!array)
 		return (NULL);
@@ -76,12 +75,12 @@ static char	**f_fill_array(char const *s, char c, unsigned int nb, \
 	return (new_array);
 }
 
-char	**do_split(char const *s, char c, t_data *shell)
+char	**do_split(char const *s, char c)
 {
 	unsigned int	n_of_substr;
 
 	if (!s)
 		return (NULL);
 	n_of_substr = num_of_str(s, c);
-	return (f_fill_array(s, c, n_of_substr, shell));
+	return (f_fill_array(s, c, n_of_substr));
 }

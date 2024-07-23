@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:53:11 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/23 13:24:09 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/18 13:57:26 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,14 +56,13 @@ void			init_cmd(t_cmd *cmd);
 
 ////////////// parsing ///////////////
 
-char			**do_split(char const *s, char c, t_data *shell);
+char			**do_split(char const *s, char c);
 void			split_line(char *line, t_data *shell);
 void			*is_heredoc(char *line, t_data *tokens);
 char			*hd_filename(t_data *shell, int count);
 int				process_hd(t_data *tokens, const char *file,
 					char *delimeter);
 char			*expand_var(t_data *shell, char *line);
-char			*get_expand(t_data *shell, char *line);
 void			cmd_and_expand(t_data *shell);
 int				end_character(char c);
 char			*receive_exit_status(t_data *shell);
@@ -75,18 +74,17 @@ void			remove_redir_from_input(t_data *tokens);
 char			*ft_strncpy(char *dest, const char *src, size_t n);
 char			*ft_strndup(const char *str, size_t n);
 int				ft_strcmp(char *s1, char *s2);
-char			*ft_strcpy(char *dest, const char *src);
+char 			*ft_strcpy(char *dest, const char *src);
 
 //////////////exit and free//////////////
 
 void			get_signal(t_signal mode);
 void			exit_free(t_data *shell, int status);
 void			free_all(t_data *shell);
-void			f_free_cmds(t_cmd *cmds);
+void			f_free_cmds(t_cmd *cmds, int cmds_count);
 void			free_t_data(t_data *shell);
 void			ft_exit(t_data *shell, char **args);
 void			f_free_array(char **r);
 unsigned int	num_of_str(const char *s, char c);
-void			free_pipes(t_data *shell, int count);
 
 #endif

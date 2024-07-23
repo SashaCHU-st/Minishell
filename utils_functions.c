@@ -31,6 +31,20 @@ char	*ft_strncpy(char *dest, const char *src, size_t n)
 	return (dest);
 }
 
+char *ft_strcpy(char *dest, const char *src)
+{
+	size_t i;
+	
+	i = 0;
+	while (src[i] != '\0')
+	{
+		dest[i] = src[i];
+		i++;
+	}
+	dest[i] = '\0';
+	return (dest);
+}
+
 char	*ft_strndup(const char *str, size_t n)
 {
 	size_t	len;
@@ -82,33 +96,4 @@ bool	empty_line(char *line)
 	}
 	free(line);
 	return (true);
-}
-
-unsigned int	num_of_str(const char *s, char c)
-{
-	unsigned int	count;
-	int				in_field;
-
-	if (!s)
-		return (0);
-	count = 0;
-	in_field = 0;
-	while (*s)
-	{
-		if (*s == c)
-		{
-			if (in_field)
-				in_field = 0;
-		}
-		else
-		{
-			if (!in_field)
-			{
-				in_field = 1;
-				count++;
-			}
-		}
-		s++;
-	}
-	return (count);
 }

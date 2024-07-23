@@ -47,11 +47,18 @@ int	in_redir(t_data *shell, char *in)
 	int	i;
 
 	i = 0;
+	int in_single_quote = 0;
+    int in_double_quote = 0;
 	while (in[i])
 	{
-		if (in[i] == '<' || in[i] == '>' || \
+		if (in[i] == '\'' && !in_double_quote)
+            in_single_quote = !in_single_quote;
+
+        if (in[i] == '\"' && !in_single_quote)
+            in_double_quote = !in_double_quote;
+		if ((in[i] == '<' || in[i] == '>' || \
 			(in[i] == '>' && in[i + 1] == '>') || \
-			(in[i] == '<' && in[i + 1] == '<'))
+			(in[i] == '<' && in[i + 1] == '<')))
 		{
 			if (in[i + 1] == '>' || in[i + 1] == '<')
 				i += 2;
@@ -59,7 +66,7 @@ int	in_redir(t_data *shell, char *in)
 				i++;
 			while (check_space(in[i]))
 				i++;
-			if (in[i] == '|' || in[i] == '\0' || in[i] == '<' || in[i] == '>')
+			if ((!in_single_quote && !in_double_quote) && (in[i] == '|' || in[i] == '\0' || in[i] == '<' || in[i] == '>'))
 			{
 				msg_status(shell, \
 				"Syntax error: no input after unexpected token", 2);
@@ -70,6 +77,35 @@ int	in_redir(t_data *shell, char *in)
 	}
 	return (0);
 }
+
+// int	in_redir(t_data *shell, char *in)
+// {
+// 	int	i;
+
+// 	i = 0;
+// 	while (in[i])
+// 	{
+// 		if (in[i] == '<' || in[i] == '>' || \
+// 			(in[i] == '>' && in[i + 1] == '>') || \
+// 			(in[i] == '<' && in[i + 1] == '<'))
+// 		{
+// 			if (in[i + 1] == '>' || in[i + 1] == '<')
+// 				i += 2;
+// 			else
+// 				i++;
+// 			while (check_space(in[i]))
+// 				i++;
+// 			if (in[i] == '|' || in[i] == '\0' || in[i] == '<' || in[i] == '>')
+// 			{
+// 				msg_status(shell, \
+// 				"Syntax error: no input after unexpected token", 2);
+// 				return (1);
+// 			}
+// 		}
+// 		i++;
+// 	}
+// 	return (0);
+// }
 
 void	error_message(t_data *shell, char *msg, int status)
 {

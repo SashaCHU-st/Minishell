@@ -38,3 +38,51 @@ char	*ft_getenv(t_data *shell, char *env)
 	}
 	return (NULL);
 }
+
+int	end_character(char c)
+{
+	return (c == '\0' || c == ' ' || c == '$'
+		|| c == '\"' || c == '\'' || c == '=' || c == ':');
+}
+
+char	*receive_exit_status(t_data *shell)
+{
+	char	*status;
+
+	if (shell->exit_status > 255)
+		status = ft_itoa(WEXITSTATUS(shell->exit_status));
+	else
+		status = ft_itoa(shell->exit_status);
+	if (!status)
+		error_message(shell, "Malloc failed", 1);
+	return (status);
+}
+
+void	cmd_and_expand(t_data *shell)
+{
+	int	i;
+	int	j;
+
+	i = -1;
+	while (shell->pipe_tok[++i] && i < shell->cmds_count)
+	{
+		shell->pipe_tok[i] = expand_var(shell, shell->pipe_tok[i]);
+		if (!shell->pipe_tok[i])
+			error_message(shell, "Failed to expand", 1);
+	}
+	i = 0;
+	while (i < shell->cmds_count)
+	{
+		j = 0;
+		while (shell->cmds[i].filenames[j])
+		{
+			shell->cmds[i].filenames[j] = expand_var(shell, \
+								shell->cmds[i].filenames[j]);
+			if (!shell->cmds[i].filenames[j])
+				error_message(shell,
+					"Variable expansion failed in filenames", 1);
+			j++;
+		}
+		i++;
+	}
+}

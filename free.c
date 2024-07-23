@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:46:00 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/23 13:53:17 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/23 20:42:05 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,9 @@
 
 void	free_fun(t_pipex *pipex)
 {
-	if (pipex->commands_path != NULL)
+	if (pipex->commands_path)
 		free_array(pipex->commands_path);
+	
 	close(STDIN_FILENO);
 	close(STDOUT_FILENO);
 	exit(1);
@@ -32,6 +33,7 @@ void	free_array(char **array)
 	while (array[i])
 	{
 		free(array[i]);
+		array[i] = NULL;
 		i++;
 	}
 	free (array);
@@ -53,29 +55,36 @@ void	f_free_array(char **str)
 	free(str);
 }
 
-void	ft_error(void)
+static void	free_wtok(t_cmd *cmd)
 {
-	perror("Error fork()");
-	exit(1);
+	int	i;
+
+	if (cmd->word_tok)
+	{
+		i = 0;
+		while (i < cmd->w_count)
+		{
+			if (cmd->word_tok[i])
+				free(cmd->word_tok[i]);
+			i++;
+		}
+		free(cmd->word_tok);
+	}
 }
 
 void	f_free_cmds(t_cmd *cmd)
 {
-	if (cmd->word_tok)
-	{
-		for (int i = 0; i < cmd->w_count; i++) {
-			if (cmd->word_tok[i]) {
-				free(cmd->word_tok[i]);
-			}
-		}
-		free(cmd->word_tok);
-	}
+	int	i;
+
+	free_wtok(cmd);
 	if (cmd->filenames)
 	{
-		for (int i = 0; i < cmd->number_of_redir; i++) {
-			if (cmd->filenames[i]) {
+		i = 0;
+		while (i < cmd->number_of_redir)
+		{
+			if (cmd->filenames[i])
 				free(cmd->filenames[i]);
-			}
+			i++;
 		}
 		free(cmd->filenames);
 	}

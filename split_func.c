@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 20:25:40 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/23 13:22:18 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/23 20:27:42 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,15 +63,16 @@ static char	**split_array(unsigned int nb, char c, char const *s, char **array)
 	return (array);
 }
 
-static char	**f_fill_array(char const *s, char c, unsigned int nb, t_data *shell)
+static char	**f_fill_array(char const *s, char c, unsigned int nb, \
+						t_data *shell)
 {
-	//char	**array;
+	char	**array;
 	char	**new_array;
-
-	shell->array = allocate_array(nb);
-	if (!shell->array)
+	(void)shell;
+	array = allocate_array(nb);
+	if (!array)
 		return (NULL);
-	new_array = split_array(nb, c, s, shell->array);
+	new_array = split_array(nb, c, s, array);
 	return (new_array);
 }
 

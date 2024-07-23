@@ -63,3 +63,9 @@ int	quotes_redir(char *line)
 	}
 	return (0);
 }
+
+void	ft_error(void)
+{
+	perror("Error fork()");
+	exit(1);
+}

@@ -38,7 +38,8 @@ SRCS = minishell.c \
 		redirect_utils.c \
 		heredoc_utils.c \
 		utils.c \
-		
+		running_command.c \
+
 OBJS = $(SRCS:.c=.o)
 
 all: $(NAME)

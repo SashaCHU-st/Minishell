@@ -14,14 +14,6 @@
 
 static void	cmd_and_redir(t_data *shell)
 {
-	// int	i;
-
-	// shell->cmds = (t_cmd *)malloc(sizeof(t_cmd) * shell->cmds_count);
-	// if (!shell->cmds)
-	// 	error_message(shell, "Failed to allocate memory", 1);
-	// i = -1;
-	// while (++i < shell->cmds_count)
-	// 	init_cmd(&shell->cmds[i]);
 	make_redirs(shell);
 	remove_redir_from_input(shell);
 }
@@ -31,9 +23,6 @@ static t_cmd	split_into_wtok(char *pipe_token, t_cmd cmd)
 	change_space_to_31(pipe_token);
 	remove_quotes(pipe_token);
 	cmd.word_tok = do_split(pipe_token, 31);
-	printf("Number of tokens: %d\n", cmd.w_count);
-    
-
 	if (!cmd.word_tok)
 		return (cmd);
 	while (cmd.word_tok[cmd.w_count])
@@ -87,8 +76,8 @@ void	split_line(char *line, t_data *shell)
 		init_cmd(&shell->cmds[i]);
 	if (quotes_redir(shell->pipe_tok[0]) == 0)
 	{
-			cmd_and_redir(shell);
-			cmd_and_expand(shell);
+		cmd_and_redir(shell);
+		cmd_and_expand(shell);
 	}
 	process_commands(shell);
 }

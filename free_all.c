@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 15:44:20 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/19 14:20:40 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/23 23:55:55 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,9 @@
 
 void	free_t_data(t_data *shell)
 {
+	int i;
+
+	i = 0;
 	if (!shell)
 		return ;
 	if (shell->pipe_tok)
@@ -22,12 +25,24 @@ void	free_t_data(t_data *shell)
 		free_array(shell->pipe_tok);
 		shell->pipe_tok = NULL;
 	}
-	if (shell->pipe) {
-        for (int i = 0; i < shell->pipe_count; i++) {
-            free(shell->pipe[i]);
-        }
-    	free(shell->pipe);
-    }
+	if (shell->pipe)
+	{
+		while (i < shell->pipe_count)
+		{
+			if (shell->pipe[i])
+			{
+				free(shell->pipe[i]);
+				shell->pipe[i] = NULL;
+			}
+		i++;
+		}
+		free(shell->pipe);
+		shell->pipe = NULL;
+	}
+}
+
+void	free_t_data2(t_data *shell)
+{
 	if (shell->input_copy)
 	{
 		free(shell->input_copy);
@@ -65,6 +80,7 @@ void	free_all(t_data *shell)
 		shell->cmds = NULL;
 	}
 	free_t_data(shell);
+	free_t_data2(shell);
 	if (shell->hd_delimeter)
 	{
 		free (shell->hd_delimeter);

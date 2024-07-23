@@ -22,12 +22,12 @@ void	free_t_data(t_data *shell)
 		free_array(shell->pipe_tok);
 		shell->pipe_tok = NULL;
 	}
-			if (shell->array)
-	{
-			printf("HERE1\n");
-		free_array(shell->array);
-		shell->array = NULL;
-	}
+	// 		if (shell->array)
+	// {
+	// 		printf("HERE1\n");
+	// 	free_array(shell->array);
+	// 	shell->array = NULL;
+	// }
 	if (shell->pipe) {
         for (int i = 0; i < shell->pipe_count; i++) {
             free(shell->pipe[i]);

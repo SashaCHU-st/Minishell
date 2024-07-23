@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:47:03 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/22 14:33:41 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/22 21:38:26 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,4 +72,3 @@ char *mine_path(t_data *shell, int i)
 	}
 	return (*envp_copy + 5);
 }
-

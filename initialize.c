@@ -43,9 +43,9 @@ void	init_t_data(t_data *data)
 	data->var_len = 0;
 	data->in_dquotes = 0;
 	data->filename = NULL;
-	//data->in_single_quote = 0;
-	//data->in_double_quote = 0;
-	//data->in_quotes = 0;
+	data->in_single_quote = 0;
+	data->in_double_quote = 0;
+	data->in_quotes = 0;
 	data->new_line = NULL;
 	data->line = NULL;
 	data->hd_index = 0;

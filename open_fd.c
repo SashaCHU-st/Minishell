@@ -13,12 +13,6 @@
 #include "minishell.h"
 #include "builtins.h"
 
-// void	write_msg_status(t_data *shell, char *msg, int status)
-// {
-// 	ft_putendl_fd(msg, 2);
-// 	shell->exit_status = status;
-// }
-
 void	check_filetype(t_data *shell, t_pipex *pipex, t_cmd *cmd)
 {
 	int	i;

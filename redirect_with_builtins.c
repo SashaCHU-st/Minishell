@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 15:48:00 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/17 13:54:48 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/23 19:30:13 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,7 @@ void	redirection_out_builtin(t_data *shel, t_pipex *pipex, int i)
 void	redirection_with_builtins(t_data *shell, t_pipex *pipex, int i)
 {
 	if (shell->cmds->filetype[i] == OUT)
-	{
 		redirection_out_builtin(shell, pipex, i);
-	}
 	if (shell->cmds->filetype[i] == IN)
 		redirection_in_builtin(shell, pipex, i);
 }

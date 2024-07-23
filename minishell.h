@@ -63,6 +63,7 @@ char			*hd_filename(t_data *shell, int count);
 int				process_hd(t_data *tokens, const char *file,
 					char *delimeter);
 char			*expand_var(t_data *shell, char *line);
+char			*get_expand(t_data *shell, char *line);
 void			cmd_and_expand(t_data *shell);
 int				end_character(char c);
 char			*receive_exit_status(t_data *shell);

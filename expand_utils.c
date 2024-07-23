@@ -88,3 +88,31 @@ void	cmd_and_expand(t_data *shell)
 		i++;
 	}
 }
+
+char	*get_expand(t_data *shell, char *line)
+{
+	int		len;
+	char	*value;
+	char	*env;
+
+	len = 0;
+	if (line[len] == '?')
+		return (receive_exit_status(shell));
+	while (!end_character(line[len]))
+		len++;
+	if (len == 0)
+		return (ft_strdup(""));
+	env = (char *)malloc(sizeof(char) * len + 1);
+	if (!env)
+	{
+		error_message(shell, "Malloc failed", 1);
+		return (NULL);
+	}
+	ft_strncpy(env, line, len);
+	env[len] = '\0';
+	value = ft_getenv(shell, env);
+	free (env);
+	if (!value)
+		value = ft_strdup("");
+	return (value);
+}

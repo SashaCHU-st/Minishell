@@ -66,7 +66,7 @@ void	split_line(char *line, t_data *shell)
 {
 	int		i;
 
-	shell->cmds_count = 0;
+	//shell->cmds_count = 0;
 	
 	if (quotes_redir(line) == 0)
 		is_heredoc(line, shell);

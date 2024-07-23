@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 16:22:11 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/22 21:53:42 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/23 23:50:06 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,46 +30,41 @@ void	dup_close(int k, t_data *shell)
 	}
 }
 
-int find_slash(t_cmd *cmd)
+int	find_slash(t_cmd *cmd)
 {
-	int i = 0;
+	int	i;
+
+	i = 0;
 	while (cmd->word_tok[i] != NULL)
 	{
 		if (strchr(cmd->word_tok[i], '/') != NULL)
-			return 1;
+			return (1);
 		i++;
 	}
-	return 0;
+	return (0);
 }
 
-void remove_dots(char *str)
+void	free_for_final(t_data *shell)
 {
-	if (!str) return;
-
-	char *src = str, *dst = str;
-	while (*src)
+	if (shell->envp)
 	{
-		if (*src != '.')
-		{
-			*dst++ = *src;
-		}
-		src++;
+		free_array(shell->envp);
+		shell->envp = NULL;
 	}
-	*dst = '\0';
+	if (shell->new_envp)
+	{
+		free_array(shell->new_envp);
+		shell->new_envp = NULL;
+	}
 }
+
 void	exeve_for_commands(t_data *shell, t_pipex pipex, char *final, int k)
 {
 	checking_path(shell, &pipex, k);
 	if (find_slash(&shell->cmds[k]) == 1)
-	{
 		final = shell->cmds[k].word_tok[0];
-		printf("here1\n");
-	}
 	else
-	{
-		printf("here2\n");
 		final = path_commands(shell, &pipex, &shell->cmds[k].word_tok[0]);
-	}
 	if (!final)
 	{
 		printf("%s: command not found\n", shell->cmds[k].word_tok[0]);
@@ -78,18 +73,8 @@ void	exeve_for_commands(t_data *shell, t_pipex pipex, char *final, int k)
 	}
 	if (execve(final, shell->cmds[k].word_tok, shell->envp) == -1)
 	{
-		shell->exit_status = 127;
 		free_fun(&pipex);
-		if (shell->envp)
-		{
-			free_array(shell->envp);
-			shell->envp = NULL;
-		}
-		if (shell->new_envp)
-		{
-			free_array(shell->new_envp);
-			shell->new_envp = NULL;
-		}
+		free_for_final(shell);
 		exit(127);
 	}
 }
@@ -99,7 +84,6 @@ void	child(t_pipex pipex, t_data *shell, int k)
 	char	*final;
 	int		i;
 
-printf("$$$$\n");
 	final = NULL;
 	i = 0;
 	dup_close(k, shell);

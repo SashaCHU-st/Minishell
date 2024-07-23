@@ -34,7 +34,6 @@ void	running_commands(t_data *shell, int i, t_pipex *pipex )
 {
 	if (shell->cmds_count == 1)
 	{
-	printf("beginning\n");
 	printf("count: %d\n", shell->cmds_count);
 	printf("number of redir: %d\n", shell->cmds[0].number_of_redir);
 	// dprintf(2,"filetype: %d\n", shell->cmds[0].filetype[0]);
@@ -199,9 +198,6 @@ void	shell_loop(t_data *sh)
 	}
 }
 
-
-
-
 static char	**copy_envp(t_data *shell, char *envp[])
 {
 	int		count;
@@ -236,9 +232,9 @@ int	main(int argc, char **argv, char *envp[])
 	t_data	data;
 
 	init_t_data(&data);
+	init_t_data2(&data);
 	(void)argv;
 	data.envp = copy_envp(&data, envp);
-	
 	if (!data.envp)
 		error_message(&data, "Failed to copy environment", 1);
 	if (argc < 2)

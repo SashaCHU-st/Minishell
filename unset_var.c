@@ -13,31 +13,47 @@
 #include "minishell.h"
 #include "builtins.h"
 
-void unset_var(t_data *data, char *arg)
+static void	shift_env_vars(t_data *data, int index)
 {
-	int	i;
 	int	j;
-	int	len;
-	
-	len = ft_strlen(arg);
-	i = 0;
-	while (data->envp[i] != NULL)
-	{
-		if (ft_strncmp(data->envp[i], arg, len) == 0 && data->envp[i][len] == '=')
-			break;
-		i++;
-	}
-	if (data->envp[i] == NULL)
-	{
-		printf("Environment variable %s not found.\n", arg);
-		return;
-	}
-	free(data->envp[i]);
-	j = i;
+
+	j = index;
+	free(data->envp[index]);
 	while (data->envp[j + 1] != NULL)
 	{
 		data->envp[j] = data->envp[j + 1];
 		j++;
 	}
-	data->envp[j] = NULL;
+	data->envp[index] = NULL;
+}
+
+void	unset_var(t_data *data, char *arg)
+{
+	int	i;
+	//int	j;
+	int	len;
+
+	len = ft_strlen(arg);
+	i = 0;
+	while (data->envp[i] != NULL)
+	{
+		if (ft_strncmp(data->envp[i], arg, len) == 0 && \
+			data->envp[i][len] == '=')
+			break ;
+		i++;
+	}
+	if (data->envp[i] == NULL)
+	{
+		printf("Environment variable %s not found.\n", arg);
+		return ;
+	}
+	shift_env_vars(data, i);
+	//free(data->envp[i]);
+	// j = i;
+	// while (data->envp[j + 1] != NULL)
+	// {
+	// 	data->envp[j] = data->envp[j + 1];
+	// 	j++;
+	// }
+	// data->envp[j] = NULL;
 }

@@ -47,9 +47,11 @@ int				skip_quotes(char *line, int i);
 int				q_pipe(t_data *shell, char *line);
 int				is_in_quotes(char c, int *in_single_quote,
 					int *in_double_quote);
+int				quotes_redir(char *line);
 void			error_message(t_data *shell, char *msg, int status);
 void			msg_status(t_data *shell, char *msg, int status);
 void			init_t_data(t_data *data);
+void			init_t_data2(t_data *data);
 void			init_cmd(t_cmd *cmd);
 
 ////////////// parsing ///////////////
@@ -61,6 +63,9 @@ char			*hd_filename(t_data *shell, int count);
 int				process_hd(t_data *tokens, const char *file,
 					char *delimeter);
 char			*expand_var(t_data *shell, char *line);
+void			cmd_and_expand(t_data *shell);
+int				end_character(char c);
+char			*receive_exit_status(t_data *shell);
 void			make_redirs(t_data *tokens);
 void			remove_redir_from_input(t_data *tokens);
 
@@ -69,6 +74,7 @@ void			remove_redir_from_input(t_data *tokens);
 char			*ft_strncpy(char *dest, const char *src, size_t n);
 char			*ft_strndup(const char *str, size_t n);
 int				ft_strcmp(char *s1, char *s2);
+char 			*ft_strcpy(char *dest, const char *src);
 
 //////////////exit and free//////////////
 

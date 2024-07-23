@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:46:25 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/20 18:12:18 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/22 21:05:32 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,17 +40,9 @@ int	open_fd_in(t_data *shell, t_pipex *pipex, int filetype, char *filename)
 {
 	if (filetype == IN || filetype == HERE)
 	{
-		if (access(filename, F_OK) == -1)
+		if (access(filename, F_OK | R_OK) == -1)
 		{
-			msg_status(shell, "sashel: No such file or directory", 1);
-			shell->exit_status = 1;
-			exit(1);
-		}
-		if (access(filename, R_OK) == -1)
-		{
-			ft_putstr_fd("sashel: ", 2);
-			ft_putstr_fd(filename, 2);
-			msg_status(shell, ": Permission denied", 1);
+			msg_status(shell, "sashel: permission denied", 1);
 			shell->exit_status = 1;
 			exit(1);
 		}

@@ -14,6 +14,7 @@
 
 char	*hd_filename(t_data *shell, int count)
 {
+	//char	*file;
 	char	*temp;
 
 	temp = ft_itoa(count);
@@ -50,8 +51,7 @@ static char	*extract_delimiter(char *line, int *i)
 	delimiter[len] = '\0';
 	return (delimiter);
 }
-
-void	freeing(t_data *tokens)
+void freeing (t_data *tokens)
 {
 	free(tokens->hd_delimeter);
 	tokens->hd_delimeter = NULL;

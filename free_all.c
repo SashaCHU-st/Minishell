@@ -22,12 +22,12 @@ void	free_t_data(t_data *shell)
 		free_array(shell->pipe_tok);
 		shell->pipe_tok = NULL;
 	}
-	// if (shell->pipe) {
-    //     for (int i = 0; i < shell->pipe_count; i++) {
-    //         free(shell->pipe[i]);
-    //     }
-    // 	free(shell->pipe);
-    // }
+	if (shell->pipe) {
+        for (int i = 0; i < shell->pipe_count; i++) {
+            free(shell->pipe[i]);
+        }
+    	free(shell->pipe);
+    }
 	if (shell->input_copy)
 	{
 		free(shell->input_copy);
@@ -43,21 +43,19 @@ void	free_t_data(t_data *shell)
 		free(shell->pid);
 		shell->pid = NULL;
 	}
-	// if (shell->envp)
-	// {
-	// 	printf("her1");
-	// 	free_array(shell->envp);
-	// 	shell->envp = NULL;
-	// }
+	if (shell->envp)
+	{
+		free_array(shell->envp);
+		shell->envp = NULL;
+	}
 	if (shell->new_envp)
 	{
-		printf("her2");
 		free_array(shell->new_envp);
 		shell->new_envp = NULL;
 	}
 }
 
-void	free_all_sh(t_data *shell)
+void	free_all(t_data *shell)
 {
 	if (shell == NULL)
 		return ;
@@ -77,6 +75,6 @@ void	free_all_sh(t_data *shell)
 void	exit_free(t_data *shell, int status)
 {
 	if (shell)
-		free_all_sh(shell);
+		free_all(shell);
 	exit (status);
 }

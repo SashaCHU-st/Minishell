@@ -17,7 +17,7 @@ void	init_cmd(t_cmd *cmd)
 	if (cmd == NULL)
 		return ;
 	cmd->filenames = NULL;
-	cmd->filetype = NULL;
+	cmd->filetype = 0;
 	cmd->number_of_redir = 0;
 	cmd->w_count = 0;
 	cmd->word_tok = NULL;
@@ -58,4 +58,5 @@ void	init_t_data(t_data *data)
 	data->path = NULL;
 	data->expanded_line = NULL;
 	data->file = NULL;
+	
 }

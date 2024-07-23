@@ -41,7 +41,7 @@ int	if_it_is_builtins( t_cmd *cmd)
 
 void	builtins(t_data *data, t_cmd *cmd, int k)
 {
-	//printf("suka\n");
+	printf("suka\n");
 	if (ft_strncmp(cmd->word_tok[0], "pwd", 4) == 0)
 		ft_pwd(data);
 	else if (ft_strncmp(cmd->word_tok[0], "echo", 5) == 0)

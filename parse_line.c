@@ -114,6 +114,11 @@ void	split_line(char *line, t_data *shell)
 			cmd_and_redir(shell);
 			cmd_and_expand(shell);
 	}
+	// else
+	// {
+	// 	shell->cmds->filetype = (int *)malloc(sizeof(int) * 1);
+	// 	shell->cmds->filetype = NULL;
+	// }
 	i = -1;
 	while (++i < shell->cmds_count)
 		shell->cmds[i] = split_into_wtok(shell->pipe_tok[i], shell->cmds[i]);

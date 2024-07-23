@@ -66,9 +66,7 @@ void	cmd_and_expand(t_data *shell)
 	i = -1;
 	while (shell->pipe_tok[++i] && i < shell->cmds_count)
 	{
-		dprintf(2,"before\n");
 		shell->pipe_tok[i] = expand_var(shell, shell->pipe_tok[i]);
-		dprintf(2,"after\n");
 		if (!shell->pipe_tok[i])
 			error_message(shell, "Failed to expand", 1);
 	}

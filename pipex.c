@@ -40,18 +40,20 @@ char	*path_commands(t_data *shell, t_pipex *pipex, char **child)
 		free(command);
 		current_path++;
 	}
-	if (!current_path)
-	{
+	// if (!current_path)
+	// {
 		ft_putstr_fd(*child, 2);
 		ft_putstr_fd(": command not found\n", 2);
 		shell->exit_status = 127;
-	}
+	//}
 	return (NULL);
 }
 
-char *mine_path(t_data *shell, int i)
+char	*mine_path(t_data *shell, int i)
 {
-	char **envp_copy = shell->envp;
+	char	**envp_copy;
+
+	envp_copy = shell->envp;
 	if (envp_copy == NULL)
 	{
 		ft_putstr_fd("Environment variables not found.\n", 2);

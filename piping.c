@@ -28,6 +28,7 @@ void	checking_path(t_data *shell, t_pipex *pipex, int i)
 		free_fun(pipex);
 	}
 }
+
 void	forking(t_data *shell, t_pipex pipex)
 {
 	int	k;
@@ -53,6 +54,7 @@ void	forking(t_data *shell, t_pipex pipex)
 		k++;
 	}
 }
+
 void	piping(t_data *shell)
 {
 	int	j;
@@ -88,7 +90,6 @@ void	closing(t_data *shell)
 
 	m = 0;
 	x = 0;
-	
 	while (m < (shell->cmds_count - 1))
 	{
 		close(shell->pipe[m][0]);

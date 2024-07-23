@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:46:00 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/22 21:02:32 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/23 13:53:17 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,30 +59,26 @@ void	ft_error(void)
 	exit(1);
 }
 
-void	f_free_cmds(t_cmd *cmds, int cmds_count)
+void	f_free_cmds(t_cmd *cmd)
 {
-	int		i;
-
-	i = 0;
-	while (i < cmds_count)
+	if (cmd->word_tok)
 	{
-		if (cmds[i].word_tok != NULL)
-		{
-			free_array(cmds[i].word_tok);
-			cmds[i].word_tok = NULL;
+		for (int i = 0; i < cmd->w_count; i++) {
+			if (cmd->word_tok[i]) {
+				free(cmd->word_tok[i]);
+			}
 		}
-		if (cmds[i].filetype != NULL)
-		{
-			free(cmds[i].filetype);
-			cmds[i].filetype = NULL;
-		}
-		if (cmds[i].filenames != NULL)
-		{
-			free_array(cmds[i].filenames);
-			cmds[i].filenames = NULL;
-		}
-		i++;
+		free(cmd->word_tok);
 	}
-	free(cmds);
-	cmds = NULL;
+	if (cmd->filenames)
+	{
+		for (int i = 0; i < cmd->number_of_redir; i++) {
+			if (cmd->filenames[i]) {
+				free(cmd->filenames[i]);
+			}
+		}
+		free(cmd->filenames);
+	}
+	if (cmd->filetype)
+		free(cmd->filetype);
 }

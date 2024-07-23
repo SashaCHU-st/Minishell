@@ -106,3 +106,4 @@ char	*expand_var(t_data *shell, char *line)
 	}
 	return (line);
 }
+

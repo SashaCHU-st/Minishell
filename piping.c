@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 10:08:33 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/23 12:38:58 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/23 20:22:59 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,4 +101,16 @@ void	closing(t_data *shell)
 		shell->exit_status = status;
 		x++;
 	}
+	if (shell->pid)
+	{
+		free(shell->pid);
+		shell->pid = NULL;
+	}
+	if (shell->pipe) {
+        for (int i = 0; i < shell->pipe_count; i++) {
+            free(shell->pipe[i]);
+        }
+    	free(shell->pipe);
+		shell->pipe= NULL;
+    }
 }

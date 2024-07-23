@@ -6,18 +6,13 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:46:25 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/22 21:05:32 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/23 19:30:49 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "builtins.h"
 
-// void	write_msg_status(t_data *shell, char *msg, int status)
-// {
-// 	ft_putendl_fd(msg, 2);
-// 	shell->exit_status = status;
-// }
 
 void	check_filetype(t_data *shell, t_pipex *pipex, t_cmd *cmd)
 {

@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:53:11 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/18 13:57:26 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/24 00:00:07 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void			remove_redir_from_input(t_data *tokens);
 char			*ft_strncpy(char *dest, const char *src, size_t n);
 char			*ft_strndup(const char *str, size_t n);
 int				ft_strcmp(char *s1, char *s2);
-char 			*ft_strcpy(char *dest, const char *src);
+char			*ft_strcpy(char *dest, const char *src);
 
 //////////////exit and free//////////////
 
@@ -86,5 +86,6 @@ void			free_t_data(t_data *shell);
 void			ft_exit(t_data *shell, char **args);
 void			f_free_array(char **r);
 unsigned int	num_of_str(const char *s, char c);
+void			free_t_data2(t_data *shell);
 
 #endif

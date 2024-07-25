@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 10:32:47 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/23 23:44:33 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/19 13:01:56 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ typedef struct s_pipex{
 	int		fd[2];
 	int		fd_in;
 	int		fd_out;
-	char	**commands_path;
+	char	**commands_path;	
 }	t_pipex;
 
 typedef struct s_cmd
@@ -84,7 +84,8 @@ typedef struct s_data
 	int		hd_index;
 	char	*filename;
 	char	*file;
-	int		len;
+	int		temp_stdin;
+	int		temp_stdout;
 }	t_data;
 
 #endif

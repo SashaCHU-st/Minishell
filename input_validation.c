@@ -13,6 +13,12 @@
 #include "minishell.h"
 #include "builtins.h"
 
+void	msg_status(t_data *shell, char *msg, int status)
+{
+	ft_putendl_fd(msg, 2);
+	shell->exit_status = status;
+}
+
 int	in_pipes(t_data *shell, char *input)
 {
 	int	i;
@@ -72,7 +78,8 @@ int	in_redir(t_data *shell, char *in)
 	while (in[i])
 	{
 		is_in_quotes(in[i], &in_single_quote, &in_double_quote);
-		if (is_redirection(in[i], in[i + 1]) && !(in_single_quote || in_double_quote))
+		if (is_redirection(in[i], in[i + 1]) && \
+			!(in_single_quote || in_double_quote))
 		{
 			if (in[i + 1] == '>' || in[i + 1] == '<')
 				i += 2;
@@ -80,7 +87,8 @@ int	in_redir(t_data *shell, char *in)
 				i++;
 			while (check_space(in[i]))
 				i++;
-			if (validate_redirection(shell, in, i, in_single_quote, in_double_quote))
+			if (validate_redirection(shell, in, i, in_single_quote, \
+								in_double_quote))
 				return (1);
 		}
 		else
@@ -92,7 +100,7 @@ int	in_redir(t_data *shell, char *in)
 void	error_message(t_data *shell, char *msg, int status)
 {
 	if (shell)
-		free_all(shell);
+		free_all_sh(shell);
 	perror(msg);
 	shell->exit_status = status;
 	exit (status);

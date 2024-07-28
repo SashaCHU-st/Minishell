@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:47:03 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/22 21:38:26 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/22 14:33:41 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,12 @@ char	*path_commands(t_data *shell, t_pipex *pipex, char **child)
 		free(command);
 		current_path++;
 	}
-	ft_putstr_fd(*child, 2);
-	ft_putstr_fd(": command not found\n", 2);
-	shell->exit_status = 127;
+	if (!current_path)
+	{
+		ft_putstr_fd(*child, 2);
+		ft_putstr_fd(": command not found\n", 2);
+		shell->exit_status = 127;
+	}
 	return (NULL);
 }
 

@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 16:22:11 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/23 23:50:06 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/20 18:13:11 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,18 @@ void	dup_close(int k, t_data *shell)
 	int	i;
 
 	i = 0;
-	if (k != 0)
-		dup2(shell->pipe[k - 1][0], STDIN_FILENO);
-	if (k != shell->cmds_count - 1)
-		dup2(shell->pipe[k][1], STDOUT_FILENO);
-	while (i < (shell->pipe_count))
+	if (shell->pipe)
 	{
-		close(shell->pipe[i][0]);
-		close(shell->pipe[i][1]);
-		i++;
+		if (k != 0)
+			dup2(shell->pipe[k - 1][0], STDIN_FILENO);
+		if (k != shell->cmds_count - 1)
+			dup2(shell->pipe[k][1], STDOUT_FILENO);
+		while (i < (shell->pipe_count))
+		{
+			close(shell->pipe[i][0]);
+			close(shell->pipe[i][1]);
+			i++;
+		}
 	}
 }
 
@@ -44,18 +47,24 @@ int	find_slash(t_cmd *cmd)
 	return (0);
 }
 
-void	free_for_final(t_data *shell)
+void	remove_dots(char *str)
 {
-	if (shell->envp)
+	char	*src;
+	char	*dst;
+
+	if (!str)
+		return ;
+	src = str;
+	dst = str;
+	while (*src)
 	{
-		free_array(shell->envp);
-		shell->envp = NULL;
+		if (*src != '.')
+		{
+			*dst++ = *src;
+		}
+		src++;
 	}
-	if (shell->new_envp)
-	{
-		free_array(shell->new_envp);
-		shell->new_envp = NULL;
-	}
+	*dst = '\0';
 }
 
 void	exeve_for_commands(t_data *shell, t_pipex pipex, char *final, int k)
@@ -68,13 +77,21 @@ void	exeve_for_commands(t_data *shell, t_pipex pipex, char *final, int k)
 	if (!final)
 	{
 		printf("%s: command not found\n", shell->cmds[k].word_tok[0]);
-		free(final);
 		exit(127);
 	}
 	if (execve(final, shell->cmds[k].word_tok, shell->envp) == -1)
 	{
+		if (shell->envp)
+		{
+			free_array(shell->envp);
+			shell->envp = NULL;
+		}
+		if (shell->envp)
+		{
+			free_array(shell->envp);
+			shell->envp = NULL;
+		}
 		free_fun(&pipex);
-		free_for_final(shell);
 		exit(127);
 	}
 }

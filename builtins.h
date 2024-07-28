@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 13:32:50 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/24 00:10:45 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/19 11:50:55 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,5 @@ void	removing( t_data *sh, int j, int k, int i);
 void	updating_variables(t_data *sh, int j, int k, int i);
 void	if_exist_filename(t_data *sh, int i);
 void	updating_filenames(t_data *sh, int i, char *line);
-void	redir_built(t_data *shell, t_pipex *pipex, int i);
-void	no_redir_no_built(t_data *shell, t_pipex *pipex);
 
 #endif

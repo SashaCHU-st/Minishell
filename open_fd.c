@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:46:25 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/23 23:46:27 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/20 18:12:18 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,24 @@ void	check_filetype(t_data *shell, t_pipex *pipex, t_cmd *cmd)
 			open_fd_out_app(shell, pipex, cmd->filetype[i], cmd->filenames[i]);
 		i++;
 	}
+	return ;
 }
 
 int	open_fd_in(t_data *shell, t_pipex *pipex, int filetype, char *filename)
 {
 	if (filetype == IN || filetype == HERE)
 	{
-		if (access(filename, F_OK | R_OK) == -1)
+		if (access(filename, F_OK) == -1)
 		{
-			msg_status(shell, "sashel: permission denied", 1);
+			msg_status(shell, "sashel: No such file or directory", 1);
+			shell->exit_status = 1;
+			exit(1);
+		}
+		if (access(filename, R_OK) == -1)
+		{
+			ft_putstr_fd("sashel: ", 2);
+			ft_putstr_fd(filename, 2);
+			msg_status(shell, ": Permission denied", 1);
 			shell->exit_status = 1;
 			exit(1);
 		}
@@ -48,7 +57,10 @@ int	open_fd_in(t_data *shell, t_pipex *pipex, int filetype, char *filename)
 			exit(1);
 		}
 		if (dup2(pipex->fd_in, STDIN_FILENO) < 0)
+		{
 			printf("dup2 \n");
+			return (-1);
+		}
 		close(pipex->fd_in);
 	}
 	return (0);
@@ -61,8 +73,8 @@ void	open_fd_out(t_data *shell, t_pipex *pipex, int filetype, char *filename)
 		pipex->fd_out = open(filename, O_CREAT | O_RDWR | O_TRUNC, 0644);
 		if (pipex->fd_out == -1)
 		{
-			close(pipex->fd_in);
 			shell->exit_status = 1;
+			close(pipex->fd_in);
 			msg_status(shell, "sashel: permission denied", 1);
 			exit(1);
 		}
@@ -74,7 +86,6 @@ void	open_fd_out(t_data *shell, t_pipex *pipex, int filetype, char *filename)
 
 void	open_fd_out_app(t_data *shell, t_pipex *pipex, int type, char *filename)
 {
-	printf ("i am in append\n");
 	if (type == APPEND)
 	{
 		pipex->fd_out = open(filename, O_CREAT | O_APPEND | O_RDWR, 0644);

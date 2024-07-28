@@ -63,9 +63,3 @@ int	quotes_redir(char *line)
 	}
 	return (0);
 }
-
-void	msg_status(t_data *shell, char *msg, int status)
-{
-	ft_putendl_fd(msg, 2);
-	shell->exit_status = status;
-}

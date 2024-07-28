@@ -1,29 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strjoin.c                                       :+:      :+:    :+:   */
+/*   error_msg.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/02 10:06:33 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/28 15:15:53 by aheinane         ###   ########.fr       */
+/*   Created: 2024/07/28 15:17:10 by aheinane          #+#    #+#             */
+/*   Updated: 2024/07/28 15:18:13 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
+#include "builtins.h"
 
-char	*ft_strjoin(char const *s1, char const *s2)
+void	error_message(t_data *shell, char *msg, int status)
 {
-	char	*newstr;
-	size_t	total_len;
-
-	if (s1 == NULL || s2 == NULL)
-		return (NULL);
-	total_len = ft_strlen(s1) + ft_strlen(s2);
-	newstr = (char *)malloc(total_len + 1);
-	if (newstr == NULL)
-		return (NULL);
-	ft_strlcpy(newstr, s1, ft_strlen(s1) + 1);
-	ft_strlcat(newstr, s2, total_len +1);
-	return (newstr);
+	if (shell)
+		free_all_sh(shell);
+	perror(msg);
+	shell->exit_status = status;
+	exit (status);
 }

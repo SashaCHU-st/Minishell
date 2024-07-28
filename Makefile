@@ -39,6 +39,7 @@ SRCS = minishell.c \
 		heredoc_utils.c \
 		utils.c \
 		running_commands.c \
+		error_msg.c
 		
 OBJS = $(SRCS:.c=.o)
 

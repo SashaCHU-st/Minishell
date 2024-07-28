@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:53:11 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/18 13:57:26 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/28 13:40:13 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int				is_in_quotes(char c, int *in_single_quote,
 void			error_message(t_data *shell, char *msg, int status);
 void			msg_status(t_data *shell, char *msg, int status);
 void			init_t_data(t_data *data);
-void			init_t_data2(t_data *data);
+void			init_t_data2(t_data *data, t_pipex *pipex);
 void			init_cmd(t_cmd *cmd);
 
 ////////////// parsing ///////////////

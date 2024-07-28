@@ -58,4 +58,6 @@ void	init_t_data2(t_data *data)
 	data->path = NULL;
 	data->expanded_line = NULL;
 	data->file = NULL;
+	data->temp_stdin = -1;
+	data->temp_stdout = -1;
 }

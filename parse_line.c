@@ -24,7 +24,9 @@ static t_cmd	split_into_wtok(char *pipe_token, t_cmd cmd)
 	remove_quotes(pipe_token);
 	cmd.word_tok = do_split(pipe_token, 31);
 	if (!cmd.word_tok)
+	{
 		return (cmd);
+	}
 	while (cmd.word_tok[cmd.w_count])
 		cmd.w_count++;
 	return (cmd);
@@ -58,7 +60,6 @@ void	split_line(char *line, t_data *shell)
 	int		i;
 
 	shell->cmds_count = 0;
-	
 	if (quotes_redir(line) == 0)
 		is_heredoc(line, shell);
 	shell->pipe_tok = do_split(line, 31);

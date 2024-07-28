@@ -83,6 +83,6 @@ int	process_hd(t_data *tokens, const char *file, char *delimeter)
 	}
 	if (close(fd) == -1)
 		error_message(tokens, "Failed to close fd for heredoc", 1);
-	get_signal(DEFAULT);
+	get_signal(HANDLER);
 	return (0);
 }

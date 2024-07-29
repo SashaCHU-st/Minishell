@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 13:32:50 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/19 11:50:55 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/28 15:49:01 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void	input_checker(t_data *shell, char *input_copy);
 void	if_added_var(char *added_var, char **new_envp, t_data *data);
 void	new_envp_size(t_data *data, int new, int i, char **new_envp);
 void	msg_status(t_data *shell, char *msg, int status);
-void	exeve_for_commands(t_data *shell, t_pipex pipex, char *final, int k);
+void	exeve_for_commands(t_data *shell, t_pipex pipex, int k);
 void	open_fd_out_app(t_data *shell, t_pipex *pipex,
 			int filetype, char *filename);
 void	free_for_path(t_data *shell, t_pipex *pipex);
@@ -90,5 +90,7 @@ void	removing( t_data *sh, int j, int k, int i);
 void	updating_variables(t_data *sh, int j, int k, int i);
 void	if_exist_filename(t_data *sh, int i);
 void	updating_filenames(t_data *sh, int i, char *line);
-
+void	freeing_after_closing(t_data *shell);
+void	error_message(t_data *shell, char *msg, int status);
+void	if_not_current(char **current_path, t_data *shell, char *child);
 #endif

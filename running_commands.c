@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 18:32:15 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/28 15:59:10 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/29 08:37:10 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,6 @@ void	no_redir_no_built(t_data *shell, t_pipex *pipex)
 	if (if_it_is_builtins(&shell->cmds[0]) == 0 && \
 			shell->cmds[0].number_of_redir == 0)
 	{
-		printf("2\n");
 		forking(shell, *pipex);
 		closing(shell);
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: epolkhov <epolkhov@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 10:06:33 by epolkhov          #+#    #+#             */
-/*   Updated: 2023/11/14 21:09:08 by epolkhov         ###   ########.fr       */
+/*   Updated: 2024/07/29 14:52:32 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,11 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	total_len = ft_strlen(s1) + ft_strlen(s2);
 	newstr = (char *)malloc(total_len + 1);
 	if (newstr == NULL)
+	{
+		free(newstr);
+		newstr = NULL;
 		return (NULL);
+	}
 	ft_strlcpy(newstr, s1, ft_strlen(s1) + 1);
 	ft_strlcat(newstr, s2, total_len +1);
 	return (newstr);

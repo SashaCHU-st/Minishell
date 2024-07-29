@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 10:05:10 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/19 14:22:43 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/29 14:55:58 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,11 @@ char	*hd_filename(t_data *shell, int count)
 	shell->file = ft_strjoin(".heredoc", temp);
 	free (temp);
 	if (!shell->file)
+	{
+		free(shell->file);
+		free_all_sh(shell);
 		error_message(shell, "Failed to create file for heredoc", 1);
+	}
 	return (shell->file);
 }
 

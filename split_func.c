@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 20:25:40 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/17 17:37:10 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/29 14:36:59 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,11 @@ static char	**allocate_array(unsigned int nb)
 
 	array = (char **)malloc((nb + 1) * sizeof(char *));
 	if (!array)
+	{
+		free(array);
+		array = NULL;
 		return (NULL);
+	}
 	return (array);
 }
 

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   runnng_commands.c                                  :+:      :+:    :+:   */
+/*   running_commands.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: epolkhov <epolkhov@student.42.fr>          #+#  +:+       +#+        */
+/*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024-07-25 18:32:15 by epolkhov          #+#    #+#             */
-/*   Updated: 2024-07-25 18:32:15 by epolkhov         ###   ########.fr       */
+/*   Created: 2024/07/25 18:32:15 by epolkhov          #+#    #+#             */
+/*   Updated: 2024/07/29 08:37:10 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	redir_built(t_data *shell, t_pipex *pipex, int i)
 	{
 		while (shell->cmds->filetype[i])
 		{
-			if (shell->cmds->word_tok[0] == NULL )
+			if (shell->cmds->word_tok[0] == NULL)
 			{
 				copy_fd_with_redir(shell);
 				check_filetype(shell, pipex, shell->cmds);

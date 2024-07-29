@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 12:30:19 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/19 13:26:54 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/28 15:50:37 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,14 @@ void	init_t_data(t_data *data)
 	data->line = NULL;
 	data->hd_index = 0;
 	data->redir_count = 0;
+	data->in_single_quote = 0;
+	data->command = NULL;
+	data->command_temp = NULL;
 }
 
-void	init_t_data2(t_data *data)
+void	init_t_data2(t_data *data, t_pipex *pipex)
 {
+	init_t_data(data);
 	data->pipe = NULL;
 	data->parent_out = 0;
 	data->parent_in = 0;
@@ -60,4 +64,6 @@ void	init_t_data2(t_data *data)
 	data->file = NULL;
 	data->temp_stdin = -1;
 	data->temp_stdout = -1;
+	data->len = 0;
+	pipex->commands_path = NULL;
 }

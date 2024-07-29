@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 13:35:40 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/15 16:59:47 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/29 15:07:46 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,11 @@ void	export_with(t_data *shell, int number_of_inputs)
 	while (j < number_of_inputs)
 	{
 		input_copy = ft_strdup(shell->cmds->word_tok[j]);
+		input_copy = NULL;
 		if (input_copy == NULL)
 		{
+			free(input_copy);
+			free_all_sh(shell);
 			perror("ft_strdup");
 			shell->exit_status = 1;
 			return ;

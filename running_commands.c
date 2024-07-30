@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 18:32:15 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/29 08:37:10 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/30 20:00:21 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,25 @@ void	copy_fd_with_redir(t_data *shell)
 	}
 }
 
-void	redir_built(t_data *shell, t_pipex *pipex, int i)
+void	redir_builtin(t_data *shell, t_pipex *pipex, int i)
+{
+	if (if_it_is_builtins(&shell->cmds[0]) == 1)
+	{
+		if (shell->cmds[0].number_of_redir == 0)
+			builtins(shell, &shell->cmds[0], 0);
+		if (shell->cmds[0].number_of_redir > 0)
+		{
+			while (shell->cmds[0].number_of_redir > 0)
+			{
+				redirection_with_builtins(shell, pipex, i);
+				shell->cmds[0].number_of_redir--;
+				i++;
+			}
+		}
+	}
+}
+
+void	redir_no_built(t_data *shell, t_pipex *pipex, int i)
 {
 	int	executed;
 

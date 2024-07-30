@@ -92,7 +92,7 @@ char	*expand_var(t_data *shell, char *line)
 		if (line[j] == '$' && line[j + 1] && line[j + 1] != ' ' && \
 			line[j + 1] != '$' && (ft_isdigit(line[j + 1]) || \
 			ft_isalpha(line[j + 1]) || line[j + 1] == '?' || \
-			line[j + 1] == '\"'))
+			line[j + 1] == '\"' || line[j + 1] == '\''))
 		{
 			shell->expanded_line = expand_env(shell, &line, &j);
 			check_expand_line(shell, line);

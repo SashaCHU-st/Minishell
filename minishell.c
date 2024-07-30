@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:52:26 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/30 09:31:27 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/30 20:01:09 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,8 @@ void	running_commands(t_data *shell, int i, t_pipex *pipex)
 	if (shell->cmds_count == 1)
 	{
 		no_redir_no_built(shell, pipex);
-		redir_built(shell, pipex, i);
-		if (if_it_is_builtins(&shell->cmds[0]) == 1)
-		{
-			if (shell->cmds[0].number_of_redir == 0)
-				builtins(shell, &shell->cmds[0], 0);
-			if (shell->cmds[0].number_of_redir > 0)
-				redirection_with_builtins(shell, pipex, i);
-		}
+		redir_no_built(shell, pipex, i);
+		redir_builtin(shell, pipex, i);
 	}
 	else if (shell->cmds_count > 1)
 	{
@@ -95,7 +89,7 @@ static char	**copy_envp(t_data *shell, char *envp[])
 	while (envp[count] != NULL)
 		count++;
 	new_envp = malloc((count + 1) * sizeof(char *));
-	if (!new_envp)
+	if (new_envp == NULL)
 		error_message(shell, "Failed to allocate memory", 1);
 	while (i < count)
 	{

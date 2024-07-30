@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:53:11 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/28 13:40:13 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/30 19:53:50 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,8 @@ unsigned int	num_of_str(const char *s, char c);
 
 void			restore_stdin(t_data *shell);
 void			copy_fd_with_redir(t_data *shell);
-void			redir_built(t_data *shell, t_pipex *pipex, int i);
+void			redir_no_built(t_data *shell, t_pipex *pipex, int i);
 void			no_redir_no_built(t_data *shell, t_pipex *pipex);
+void			redir_builtin(t_data *shell, t_pipex *pipex, int i);
 
 #endif

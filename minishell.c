@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 12:52:26 by epolkhov          #+#    #+#             */
-/*   Updated: 2024/07/29 14:33:51 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/30 09:31:27 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,11 +95,8 @@ static char	**copy_envp(t_data *shell, char *envp[])
 	while (envp[count] != NULL)
 		count++;
 	new_envp = malloc((count + 1) * sizeof(char *));
-	if (new_envp == NULL)
-	{
-		free_all_sh(shell);
+	if (!new_envp)
 		error_message(shell, "Failed to allocate memory", 1);
-	}
 	while (i < count)
 	{
 		new_envp[i] = ft_strdup(envp[i]);

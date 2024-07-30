@@ -6,7 +6,7 @@
 /*   By: aheinane <aheinane@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 16:22:11 by aheinane          #+#    #+#             */
-/*   Updated: 2024/07/28 17:14:50 by aheinane         ###   ########.fr       */
+/*   Updated: 2024/07/30 19:37:41 by aheinane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	exeve_for_commands(t_data *shell, t_pipex pipex, int k)
 	char	*final;
 
 	final = NULL;
-	if (find_slash(&shell->cmds[k]) == 1)
+	if (shell->cmds->word_tok[0] != NULL && find_slash(&shell->cmds[k]) == 1)
 		final = shell->cmds[k].word_tok[0];
 	else
 	{
@@ -64,8 +64,8 @@ void	exeve_for_commands(t_data *shell, t_pipex pipex, int k)
 			free_array(shell->envp);
 			shell->envp = NULL;
 		}
+		printf("sashel: %s: Not a directory \n", shell->cmds[k].word_tok[0]);
 		free_fun(&pipex);
-		exit(127);
 	}
 }
 

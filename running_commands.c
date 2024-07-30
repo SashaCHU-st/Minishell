@@ -46,6 +46,9 @@ void	copy_fd_with_redir(t_data *shell)
 
 void	redir_built(t_data *shell, t_pipex *pipex, int i)
 {
+	int	executed;
+
+	executed = 0;
 	if (shell->cmds[0].number_of_redir > 0 && \
 			if_it_is_builtins(&shell->cmds[0]) == 0)
 	{
@@ -57,10 +60,11 @@ void	redir_built(t_data *shell, t_pipex *pipex, int i)
 				check_filetype(shell, pipex, shell->cmds);
 				restore_stdin(shell);
 			}
-			if (shell->cmds->word_tok[0] != NULL)
+			if (shell->cmds->word_tok[0] != NULL && !executed)
 			{
 				forking(shell, *pipex);
 				closing(shell);
+				executed = 1;
 			}
 			i++;
 		}

@@ -43,11 +43,11 @@ make
 ```
 5. #### Testing the program
    
-*Builting env:*
+*Built in env:*
 ```bash
 env
 ```
-*Builtin echo:*
+*Built in echo:*
 ```bash
 echo "hello world"
 ````
@@ -57,7 +57,7 @@ echo "hello world"
 ```
 *Heredoc*
 ```bash
-<< ..
+<< ll
 ```
 
 
